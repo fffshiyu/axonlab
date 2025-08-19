@@ -87,11 +87,25 @@
             <div class="timeline">
               <div class="timeline-item" 
                    v-for="(item, index) in timelineData" 
-                   :key="index">
+                   :key="index"
+                   :class="{ 
+                     'timeline-item-dimmed': hoveredTimelineIndex !== -1 && hoveredTimelineIndex !== index
+                   }"
+                   @mouseenter="hoverTimeline(index)"
+                   @mouseleave="leaveTimeline">
                 <div class="timeline-bar" 
+                     :class="{ 
+                       'timeline-bar-expanded': hoveredTimelineIndex === index,
+                       'timeline-bar-left-expand': hoveredTimelineIndex === index && index === 0,
+                       'timeline-bar-right-expand': hoveredTimelineIndex === index && index === timelineData.length - 1,
+                       'timeline-bar-center-expand': hoveredTimelineIndex === index && index > 0 && index < timelineData.length - 1
+                     }"
                      :style="{ backgroundColor: item.color }">
                 </div>
-                <div class="timeline-date">{{ item.date }}</div>
+                <div class="timeline-date" 
+                     :class="{ 
+                       'timeline-date-dimmed': hoveredTimelineIndex !== -1 && hoveredTimelineIndex !== index
+                     }">{{ item.date }}</div>
               </div>
             </div>
           </div>
@@ -178,6 +192,18 @@ const timelineData = ref([
   { date: '2027', color: '#40CF97' }, // 从左到右第四个
   { date: '2028', color: '#01CE7E' }  // 从左到右第五个
 ])
+
+// 时间线悬浮状态
+const hoveredTimelineIndex = ref(-1)
+
+// 时间线悬浮事件
+const hoverTimeline = (index: number) => {
+  hoveredTimelineIndex.value = index
+}
+
+const leaveTimeline = () => {
+  hoveredTimelineIndex.value = -1
+}
 
 // 时间线交互功能已移除，只显示静态格子
 
@@ -1021,7 +1047,7 @@ onUnmounted(() => {
 
 /* 大事件标题距离色块144px */
 .history-content .section-subtitle {
-  margin-bottom: 144px; /* 1920*1080基准：大事件距离色块144px */
+  margin-bottom: 164px; /* 1920*1080基准：大事件距离色块164px，稍微往上移动20px */
 }
 
 /* 时间线 */
@@ -1035,23 +1061,82 @@ onUnmounted(() => {
   margin-right: auto;
 }
 
+
+
 .timeline-item {
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative; /* 为绝对定位的拓展色块提供定位上下文 */
 }
 
 .timeline-bar {
   height: 400px; /* 1920*1080基准高度400px */
   width: 244px; /* 1920*1080基准宽度244px */
   margin-bottom: 1rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  z-index: 1;
+}
+
+/* 悬浮时的拓展效果 - 使用绝对定位覆盖其他色块 */
+.timeline-bar-expanded {
+  position: absolute;
+  z-index: 10;
+  top: 0;
+}
+
+/* 最左边色块悬浮：从自己位置向右拓展到3格宽度 */
+.timeline-bar-left-expand {
+  width: 732px; /* 244px * 3 = 732px，占据3格宽度 */
+  left: 0; /* 相对于自己的timeline-item容器，从左边开始 */
+}
+
+/* 第二个色块悬浮：向两边拓展到3格宽度 */
+.timeline-item:nth-child(2) .timeline-bar-center-expand {
+  width: 732px; /* 244px * 3 = 732px，占据3格宽度 */
+  left: -244px; /* 向左移动1格，覆盖第1格到第3格 */
+}
+
+/* 第三个色块悬浮：居中拓展到3格宽度 */
+.timeline-item:nth-child(3) .timeline-bar-center-expand {
+  width: 732px; /* 244px * 3 = 732px，占据3格宽度 */
+  left: -244px; /* 向左移动1格，覆盖第2格到第4格 */
+}
+
+/* 第四个色块悬浮：向两边拓展到3格宽度 */
+.timeline-item:nth-child(4) .timeline-bar-center-expand {
+  width: 732px; /* 244px * 3 = 732px，占据3格宽度 */
+  left: -244px; /* 向左移动1格，覆盖第3格到第5格 */
+}
+
+/* 最右边色块悬浮：向左拓展到3格宽度 */
+.timeline-bar-right-expand {
+  width: 732px; /* 244px * 3 = 732px，占据3格宽度 */
+  left: -488px; /* 向左移动2格，覆盖第3格到第5格 */
+}
+
+/* 其他色块变暗效果 */
+.timeline-item-dimmed .timeline-bar {
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+}
+
+/* 文字变透明效果 - 确保文字始终可见 */
+.timeline-date-dimmed {
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+  position: relative;
+  z-index: 15; /* 确保文字在拓展色块之上 */
 }
 
 .timeline-date {
   color: #ffffff;
   font-size: 0.9rem;
   font-weight: 500;
+  position: relative;
+  z-index: 15; /* 确保所有文字都在拓展色块之上 */
   /* 年份文字紧贴时间线方框底部 */
 }
 
@@ -1334,7 +1419,33 @@ onUnmounted(() => {
   }
   
   .history-content .section-subtitle {
-    margin-bottom: 86.4px; /* 144px * 0.6 */
+    margin-bottom: 98.4px; /* 164px * 0.6 */
+  }
+  
+  /* 响应式悬浮拓展效果 */
+  .timeline-bar-left-expand {
+    width: 438px; /* 146px * 3 = 438px */
+    left: 0;
+  }
+  
+  .timeline-item:nth-child(2) .timeline-bar-center-expand {
+    width: 438px; /* 146px * 3 = 438px */
+    left: -146px; /* 146px * 1 = 146px */
+  }
+  
+  .timeline-item:nth-child(3) .timeline-bar-center-expand {
+    width: 438px; /* 146px * 3 = 438px */
+    left: -146px; /* 146px * 1 = 146px */
+  }
+  
+  .timeline-item:nth-child(4) .timeline-bar-center-expand {
+    width: 438px; /* 146px * 3 = 438px */
+    left: -146px; /* 146px * 1 = 146px */
+  }
+  
+  .timeline-bar-right-expand {
+    width: 438px; /* 146px * 3 = 438px */
+    left: -292px; /* 146px * 2 = 292px */
   }
 }
 
@@ -1432,7 +1543,24 @@ onUnmounted(() => {
   }
   
   .history-content .section-subtitle {
-    margin-bottom: 72px; /* 144px * 0.5 */
+    margin-bottom: 82px; /* 164px * 0.5 */
+  }
+  
+  /* 在移动端禁用悬浮拓展效果 */
+  .timeline-bar-left-expand,
+  .timeline-bar-right-expand,
+  .timeline-bar-center-expand {
+    width: 122px !important; /* 保持原始宽度 */
+    position: relative !important; /* 恢复相对定位 */
+    left: auto !important;
+    right: auto !important;
+    transform: none !important; /* 禁用变换 */
+  }
+  
+  /* 在移动端禁用变暗效果 */
+  .timeline-item-dimmed .timeline-bar,
+  .timeline-date-dimmed {
+    opacity: 1 !important;
   }
   
   /* 页脚响应式 */
@@ -1495,7 +1623,33 @@ onUnmounted(() => {
   }
   
   .history-content .section-subtitle {
-    margin-bottom: 108px; /* 144px * 0.75 */
+    margin-bottom: 123px; /* 164px * 0.75 */
+  }
+  
+  /* 响应式悬浮拓展效果 */
+  .timeline-bar-left-expand {
+    width: 549px; /* 183px * 3 = 549px */
+    left: 0;
+  }
+  
+  .timeline-item:nth-child(2) .timeline-bar-center-expand {
+    width: 549px; /* 183px * 3 = 549px */
+    left: -183px; /* 183px * 1 = 183px */
+  }
+  
+  .timeline-item:nth-child(3) .timeline-bar-center-expand {
+    width: 549px; /* 183px * 3 = 549px */
+    left: -183px; /* 183px * 1 = 183px */
+  }
+  
+  .timeline-item:nth-child(4) .timeline-bar-center-expand {
+    width: 549px; /* 183px * 3 = 549px */
+    left: -183px; /* 183px * 1 = 183px */
+  }
+  
+  .timeline-bar-right-expand {
+    width: 549px; /* 183px * 3 = 549px */
+    left: -366px; /* 183px * 2 = 366px */
   }
   
   /* 页脚响应式 */
@@ -1639,7 +1793,24 @@ onUnmounted(() => {
   }
   
   .history-content .section-subtitle {
-    margin-bottom: 57.6px; /* 144px * 0.4 */
+    margin-bottom: 65.6px; /* 164px * 0.4 */
+  }
+  
+  /* 在小屏幕禁用悬浮拓展效果 */
+  .timeline-bar-left-expand,
+  .timeline-bar-right-expand,
+  .timeline-bar-center-expand {
+    width: 98px !important; /* 保持原始宽度 */
+    position: relative !important; /* 恢复相对定位 */
+    left: auto !important;
+    right: auto !important;
+    transform: none !important; /* 禁用变换 */
+  }
+  
+  /* 在小屏幕禁用变暗效果 */
+  .timeline-item-dimmed .timeline-bar,
+  .timeline-date-dimmed {
+    opacity: 1 !important;
   }
   
   /* 页脚移动端适配 */
