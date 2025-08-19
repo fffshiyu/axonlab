@@ -35,34 +35,50 @@ const isAnimating = ref(false)
 const chargingPercentage = ref(0)
 
 onMounted(() => {
-  // 延迟启动动画
-  setTimeout(() => {
-    isAnimating.value = true
-    startCharging()
-  }, 500)
+  // 预加载主页资源
+  preloadHomePage()
   
-  // 动画完成后跳转到主页
+  // 立即启动动画，总时长2秒
+  isAnimating.value = true
+  startCharging()
+  
+  // 2秒后跳转到主页
   setTimeout(() => {
     router.push('/home')
-  }, 2000) // 1.5s动画 + 0.5s延迟 = 2s总时长
+  }, 2000) // 精确2秒总时长
 })
 
-// 充电动画控制 - 使用缓动函数
+// 预加载主页资源
+const preloadHomePage = () => {
+  // 预加载主页背景图片
+  const images = ['/BG1.png', '/BG2.png', '/箭头.png']
+  images.forEach(src => {
+    const img = new Image()
+    img.src = src
+  })
+  
+  // 预加载主页组件（通过动态导入）
+  import('../components/HomePage.vue').catch(() => {
+    // 忽略预加载错误
+  })
+}
+
+// 充电动画控制 - 慢速到快速的变化
 const startCharging = () => {
-  const duration = 1500 // 1.5秒充电动画
+  const duration = 2000 // 2秒充电动画
   const startTime = Date.now()
   
-  // 缓动函数 - 开始快，中间慢，结束快
-  const easeInOutCubic = (t: number): number => {
-    return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2
+  // 缓动函数 - 慢速开始，然后加速
+  const easeInQuart = (t: number): number => {
+    return t * t * t * t
   }
   
   const animate = () => {
     const elapsed = Date.now() - startTime
     const progress = Math.min(elapsed / duration, 1)
     
-    // 应用缓动函数
-    const easedProgress = easeInOutCubic(progress)
+    // 应用缓动函数 - 慢速到快速
+    const easedProgress = easeInQuart(progress)
     chargingPercentage.value = Math.round(easedProgress * 100)
     
     if (progress < 1) {
@@ -147,12 +163,77 @@ const startCharging = () => {
 .logo-green {
   width: 608px;
   height: 57px;
+  position: relative;
   /* 直接使用背景色，不要filter */
   background-color: #01CE7E;
   mask: url('/logo.svg') no-repeat center;
   mask-size: contain;
   -webkit-mask: url('/logo.svg') no-repeat center;
   -webkit-mask-size: contain;
+  overflow: hidden;
+}
+
+/* 追光效果 - 增强可见性 */
+.logo-green::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 150%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    transparent 20%,
+    rgba(255, 255, 255, 0.6) 35%,
+    rgba(255, 255, 255, 1) 50%,
+    rgba(255, 255, 255, 0.6) 65%,
+    transparent 80%,
+    transparent 100%
+  );
+  animation: shine 2s ease-in-out infinite;
+  animation-delay: 0s;
+  filter: blur(0.5px);
+  mix-blend-mode: overlay;
+}
+
+/* 添加第二层追光效果 */
+.logo-green::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 120%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.3) 40%,
+    rgba(255, 255, 255, 0.7) 50%,
+    rgba(255, 255, 255, 0.3) 60%,
+    transparent 100%
+  );
+  animation: shine-secondary 2s ease-in-out infinite;
+  animation-delay: 0.2s;
+  z-index: 1;
+}
+
+@keyframes shine {
+  0% {
+    left: -150%;
+  }
+  100% {
+    left: 150%;
+  }
+}
+
+@keyframes shine-secondary {
+  0% {
+    left: -120%;
+  }
+  100% {
+    left: 120%;
+  }
 }
 
 
