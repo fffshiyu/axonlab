@@ -59,7 +59,7 @@
             </div>
             <div class="carousel-dots">
               <span 
-                v-for="(image, index) in carouselImages1" 
+                v-for="(_, index) in carouselImages1" 
                 :key="index"
                 :class="['dot', { active: currentSlide1 === index }]"
                 @click="setSlide1(index)">
@@ -75,7 +75,7 @@
             </p>
             <!-- 文字下方箭头 -->
             <div class="news-arrow" @click="scrollToSecondIntro">
-              <img src="/箭头.png" alt="向下箭头" class="news-arrow-img" />
+              <img src="/arrow.png" alt="向下箭头" class="news-arrow-img" />
             </div>
           </div>
         </div>
@@ -106,7 +106,7 @@
             </div>
             <div class="carousel-dots">
               <span 
-                v-for="(image, index) in carouselImages2" 
+                v-for="(_, index) in carouselImages2" 
                 :key="index"
                 :class="['dot', { active: currentSlide2 === index }]"
                 @click="setSlide2(index)">
@@ -122,7 +122,7 @@
             </p>
             <!-- 文字下方箭头 -->
             <div class="news-arrow" @click="scrollToTop">
-              <img src="/箭头.png" alt="向上箭头" class="news-arrow-img news-arrow-up" />
+              <img src="/arrow.png" alt="向上箭头" class="news-arrow-img news-arrow-up" />
             </div>
           </div>
         </div>
@@ -141,7 +141,7 @@
         <div class="footer-content">
           <!-- 社交媒体图标 -->
           <div class="social-icons">
-            <img src="/logo/新浪.png" alt="微博" class="social-icon" />
+            <img src="/logo/weibo.png" alt="微博" class="social-icon" />
             <img src="/logo/redbook.png" alt="小红书" class="social-icon" />
             <img src="/logo/bilibil.png" alt="哔哩哔哩" class="social-icon" />
             <img src="/logo/ins.png" alt="Instagram" class="social-icon" />
@@ -206,16 +206,7 @@ const setSlide2 = (index: number) => {
 // 导航栏可见性
 const isNavbarVisible = ref(true)
 
-// 导航栏自动隐藏控制
-const updateNavbarVisibility = () => {
-  const currentScrollY = window.scrollY
-  
-  // 如果在页面顶部，始终显示导航栏
-  if (currentScrollY < 100) {
-    isNavbarVisible.value = true
-  }
-  // 其他情况由滚动方向控制（在handleWheel中处理）
-}
+
 
 // 下拉菜单控制
 const isDropdownVisible = ref(false)
@@ -389,8 +380,8 @@ const handleWheel = (event: WheelEvent) => {
 }
 
 // 自动轮播函数
-let autoSlideInterval1: number
-let autoSlideInterval2: number
+let autoSlideInterval1: NodeJS.Timeout | null = null
+let autoSlideInterval2: NodeJS.Timeout | null = null
 
 const startAutoSlide = () => {
   autoSlideInterval1 = setInterval(() => {
@@ -403,8 +394,14 @@ const startAutoSlide = () => {
 }
 
 const stopAutoSlide = () => {
-  if (autoSlideInterval1) clearInterval(autoSlideInterval1)
-  if (autoSlideInterval2) clearInterval(autoSlideInterval2)
+  if (autoSlideInterval1) {
+    clearInterval(autoSlideInterval1)
+    autoSlideInterval1 = null
+  }
+  if (autoSlideInterval2) {
+    clearInterval(autoSlideInterval2)
+    autoSlideInterval2 = null
+  }
 }
 
 onMounted(() => {
@@ -657,6 +654,7 @@ onUnmounted(() => {
   transition: color 0.3s ease;
   font-family: 'MiSans', 'Noto Sans SC', sans-serif;
   font-weight: 400;
+  font-size: 16px;
 }
 
 .lang-switch:hover {
@@ -670,6 +668,7 @@ onUnmounted(() => {
 .lang-divider {
   color: #cccccc;
   font-family: 'MiSans', 'Noto Sans SC', sans-serif;
+  font-size: 16px;
 }
 
 
@@ -769,17 +768,43 @@ onUnmounted(() => {
 .news-arrow-img {
   width: 30px;
   height: 28px;
-  opacity: 0.8;
+  animation: floatArrow 2.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+  display: block;
+  margin: 0 auto;
+  opacity: 0.3; /* 默认透明度较高 */
   transition: opacity 0.3s ease;
   cursor: pointer;
 }
 
 .news-arrow-img:hover {
-  opacity: 1;
+  opacity: 1; /* 悬停时完全不透明 */
 }
 
 .news-arrow-img.news-arrow-up {
   transform: rotate(180deg);
+}
+
+@keyframes floatArrow {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+/* 向上箭头的浮动动画需要结合旋转 */
+.news-arrow-img.news-arrow-up {
+  animation: floatArrowUp 2.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+}
+
+@keyframes floatArrowUp {
+  0%, 100% {
+    transform: rotate(180deg) translateY(0);
+  }
+  50% {
+    transform: rotate(180deg) translateY(-12px);
+  }
 }
 
 /* 3D轮播图包装器 */
@@ -856,7 +881,7 @@ onUnmounted(() => {
   display: flex;
   justify-content: center;
   gap: 0.8rem;
-  margin-top: 1rem; /* 减少上边距 */
+  margin-top: 0.5rem; /* 进一步减少上边距，往上移动 */
 }
 
 .dot {
