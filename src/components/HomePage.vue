@@ -85,27 +85,18 @@
             
             <!-- 时间线 -->
             <div class="timeline">
-              <div class="timeline-item" 
+              <div class="timeline-item timeline-card" 
                    v-for="(item, index) in timelineData" 
                    :key="index"
-                   :class="{ 
-                     'timeline-item-dimmed': hoveredTimelineIndex !== -1 && hoveredTimelineIndex !== index
-                   }"
-                   @mouseenter="hoverTimeline(index)"
-                   @mouseleave="leaveTimeline">
+                   :class="{ 'timeline-item-dimmed': isFirstCardHovered && index > 2 }"
+                   @mouseenter="index === 0 ? hoverFirstCard() : null"
+                   @mouseleave="index === 0 ? leaveFirstCard() : null">
                 <div class="timeline-bar" 
-                     :class="{ 
-                       'timeline-bar-expanded': hoveredTimelineIndex === index,
-                       'timeline-bar-left-expand': hoveredTimelineIndex === index && index === 0,
-                       'timeline-bar-right-expand': hoveredTimelineIndex === index && index === timelineData.length - 1,
-                       'timeline-bar-center-expand': hoveredTimelineIndex === index && index > 0 && index < timelineData.length - 1
-                     }"
+                     :class="{ 'timeline-bar-expanded': isFirstCardHovered && index === 0 }"
                      :style="{ backgroundColor: item.color }">
+                  <div v-if="isFirstCardHovered && index === 0" class="timeline-image"></div>
                 </div>
-                <div class="timeline-date" 
-                     :class="{ 
-                       'timeline-date-dimmed': hoveredTimelineIndex !== -1 && hoveredTimelineIndex !== index
-                     }">{{ item.date }}</div>
+                <div class="timeline-date">{{ item.date }}</div>
               </div>
             </div>
           </div>
@@ -193,19 +184,19 @@ const timelineData = ref([
   { date: '2028', color: '#01CE7E' }  // 从左到右第五个
 ])
 
-// 时间线悬浮状态
-const hoveredTimelineIndex = ref(-1)
 
-// 时间线悬浮事件
-const hoverTimeline = (index: number) => {
-  hoveredTimelineIndex.value = index
+
+// 第一个卡片悬停状态
+const isFirstCardHovered = ref(false)
+
+// 第一个卡片悬停事件
+const hoverFirstCard = () => {
+  isFirstCardHovered.value = true
 }
 
-const leaveTimeline = () => {
-  hoveredTimelineIndex.value = -1
+const leaveFirstCard = () => {
+  isFirstCardHovered.value = false
 }
-
-// 时间线交互功能已移除，只显示静态格子
 
 // 移动端菜单控制
 const isMobileMenuOpen = ref(false)
@@ -456,6 +447,27 @@ onMounted(() => {
   setTimeout(() => {
     initializePagePosition()
   }, 100)
+  
+  // 大事件时间线动画
+  const timelineCards = document.querySelectorAll<HTMLElement>('.timeline-card')
+  
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          // 添加延迟动画，每个卡片间隔0.1秒
+          const index = Array.from(timelineCards).indexOf(entry.target as HTMLElement)
+          setTimeout(() => {
+            entry.target.classList.add('fade-in-up')
+          }, index * 100)
+          observer.unobserve(entry.target) // 动画只执行一次
+        }
+      })
+    },
+    { threshold: 0.2 }
+  )
+  
+  timelineCards.forEach((card) => observer.observe(card))
   
   // 平滑滚动
   const links = document.querySelectorAll('a[href^="#"]')
@@ -1068,76 +1080,97 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: relative; /* 为绝对定位的拓展色块提供定位上下文 */
+  position: relative; /* 为绝对定位提供上下文 */
+}
+
+/* 时间线卡片动画效果 */
+.timeline-card {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s ease;
+}
+
+/* 进入视口时添加的动画效果 */
+.timeline-card.fade-in-up {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 悬停时的放大效果 */
+.timeline-card:hover {
+  transform: scale(1.05) translateY(-5px);
+}
+
+.timeline-card:hover .timeline-bar {
+  box-shadow: 0 8px 20px rgba(1, 206, 126, 0.3);
 }
 
 .timeline-bar {
   height: 400px; /* 1920*1080基准高度400px */
   width: 244px; /* 1920*1080基准宽度244px */
   margin-bottom: 1rem;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s ease;
+  border-radius: 4px; /* 添加圆角 */
   position: relative;
-  z-index: 1;
+  overflow: hidden;
 }
 
-/* 悬浮时的拓展效果 - 使用绝对定位覆盖其他色块 */
+/* 第一个卡片悬停时拓展到3格宽度 */
 .timeline-bar-expanded {
+  width: 732px; /* 244px * 3 = 732px，占据3格宽度 */
   position: absolute;
-  z-index: 10;
   top: 0;
+  left: 0; /* 从左侧开始向右拓展 */
+  z-index: 10;
+  box-shadow: 0 8px 20px rgba(1, 206, 126, 0.3);
 }
 
-/* 最左边色块悬浮：从自己位置向右拓展到3格宽度 */
-.timeline-bar-left-expand {
-  width: 732px; /* 244px * 3 = 732px，占据3格宽度 */
-  left: 0; /* 相对于自己的timeline-item容器，从左边开始 */
+/* 产品图片覆盖层 */
+.timeline-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/product1.png');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0;
+  z-index: 5;
+  animation: fadeInImage 0.3s ease-in-out 0.2s forwards;
 }
 
-/* 第二个色块悬浮：向两边拓展到3格宽度 */
-.timeline-item:nth-child(2) .timeline-bar-center-expand {
-  width: 732px; /* 244px * 3 = 732px，占据3格宽度 */
-  left: -244px; /* 向左移动1格，覆盖第1格到第3格 */
+@keyframes fadeInImage {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
-/* 第三个色块悬浮：居中拓展到3格宽度 */
-.timeline-item:nth-child(3) .timeline-bar-center-expand {
-  width: 732px; /* 244px * 3 = 732px，占据3格宽度 */
-  left: -244px; /* 向左移动1格，覆盖第2格到第4格 */
-}
-
-/* 第四个色块悬浮：向两边拓展到3格宽度 */
-.timeline-item:nth-child(4) .timeline-bar-center-expand {
-  width: 732px; /* 244px * 3 = 732px，占据3格宽度 */
-  left: -244px; /* 向左移动1格，覆盖第3格到第5格 */
-}
-
-/* 最右边色块悬浮：向左拓展到3格宽度 */
-.timeline-bar-right-expand {
-  width: 732px; /* 244px * 3 = 732px，占据3格宽度 */
-  left: -488px; /* 向左移动2格，覆盖第3格到第5格 */
-}
-
-/* 其他色块变暗效果 */
+/* 最右侧两格变暗效果 */
 .timeline-item-dimmed .timeline-bar {
   opacity: 0.5;
   transition: opacity 0.3s ease;
-}
-
-/* 文字变透明效果 - 确保文字始终可见 */
-.timeline-date-dimmed {
-  opacity: 0.5;
-  transition: opacity 0.3s ease;
-  position: relative;
-  z-index: 15; /* 确保文字在拓展色块之上 */
 }
 
 .timeline-date {
   color: #ffffff;
   font-size: 0.9rem;
   font-weight: 500;
-  position: relative;
-  z-index: 15; /* 确保所有文字都在拓展色块之上 */
+  transition: all 0.3s ease;
   /* 年份文字紧贴时间线方框底部 */
+}
+
+/* 悬停时文字效果 */
+.timeline-card:hover .timeline-date {
+  color: #01CE7E;
+  transform: scale(1.1);
+  font-weight: 600;
 }
 
 /* 页脚 */
@@ -1422,31 +1455,11 @@ onUnmounted(() => {
     margin-bottom: 98.4px; /* 164px * 0.6 */
   }
   
-  /* 响应式悬浮拓展效果 */
-  .timeline-bar-left-expand {
+  /* 响应式拓展效果 */
+  .timeline-bar-expanded {
     width: 438px; /* 146px * 3 = 438px */
-    left: 0;
   }
-  
-  .timeline-item:nth-child(2) .timeline-bar-center-expand {
-    width: 438px; /* 146px * 3 = 438px */
-    left: -146px; /* 146px * 1 = 146px */
-  }
-  
-  .timeline-item:nth-child(3) .timeline-bar-center-expand {
-    width: 438px; /* 146px * 3 = 438px */
-    left: -146px; /* 146px * 1 = 146px */
-  }
-  
-  .timeline-item:nth-child(4) .timeline-bar-center-expand {
-    width: 438px; /* 146px * 3 = 438px */
-    left: -146px; /* 146px * 1 = 146px */
-  }
-  
-  .timeline-bar-right-expand {
-    width: 438px; /* 146px * 3 = 438px */
-    left: -292px; /* 146px * 2 = 292px */
-  }
+
 }
 
 @media (max-width: 768px) {
@@ -1546,22 +1559,19 @@ onUnmounted(() => {
     margin-bottom: 82px; /* 164px * 0.5 */
   }
   
-  /* 在移动端禁用悬浮拓展效果 */
-  .timeline-bar-left-expand,
-  .timeline-bar-right-expand,
-  .timeline-bar-center-expand {
+  /* 在移动端禁用拓展效果 */
+  .timeline-bar-expanded {
     width: 122px !important; /* 保持原始宽度 */
-    position: relative !important; /* 恢复相对定位 */
+    position: relative !important;
     left: auto !important;
-    right: auto !important;
-    transform: none !important; /* 禁用变换 */
+    z-index: 1 !important;
+    box-shadow: none !important;
   }
   
-  /* 在移动端禁用变暗效果 */
-  .timeline-item-dimmed .timeline-bar,
-  .timeline-date-dimmed {
-    opacity: 1 !important;
+  .timeline-item-dimmed .timeline-bar {
+    opacity: 1 !important; /* 移动端不变暗 */
   }
+
   
   /* 页脚响应式 */
   .footer-logo {
@@ -1626,31 +1636,11 @@ onUnmounted(() => {
     margin-bottom: 123px; /* 164px * 0.75 */
   }
   
-  /* 响应式悬浮拓展效果 */
-  .timeline-bar-left-expand {
+  /* 响应式拓展效果 */
+  .timeline-bar-expanded {
     width: 549px; /* 183px * 3 = 549px */
-    left: 0;
   }
-  
-  .timeline-item:nth-child(2) .timeline-bar-center-expand {
-    width: 549px; /* 183px * 3 = 549px */
-    left: -183px; /* 183px * 1 = 183px */
-  }
-  
-  .timeline-item:nth-child(3) .timeline-bar-center-expand {
-    width: 549px; /* 183px * 3 = 549px */
-    left: -183px; /* 183px * 1 = 183px */
-  }
-  
-  .timeline-item:nth-child(4) .timeline-bar-center-expand {
-    width: 549px; /* 183px * 3 = 549px */
-    left: -183px; /* 183px * 1 = 183px */
-  }
-  
-  .timeline-bar-right-expand {
-    width: 549px; /* 183px * 3 = 549px */
-    left: -366px; /* 183px * 2 = 366px */
-  }
+
   
   /* 页脚响应式 */
   .footer-logo {
@@ -1796,22 +1786,19 @@ onUnmounted(() => {
     margin-bottom: 65.6px; /* 164px * 0.4 */
   }
   
-  /* 在小屏幕禁用悬浮拓展效果 */
-  .timeline-bar-left-expand,
-  .timeline-bar-right-expand,
-  .timeline-bar-center-expand {
+  /* 在小屏幕禁用拓展效果 */
+  .timeline-bar-expanded {
     width: 98px !important; /* 保持原始宽度 */
-    position: relative !important; /* 恢复相对定位 */
+    position: relative !important;
     left: auto !important;
-    right: auto !important;
-    transform: none !important; /* 禁用变换 */
+    z-index: 1 !important;
+    box-shadow: none !important;
   }
   
-  /* 在小屏幕禁用变暗效果 */
-  .timeline-item-dimmed .timeline-bar,
-  .timeline-date-dimmed {
-    opacity: 1 !important;
+  .timeline-item-dimmed .timeline-bar {
+    opacity: 1 !important; /* 小屏幕不变暗 */
   }
+
   
   /* 页脚移动端适配 */
   .footer-logo {
