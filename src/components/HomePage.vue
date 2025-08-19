@@ -649,6 +649,7 @@ onUnmounted(() => {
 
 .nav-link.active {
   color: #01CE7E;
+  font-weight: 600; /* 加粗选中的导航文字 */
 }
 
 .nav-link.active::after {
