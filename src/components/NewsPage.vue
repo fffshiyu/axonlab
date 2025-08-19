@@ -35,35 +35,97 @@
         </div>
       </div>
     </nav>
-    <!-- 第一个品牌介绍区域 -->
-    <section class="introduction-section" id="news-intro-1">
+    <!-- 第一个新闻轮播区域 -->
+    <section class="news-section" id="news-intro-1">
       <div class="section-container">
-        <div class="section-content">
-          <h2 class="section-title">INTRODUCTION</h2>
-          <h3 class="section-subtitle">品牌介绍</h3>
-          <p class="section-text">
-            北京玄圃科技有限公司成立于2024年，为国内领先的AI技术与智能硬件开发公司。AXON LABS羽山作为公司旗下最重要的品牌，以"AI为爱，智趣未来，AI for Love, Smart Fun Future"为品牌理念，以用户情感需求为导向，推动智能产品从功能工具向 "有温度的伙伴" 进化。
-          </p>
+        <div class="news-content">
+          <!-- 轮播图上移 - 3D层次效果 -->
+          <div class="carousel-container">
+            <div class="carousel-3d-wrapper">
+              <div 
+                v-for="(image, index) in carouselImages1" 
+                :key="index"
+                class="carousel-3d-slide"
+                :class="{
+                  'slide-active': currentSlide1 === index,
+                  'slide-prev': currentSlide1 === (index + 1) % carouselImages1.length,
+                  'slide-next': currentSlide1 === (index - 1 + carouselImages1.length) % carouselImages1.length
+                }"
+                @click="setSlide1(index)">
+                <div class="carousel-image" :style="{ backgroundColor: image.color }">
+                  <span class="placeholder-text">{{ image.text }}</span>
+                </div>
+              </div>
+            </div>
+            <div class="carousel-dots">
+              <span 
+                v-for="(image, index) in carouselImages1" 
+                :key="index"
+                :class="['dot', { active: currentSlide1 === index }]"
+                @click="setSlide1(index)">
+              </span>
+            </div>
+          </div>
+          
+          <!-- 新闻标题和内容 -->
+          <div class="news-text-content">
+            <h3 class="news-title">AXON LABS发布全新AI智能硬件产品线</h3>
+            <p class="news-description">
+              北京玄圃科技有限公司今日正式发布AXON LABS羽山系列全新AI智能硬件产品，该产品线融合了最新的人工智能技术与创新硬件设计，旨在为用户提供更加智能、便捷的生活体验。新产品采用了先进的机器学习算法，能够自主学习用户习惯，提供个性化的智能服务。
+            </p>
+            <!-- 文字下方箭头 -->
+            <div class="news-arrow" @click="scrollToSecondIntro">
+              <img src="/箭头.png" alt="向下箭头" class="news-arrow-img" />
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="scroll-indicator" @click="scrollToSecondIntro">
-        <img src="/箭头.png" alt="向下箭头" class="scroll-arrow-img" />
       </div>
     </section>
 
-    <!-- 第二个品牌介绍区域 -->
-    <section class="introduction-section" id="news-intro-2">
+    <!-- 第二个新闻轮播区域 -->
+    <section class="news-section" id="news-intro-2">
       <div class="section-container">
-        <div class="section-content">
-          <h2 class="section-title">INTRODUCTION</h2>
-          <h3 class="section-subtitle">品牌介绍</h3>
-          <p class="section-text">
-            北京玄圃科技有限公司成立于2024年，为国内领先的AI技术与智能硬件开发公司。AXON LABS羽山作为公司旗下最重要的品牌，以"AI为爱，智趣未来，AI for Love, Smart Fun Future"为品牌理念，以用户情感需求为导向，推动智能产品从功能工具向 "有温度的伙伴" 进化。
-          </p>
+        <div class="news-content">
+          <!-- 轮播图上移 - 3D层次效果 -->
+          <div class="carousel-container">
+            <div class="carousel-3d-wrapper">
+              <div 
+                v-for="(image, index) in carouselImages2" 
+                :key="index"
+                class="carousel-3d-slide"
+                :class="{
+                  'slide-active': currentSlide2 === index,
+                  'slide-prev': currentSlide2 === (index + 1) % carouselImages2.length,
+                  'slide-next': currentSlide2 === (index - 1 + carouselImages2.length) % carouselImages2.length
+                }"
+                @click="setSlide2(index)">
+                <div class="carousel-image" :style="{ backgroundColor: image.color }">
+                  <span class="placeholder-text">{{ image.text }}</span>
+                </div>
+              </div>
+            </div>
+            <div class="carousel-dots">
+              <span 
+                v-for="(image, index) in carouselImages2" 
+                :key="index"
+                :class="['dot', { active: currentSlide2 === index }]"
+                @click="setSlide2(index)">
+              </span>
+            </div>
+          </div>
+          
+          <!-- 新闻标题和内容 -->
+          <div class="news-text-content">
+            <h3 class="news-title">羽山机器人系列获得国际设计大奖</h3>
+            <p class="news-description">
+              AXON LABS羽山机器人系列在2024年国际智能硬件设计大赛中荣获金奖，该系列产品以其独特的情感交互设计和先进的AI技术获得了评委的一致好评。羽山机器人不仅具备强大的智能功能，更重要的是它能够理解和回应用户的情感需求，真正实现了"有温度的科技"这一设计理念。
+            </p>
+            <!-- 文字下方箭头 -->
+            <div class="news-arrow" @click="scrollToTop">
+              <img src="/箭头.png" alt="向上箭头" class="news-arrow-img news-arrow-up" />
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="scroll-indicator" @click="scrollToTop">
-        <img src="/箭头.png" alt="向上箭头" class="scroll-arrow-img scroll-arrow-up" />
       </div>
     </section>
 
@@ -115,6 +177,31 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
+
+// 轮播图数据和状态
+const currentSlide1 = ref(0)
+const currentSlide2 = ref(0)
+
+const carouselImages1 = ref([
+  { text: '新闻图片 1', color: '#8B9DC3' },
+  { text: '新闻图片 2', color: '#DDB892' },
+  { text: '新闻图片 3', color: '#A8DADC' }
+])
+
+const carouselImages2 = ref([
+  { text: '品牌图片 1', color: '#F1FAEE' },
+  { text: '品牌图片 2', color: '#E63946' },
+  { text: '品牌图片 3', color: '#457B9D' }
+])
+
+// 轮播图控制函数
+const setSlide1 = (index: number) => {
+  currentSlide1.value = index
+}
+
+const setSlide2 = (index: number) => {
+  currentSlide2.value = index
+}
 
 // 导航栏可见性
 const isNavbarVisible = ref(true)
@@ -301,7 +388,29 @@ const handleWheel = (event: WheelEvent) => {
   }
 }
 
+// 自动轮播函数
+let autoSlideInterval1: number
+let autoSlideInterval2: number
+
+const startAutoSlide = () => {
+  autoSlideInterval1 = setInterval(() => {
+    currentSlide1.value = (currentSlide1.value + 1) % carouselImages1.value.length
+  }, 4000)
+  
+  autoSlideInterval2 = setInterval(() => {
+    currentSlide2.value = (currentSlide2.value + 1) % carouselImages2.value.length
+  }, 4500) // 稍微错开时间
+}
+
+const stopAutoSlide = () => {
+  if (autoSlideInterval1) clearInterval(autoSlideInterval1)
+  if (autoSlideInterval2) clearInterval(autoSlideInterval2)
+}
+
 onMounted(() => {
+  // 启动自动轮播
+  startAutoSlide()
+  
   // 添加点击空白处隐藏下拉菜单的事件监听
   window.addEventListener('click', handleClickOutside)
   
@@ -331,6 +440,8 @@ onUnmounted(() => {
   window.removeEventListener('click', handleClickOutside)
   window.removeEventListener('wheel', handleWheel)
   window.removeEventListener('keydown', () => {})
+  // 清理自动轮播定时器
+  stopAutoSlide()
 })
 
 
@@ -561,19 +672,7 @@ onUnmounted(() => {
   font-family: 'MiSans', 'Noto Sans SC', sans-serif;
 }
 
-/* 品牌介绍区域 */
-.introduction-section {
-  min-height: 100vh;
-  background-image: url('/BG1.png');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
+
 
 .section-container {
   max-width: 1920px;
@@ -584,42 +683,202 @@ onUnmounted(() => {
   height: 100vh;
   display: flex;
   align-items: center;
+  justify-content: center; /* 完全居中 */
 }
 
-.section-content {
+/* 新闻区域背景 */
+.news-section {
+  position: relative;
+  background: url('/BG3.png') no-repeat center center;
+  background-size: cover;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  height: 100vh;
+  min-height: 100vh;
+}
+
+.news-section::before {
+  content: '';
   position: absolute;
-  left: 200px; /* 1920*1080基准：距离左侧200px */
-  bottom: 212px; /* 1920*1080基准：距离底部212px */
-  max-width: 600px;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1;
+}
+
+.news-section .section-container {
+  position: relative;
+  z-index: 2;
+  justify-content: center;
+  flex-direction: column; /* 垂直布局 */
+}
+
+/* 新闻内容容器 */
+.news-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+}
+
+/* 轮播图容器 - 紧凑布局 */
+.carousel-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 1000px;
+  width: 100%;
+  margin-bottom: 1.5rem; /* 减少与下方文字的间距 */
+}
+
+/* 新闻文字内容 */
+.news-text-content {
+  text-align: center;
+  max-width: 800px;
   color: #ffffff;
 }
 
-.section-title {
-  font-family: 'MiSans', sans-serif;
-  font-weight: 600; /* semibold */
-  font-size: 60px; /* 1920*1080基准 */
+.news-title {
+  font-size: 30px;
+  font-weight: 600;
   color: #ffffff;
-  margin: 0 0 0 0; /* h2和h3距离为0 */
-  line-height: 1.2;
+  margin-bottom: 0.8rem; /* 减少下边距 */
+  font-family: 'MiSans', 'Noto Sans SC', sans-serif;
+  line-height: 1.4;
 }
 
-.section-subtitle {
-  font-family: 'MiSans', sans-serif;
-  font-weight: 700; /* bold */
-  font-size: 30px; /* 1920*1080基准 */
-  color: #ffffff;
-  margin: 0 0 20px 0; /* h3和section-text距离为20px */
-  line-height: 1.2;
+.news-description {
+  font-size: 16px;
+  font-weight: 400;
+  color: #cccccc;
+  line-height: 1.8;
+  margin: 0 0 1.5rem 0; /* 下方添加边距为箭头留空间 */
+  font-family: 'MiSans', 'Noto Sans SC', sans-serif;
 }
 
-.section-text {
-  font-family: 'MiSans', sans-serif;
-  font-weight: 400; /* regular */
-  font-size: 16px; /* 1920*1080基准 */
-  line-height: 1.6;
-  color: #ffffff;
-  margin: 0;
+/* 新闻文字下方箭头 */
+.news-arrow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+
+.news-arrow-img {
+  width: 30px;
+  height: 28px;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+  cursor: pointer;
+}
+
+.news-arrow-img:hover {
+  opacity: 1;
+}
+
+.news-arrow-img.news-arrow-up {
+  transform: rotate(180deg);
+}
+
+/* 3D轮播图包装器 */
+.carousel-3d-wrapper {
+  position: relative;
+  width: 900px;
+  height: 600px; /* 放大尺寸 */
+  perspective: 1200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 3D轮播图单张 */
+.carousel-3d-slide {
+  position: absolute;
+  width: 600px;
+  height: 450px; /* 放大滑块尺寸 */
+  cursor: pointer;
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+/* 当前激活的图片 - 居中最前 */
+.slide-active {
+  transform: translateX(0) translateZ(0) scale(1);
+  z-index: 3;
+  opacity: 1;
+}
+
+/* 左边的图片 - 左后方 */
+.slide-prev {
+  transform: translateX(-270px) translateZ(-100px) rotateY(25deg) scale(0.8);
+  z-index: 1;
+  opacity: 0.7;
+}
+
+/* 右边的图片 - 右后方 */
+.slide-next {
+  transform: translateX(270px) translateZ(-100px) rotateY(-25deg) scale(0.8);
+  z-index: 1;
+  opacity: 0.7;
+}
+
+/* 其他隐藏的图片 */
+.carousel-3d-slide:not(.slide-active):not(.slide-prev):not(.slide-next) {
+  opacity: 0;
+  transform: translateZ(-200px) scale(0.5);
+  z-index: 0;
+}
+
+.carousel-image {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.placeholder-text {
+  color: #ffffff;
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  font-family: 'MiSans', 'Noto Sans SC', sans-serif;
+}
+
+/* 轮播图指示器 - 紧凑布局 */
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.8rem;
+  margin-top: 1rem; /* 减少上边距 */
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dot.active {
+  background: #01CE7E;
+  transform: scale(1.2);
+}
+
+.dot:hover {
+  background: rgba(1, 206, 126, 0.7);
+  transform: scale(1.1);
+}
+
+
 
 /* 滚动指示器 */
 .scroll-indicator {
@@ -775,24 +1034,39 @@ onUnmounted(() => {
   }
 }
 
-/* 内容区域响应式设计 */
+/* 响应式设计 */
 @media (max-width: 1440px) {
-  .section-content {
-    left: 150px; /* 200px * 0.75 */
-    bottom: 159px; /* 212px * 0.75 */
+  .carousel-3d-wrapper {
+    width: 675px; /* 900px * 0.75 */
+    height: 450px; /* 600px * 0.75 */
   }
   
-  .section-title {
-    font-size: 45px; /* 60px * 0.75 */
+  .carousel-3d-slide {
+    width: 450px; /* 600px * 0.75 */
+    height: 337px; /* 450px * 0.75 */
   }
   
-  .section-subtitle {
-    font-size: 22.5px; /* 30px * 0.75 */
-    margin-bottom: 15px; /* 20px * 0.75 */
+  .slide-prev {
+    transform: translateX(-202px) translateZ(-75px) rotateY(25deg) scale(0.8); /* -270px * 0.75 */
   }
   
-  .section-text {
-    font-size: 12px; /* 16px * 0.75 */
+  .slide-next {
+    transform: translateX(202px) translateZ(-75px) rotateY(-25deg) scale(0.8); /* 270px * 0.75 */
+  }
+  
+
+  
+  .news-title {
+    font-size: 22px; /* 30px * 0.75 */
+  }
+  
+  .news-description {
+    font-size: 14px; /* 16px * 0.75 */
+  }
+  
+  .news-arrow-img {
+    width: 22.5px; /* 30px * 0.75 */
+    height: 21px; /* 28px * 0.75 */
   }
   
   .scroll-arrow-img {
@@ -802,22 +1076,39 @@ onUnmounted(() => {
 }
 
 @media (max-width: 1024px) {
-  .section-content {
-    left: 120px; /* 200px * 0.6 */
-    bottom: 127px; /* 212px * 0.6 */
+  .carousel-3d-wrapper {
+    width: 540px; /* 900px * 0.6 */
+    height: 360px; /* 600px * 0.6 */
   }
   
-  .section-title {
-    font-size: 36px; /* 60px * 0.6 */
+  .carousel-3d-slide {
+    width: 360px; /* 600px * 0.6 */
+    height: 270px; /* 450px * 0.6 */
   }
   
-  .section-subtitle {
+  .slide-prev {
+    transform: translateX(-162px) translateZ(-60px) rotateY(25deg) scale(0.8); /* -270px * 0.6 */
+  }
+  
+  .slide-next {
+    transform: translateX(162px) translateZ(-60px) rotateY(-25deg) scale(0.8); /* 270px * 0.6 */
+  }
+  
+  .carousel-dots {
+    bottom: 48px; /* 80px * 0.6 */
+  }
+  
+  .news-title {
     font-size: 18px; /* 30px * 0.6 */
-    margin-bottom: 12px; /* 20px * 0.6 */
   }
   
-  .section-text {
-    font-size: 9.6px; /* 16px * 0.6 */
+  .news-description {
+    font-size: 12px; /* 16px * 0.6 */
+  }
+  
+  .news-arrow-img {
+    width: 18px; /* 30px * 0.6 */
+    height: 16.8px; /* 28px * 0.6 */
   }
   
   .scroll-arrow-img {
@@ -827,22 +1118,39 @@ onUnmounted(() => {
 }
 
 @media (max-width: 768px) {
-  .section-content {
-    left: 100px; /* 200px * 0.5 */
-    bottom: 106px; /* 212px * 0.5 */
+  .carousel-3d-wrapper {
+    width: 450px; /* 900px * 0.5 */
+    height: 300px; /* 600px * 0.5 */
   }
   
-  .section-title {
-    font-size: 30px; /* 60px * 0.5 */
+  .carousel-3d-slide {
+    width: 300px; /* 600px * 0.5 */
+    height: 225px; /* 450px * 0.5 */
   }
   
-  .section-subtitle {
+  .slide-prev {
+    transform: translateX(-135px) translateZ(-50px) rotateY(20deg) scale(0.8); /* -270px * 0.5 */
+  }
+  
+  .slide-next {
+    transform: translateX(135px) translateZ(-50px) rotateY(-20deg) scale(0.8); /* 270px * 0.5 */
+  }
+  
+  .carousel-dots {
+    bottom: 40px; /* 80px * 0.5 */
+  }
+  
+  .news-title {
     font-size: 15px; /* 30px * 0.5 */
-    margin-bottom: 10px; /* 20px * 0.5 */
   }
   
-  .section-text {
-    font-size: 8px; /* 16px * 0.5 */
+  .news-description {
+    font-size: 10px; /* 16px * 0.5 */
+  }
+  
+  .news-arrow-img {
+    width: 15px; /* 30px * 0.5 */
+    height: 14px; /* 28px * 0.5 */
   }
   
   .scroll-arrow-img {
@@ -852,23 +1160,49 @@ onUnmounted(() => {
 }
 
 @media (max-width: 480px) {
-  .section-content {
-    left: 20px; /* 移动端左侧边距减小 */
-    bottom: 85px; /* 212px * 0.4 */
-    max-width: calc(100% - 40px); /* 限制最大宽度 */
+  .carousel-3d-wrapper {
+    width: 360px; /* 900px * 0.4 */
+    height: 240px; /* 600px * 0.4 */
   }
   
-  .section-title {
-    font-size: 24px; /* 60px * 0.4 */
+  .carousel-3d-slide {
+    width: 240px; /* 600px * 0.4 */
+    height: 180px; /* 450px * 0.4 */
   }
   
-  .section-subtitle {
+  .slide-prev {
+    transform: translateX(-108px) translateZ(-40px) rotateY(15deg) scale(0.8); /* -270px * 0.4 */
+  }
+  
+  .slide-next {
+    transform: translateX(108px) translateZ(-40px) rotateY(-15deg) scale(0.8); /* 270px * 0.4 */
+  }
+  
+  .carousel-dots {
+    bottom: 32px; /* 80px * 0.4 */
+  }
+  
+  .placeholder-text {
+    font-size: 1rem;
+  }
+  
+  .news-title {
     font-size: 12px; /* 30px * 0.4 */
-    margin-bottom: 8px; /* 20px * 0.4 */
+    margin-bottom: 1rem;
   }
   
-  .section-text {
-    font-size: 6.4px; /* 16px * 0.4 */
+  .news-description {
+    font-size: 8px; /* 16px * 0.4 */
+    line-height: 1.6;
+  }
+  
+  .carousel-container {
+    margin-bottom: 2rem;
+  }
+  
+  .news-arrow-img {
+    width: 12px; /* 30px * 0.4 */
+    height: 11.2px; /* 28px * 0.4 */
   }
   
   .scroll-arrow-img {
