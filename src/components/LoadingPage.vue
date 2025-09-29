@@ -51,7 +51,7 @@ onMounted(() => {
 // 预加载主页资源
 const preloadHomePage = () => {
   // 预加载主页背景图片
-  const images = ['/BG1.png', '/BG2.png', '/箭头.png']
+  const images = ['/BG1.png', '/BG2.png', '/arrow.png']
   images.forEach(src => {
     const img = new Image()
     img.src = src

@@ -8,8 +8,8 @@
         </div>
         <div class="nav-links">
           <a href="#introduction" class="nav-link active">首页</a>
-          <router-link to="/news" class="nav-link">新闻</router-link>
-          <router-link to="/product" class="nav-link">产品系列</router-link>
+          <a href="#" class="nav-link disabled" @click.prevent>新闻</a>
+          <a href="#" class="nav-link disabled" @click.prevent>产品系列</a>
           <div class="nav-dropdown" @mouseenter="showDropdown" @mouseleave="hideDropdown">
             <a href="#" class="nav-link" :class="{ 'active': isDropdownVisible }">线上商城</a>
             <div class="dropdown-menu" :class="{ 'show': isDropdownVisible }">
@@ -51,11 +51,14 @@
             <div class="section-text">
               <p>北京玄圃科技有限公司成立于2024年，为国内领先的AI技术与智能硬件开发公司。AXON LABS羽山作为公司旗下最重要的品牌，以"AI为爱，智趣未来，AI for Love, Smart Fun Future"为品牌理念，以用户情感需求为导向，推动智能产品从功能工具向 "有温度的伙伴" 进化。</p>
             </div>
+            <div class="intro-button">
+              <button class="learn-more-btn">Learn More</button>
+            </div>
           </div>
     
         </div>
         <div class="scroll-indicator" @click="scrollToTeam">
-          <img src="/箭头.png" alt="向下箭头" class="scroll-arrow-img" />
+          <img src="/arrow.png" alt="向下箭头" class="scroll-arrow-img" />
         </div>
       </section>
 
@@ -72,7 +75,7 @@
        
         </div>
         <div class="scroll-indicator" @click="scrollToHistory">
-          <img src="/箭头.png" alt="向下箭头" class="scroll-arrow-img" />
+          <img src="/arrow.png" alt="向下箭头" class="scroll-arrow-img" />
         </div>
       </section>
 
@@ -84,17 +87,19 @@
             <h3 class="section-subtitle">大事件</h3>
             
             <!-- 时间线 -->
-            <div class="timeline">
-              <div class="timeline-item timeline-card" 
+            <div class="timeline" 
+                 @mouseenter="isTimelineHovered = true; hoveredCardIndex = -1" 
+                 @mouseleave="isTimelineHovered = false; hoveredCardIndex = -1">
+              <div class="timeline-item card" 
                    v-for="(item, index) in timelineData" 
                    :key="index"
-                   :class="{ 'timeline-item-dimmed': isFirstCardHovered && index > 2 }"
-                   @mouseenter="index === 0 ? hoverFirstCard() : null"
-                   @mouseleave="index === 0 ? leaveFirstCard() : null">
+                   :class="{ 
+                     'card-dimmed': isTimelineHovered && anyCardHovered && hoveredCardIndex !== index
+                   }"
+                   @mouseenter="hoveredCardIndex = index"
+                   @mouseleave="hoveredCardIndex = -1">
                 <div class="timeline-bar" 
-                     :class="{ 'timeline-bar-expanded': isFirstCardHovered && index === 0 }"
                      :style="{ backgroundColor: item.color }">
-                  <div v-if="isFirstCardHovered && index === 0" class="timeline-image"></div>
                 </div>
                 <div class="timeline-date">{{ item.date }}</div>
               </div>
@@ -117,7 +122,7 @@
           <!-- 社交媒体图标 -->
           <div class="social-icons">
             <a href="#" class="social-icon">
-              <img src="/logo/新浪.png" alt="微博" />
+              <img src="/logo/weibo.png" alt="微博" />
             </a>
             <a href="#" class="social-icon">
               <img src="/logo/bilibil.png" alt="哔哩哔哩" />
@@ -173,7 +178,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
 
 // 时间线数据
 const timelineData = ref([
@@ -186,17 +191,10 @@ const timelineData = ref([
 
 
 
-// 第一个卡片悬停状态
-const isFirstCardHovered = ref(false)
-
-// 第一个卡片悬停事件
-const hoverFirstCard = () => {
-  isFirstCardHovered.value = true
-}
-
-const leaveFirstCard = () => {
-  isFirstCardHovered.value = false
-}
+// 时间线悬停状态管理
+const isTimelineHovered = ref(false)
+const hoveredCardIndex = ref(-1)
+const anyCardHovered = computed(() => hoveredCardIndex.value !== -1)
 
 // 移动端菜单控制
 const isMobileMenuOpen = ref(false)
@@ -279,6 +277,46 @@ const handleScroll = () => {
   }
 }
 
+// 视差滚动效果
+const updateParallax = () => {
+  const scrollY = window.pageYOffset
+  const parallaxElements = document.querySelectorAll('.introduction-section, .team-section, .history-section')
+  
+  parallaxElements.forEach((element) => {
+    const htmlElement = element as HTMLElement
+    if (!htmlElement) return
+    
+    // 检测是否为移动设备
+    const isMobile = window.innerWidth <= 768
+    
+    if (isMobile) {
+      // 移动端使用transform实现视差效果，性能更好
+      const rect = htmlElement.getBoundingClientRect()
+      const elementTop = rect.top + scrollY
+      const elementHeight = htmlElement.offsetHeight
+      const windowHeight = window.innerHeight
+      
+      // 当元素在视口内时计算视差偏移
+      if (scrollY + windowHeight > elementTop && scrollY < elementTop + elementHeight) {
+        const parallaxSpeed = 0.5 // 视差速度，0.5表示背景移动速度是滚动速度的一半
+        const yPos = -(scrollY - elementTop) * parallaxSpeed
+        htmlElement.style.backgroundPosition = `center ${yPos}px`
+      }
+    }
+  })
+}
+
+let parallaxTicking = false
+const handleParallaxScroll = () => {
+  if (!parallaxTicking) {
+    requestAnimationFrame(() => {
+      updateParallax()
+      parallaxTicking = false
+    })
+    parallaxTicking = true
+  }
+}
+
 // 滚动到团队介绍区域
 const scrollToTeam = () => {
   scrollToSection(1) // 使用统一的滚动函数
@@ -293,10 +331,7 @@ const scrollToHistory = () => {
 let currentSection = 0
 const sections = ['introduction', 'team', 'history']
 let isScrolling = false
-let scrollAccumulator = 0
 let lastScrollTime = 0
-const SCROLL_THRESHOLD = 50 // 降低滚动阈值，更容易触发
-const SCROLL_COOLDOWN = 1000 // 冷却时间改为1秒，和箭头点击一致
 
 // 检测当前在哪个区域 - 更精确的检测
 const getCurrentSection = () => {
@@ -447,27 +482,23 @@ onMounted(() => {
   setTimeout(() => {
     initializePagePosition()
   }, 100)
-  
-  // 大事件时间线动画
-  const timelineCards = document.querySelectorAll<HTMLElement>('.timeline-card')
-  
+
+  // 大事件时间线动画 - 参考提供的代码实现
+  const cards = document.querySelectorAll<HTMLElement>('.card')
+
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          // 添加延迟动画，每个卡片间隔0.1秒
-          const index = Array.from(timelineCards).indexOf(entry.target as HTMLElement)
-          setTimeout(() => {
-            entry.target.classList.add('fade-in-up')
-          }, index * 100)
+          entry.target.classList.add('fade-in-up')
           observer.unobserve(entry.target) // 动画只执行一次
         }
       })
     },
     { threshold: 0.2 }
   )
-  
-  timelineCards.forEach((card) => observer.observe(card))
+
+  cards.forEach((card) => observer.observe(card))
   
   // 平滑滚动
   const links = document.querySelectorAll('a[href^="#"]')
@@ -513,6 +544,9 @@ onMounted(() => {
   // 添加导航栏自动隐藏的滚动监听
   window.addEventListener('scroll', handleScroll, { passive: true })
   
+  // 添加视差滚动效果监听器
+  window.addEventListener('scroll', handleParallaxScroll, { passive: true })
+  
   // 添加页脚区域的正常滚动支持
   const footerObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -535,6 +569,7 @@ onMounted(() => {
 onUnmounted(() => {
   // 清理事件监听器
   window.removeEventListener('click', handleClickOutside)
+  window.removeEventListener('scroll', handleParallaxScroll)
 })
 </script>
 
@@ -559,6 +594,21 @@ onUnmounted(() => {
   margin-top: -100px; /* 向上偏移导航栏高度100px */
   padding-top: 100px; /* 内容区域保持原位置 */
   z-index: 1;
+  background: url('/BG1.png') no-repeat center center;
+  background-size: cover;
+  background-attachment: fixed; /* 启用视差滚动效果 */
+  overflow: hidden;
+}
+
+.introduction-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.2); /* 轻微遮罩确保文字可读性 */
+  z-index: 1;
 }
 
 /* 团队介绍区域背景图 */
@@ -566,6 +616,7 @@ onUnmounted(() => {
   position: relative;
   background: url('/BG2.png') no-repeat center center;
   background-size: cover;
+  background-attachment: fixed; /* 启用视差滚动效果 */
   width: 100vw;
   margin-left: calc(-50vw + 50%);
   height: 100vh; /* 固定高度，确保全屏滚动效果 */
@@ -598,6 +649,7 @@ onUnmounted(() => {
   position: relative;
   background: url('/BG3.png') no-repeat center center;
   background-size: cover;
+  background-attachment: fixed; /* 启用视差滚动效果 */
   width: 100vw;
   margin-left: calc(-50vw + 50%);
   min-height: 100vh; /* 改为min-height，允许内容撑开 */
@@ -698,6 +750,16 @@ onUnmounted(() => {
   width: 100%;
   height: 2px;
   background-color: #01CE7E;
+}
+
+.nav-link.disabled {
+  color: #666666 !important;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.nav-link.disabled:hover {
+  color: #666666 !important;
 }
 
 /* 下拉菜单样式 */
@@ -811,7 +873,7 @@ onUnmounted(() => {
 
 .nav-language {
   color: #cccccc;
-  font-size: 0.9rem;
+  font-size: 16px;
   font-weight: 400; /* 使用Regular字重 */
   font-family: 'MiSans', 'Noto Sans SC', sans-serif;
 }
@@ -859,14 +921,23 @@ onUnmounted(() => {
 .introduction-section .section-container {
   position: relative;
   z-index: 2;
+  height: 100vh; /* 容器也占满整个视口高度 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .section-content {
   position: absolute;
   left: 200px; /* 1920*1080基准：距离左侧200px */
-  bottom: 212px; /* 1920*1080基准：距离底部212px */
+  bottom: 280px; /* 1920*1080基准：距离底部280px，向上移动68px */
   max-width: 600px;
   color: #ffffff;
+}
+
+/* 品牌介绍按钮 */
+.intro-button {
+  margin-top: 2rem;
 }
 
 .section-decoration {
@@ -1023,8 +1094,8 @@ onUnmounted(() => {
 }
 
 .learn-more-btn:hover {
-  color: #000000;
-  border-color: #01CE7E;
+  color: #ffffff; /* 保持文字为白色 */
+  border-color: #ffffff; /* 保持边框为白色 */
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(1, 206, 126, 0.3);
 }
@@ -1055,11 +1126,12 @@ onUnmounted(() => {
 
 .history-content {
   padding-top: 100px; /* 1920*1080基准：内容区距离页面顶部100px */
+  transform: translateY(-5vh); /* 整体上移5% */
 }
 
 /* 大事件标题距离色块144px */
 .history-content .section-subtitle {
-  margin-bottom: 164px; /* 1920*1080基准：大事件距离色块164px，稍微往上移动20px */
+  margin-bottom: 120px; /* 调小间距：原164px -> 120px */
 }
 
 /* 时间线 */
@@ -1080,97 +1152,45 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: relative; /* 为绝对定位提供上下文 */
 }
 
-/* 时间线卡片动画效果 */
-.timeline-card {
-  opacity: 0;
+/* 卡片强制始终可见 */
+.card {
+  opacity: 1 !important; /* 强制始终可见，不会为0 */
   transform: translateY(40px);
   transition: all 0.8s ease;
 }
 
 /* 进入视口时添加的动画效果 */
-.timeline-card.fade-in-up {
-  opacity: 1;
+.card.fade-in-up {
+  opacity: 1 !important; /* 强制始终可见 */
   transform: translateY(0);
 }
 
 /* 悬停时的放大效果 */
-.timeline-card:hover {
-  transform: scale(1.05) translateY(-5px);
+.card:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  opacity: 1 !important; /* 强制始终可见 */
 }
 
-.timeline-card:hover .timeline-bar {
-  box-shadow: 0 8px 20px rgba(1, 206, 126, 0.3);
+/* 其他卡片变浅效果 - 最低透明度0.4，绝不为0 */
+.card.card-dimmed {
+  opacity: 0.4 !important; /* 最浅状态，但绝不为0 */
+  transition: opacity 0.3s ease;
 }
 
 .timeline-bar {
   height: 400px; /* 1920*1080基准高度400px */
   width: 244px; /* 1920*1080基准宽度244px */
   margin-bottom: 1rem;
-  transition: all 0.3s ease;
-  border-radius: 4px; /* 添加圆角 */
-  position: relative;
-  overflow: hidden;
-}
-
-/* 第一个卡片悬停时拓展到3格宽度 */
-.timeline-bar-expanded {
-  width: 732px; /* 244px * 3 = 732px，占据3格宽度 */
-  position: absolute;
-  top: 0;
-  left: 0; /* 从左侧开始向右拓展 */
-  z-index: 10;
-  box-shadow: 0 8px 20px rgba(1, 206, 126, 0.3);
-}
-
-/* 产品图片覆盖层 */
-.timeline-image {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url('/product1.png');
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
-  opacity: 0;
-  z-index: 5;
-  animation: fadeInImage 0.3s ease-in-out 0.2s forwards;
-}
-
-@keyframes fadeInImage {
-  from {
-    opacity: 0;
-    transform: scale(0.8);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-/* 最右侧两格变暗效果 */
-.timeline-item-dimmed .timeline-bar {
-  opacity: 0.5;
-  transition: opacity 0.3s ease;
 }
 
 .timeline-date {
   color: #ffffff;
   font-size: 0.9rem;
   font-weight: 500;
-  transition: all 0.3s ease;
   /* 年份文字紧贴时间线方框底部 */
-}
-
-/* 悬停时文字效果 */
-.timeline-card:hover .timeline-date {
-  color: #01CE7E;
-  transform: scale(1.1);
-  font-weight: 600;
 }
 
 /* 页脚 */
@@ -1318,7 +1338,7 @@ onUnmounted(() => {
   
   .section-content {
     left: 150px; /* 200px * 0.75 */
-    bottom: 159px; /* 212px * 0.75 */
+    bottom: 210px; /* 280px * 0.75 */
   }
   
   .logo {
@@ -1363,7 +1383,7 @@ onUnmounted(() => {
   
   .section-content {
     left: 120px; /* 200px * 0.6 */
-    bottom: 127px; /* 212px * 0.6 */
+    bottom: 168px; /* 280px * 0.6 */
   }
   
   .logo {
@@ -1452,13 +1472,9 @@ onUnmounted(() => {
   }
   
   .history-content .section-subtitle {
-    margin-bottom: 98.4px; /* 164px * 0.6 */
+    margin-bottom: 72px; /* 调小间距：原98.4px -> 72px */
   }
   
-  /* 响应式拓展效果 */
-  .timeline-bar-expanded {
-    width: 438px; /* 146px * 3 = 438px */
-  }
 
 }
 
@@ -1474,11 +1490,23 @@ onUnmounted(() => {
   .introduction-section {
     margin-top: -50px;
     padding-top: 50px;
+    /* 移动端禁用background-attachment: fixed，使用JavaScript实现视差效果 */
+    background-attachment: scroll;
+  }
+  
+  .team-section {
+    /* 移动端禁用background-attachment: fixed */
+    background-attachment: scroll;
+  }
+  
+  .history-section {
+    /* 移动端禁用background-attachment: fixed */
+    background-attachment: scroll;
   }
   
   .section-content {
     left: 100px; /* 200px * 0.5 */
-    bottom: 106px; /* 212px * 0.5 */
+    bottom: 140px; /* 280px * 0.5 */
     max-width: calc(100% - 120px); /* 调整最大宽度 */
   }
   
@@ -1540,37 +1568,36 @@ onUnmounted(() => {
 
   .timeline {
     flex-direction: column;
-    gap: 1rem;
+    gap: 1.5rem; /* 增加间距确保文字显示 */
     max-width: 610px; /* 1220px * 0.5 */
+    padding: 0 1rem; /* 添加左右内边距 */
   }
   
   .timeline-bar {
-    height: 200px; /* 400px * 0.5 */
-    width: 122px; /* 244px * 0.5 */
+    height: 160px; /* 减小高度：200px -> 160px */
+    width: 100px; /* 减小宽度：122px -> 100px */
+  }
+  
+  .timeline-item {
+    margin-bottom: 1rem; /* 确保年份文字有足够空间 */
+  }
+  
+  .timeline-date {
+    margin-top: 0.5rem; /* 增加文字与色块的间距 */
+    font-size: 0.8rem; /* 移动端字体稍小 */
   }
   
   /* 移除交互样式，只保留基础时间线样式 */
   
   .history-content {
-    padding-top: 50px; /* 100px * 0.5 */
+    padding-top: 40px; /* 减小顶部间距：50px -> 40px */
+    padding-bottom: 2rem; /* 添加底部间距确保内容不被截断 */
   }
   
   .history-content .section-subtitle {
-    margin-bottom: 82px; /* 164px * 0.5 */
+    margin-bottom: 40px; /* 进一步减小间距：60px -> 40px */
   }
   
-  /* 在移动端禁用拓展效果 */
-  .timeline-bar-expanded {
-    width: 122px !important; /* 保持原始宽度 */
-    position: relative !important;
-    left: auto !important;
-    z-index: 1 !important;
-    box-shadow: none !important;
-  }
-  
-  .timeline-item-dimmed .timeline-bar {
-    opacity: 1 !important; /* 移动端不变暗 */
-  }
 
   
   /* 页脚响应式 */
@@ -1633,13 +1660,9 @@ onUnmounted(() => {
   }
   
   .history-content .section-subtitle {
-    margin-bottom: 123px; /* 164px * 0.75 */
+    margin-bottom: 90px; /* 调小间距：原123px -> 90px */
   }
   
-  /* 响应式拓展效果 */
-  .timeline-bar-expanded {
-    width: 549px; /* 183px * 3 = 549px */
-  }
 
   
   /* 页脚响应式 */
@@ -1689,6 +1712,7 @@ onUnmounted(() => {
   }
   
   .footer-links {
+    justify-content: center; /* 移动端居中 */
     font-size: 0.8rem;
     gap: 0.4rem;
   }
@@ -1715,7 +1739,7 @@ onUnmounted(() => {
   
   .section-content {
     left: 20px; /* 移动端左侧边距减小 */
-    bottom: 85px; /* 212px * 0.4 */
+    bottom: 112px; /* 280px * 0.4 */
     max-width: calc(100% - 40px); /* 限制最大宽度 */
   }
   
@@ -1768,36 +1792,36 @@ onUnmounted(() => {
   }
   
   .timeline {
-    max-width: 488px; /* 1220px * 0.4 */
+    max-width: 400px; /* 减小最大宽度适应小屏幕 */
+    gap: 1.5rem; /* 保持充足间距 */
+    padding: 0 1rem; /* 添加左右内边距 */
   }
   
   .timeline-bar {
-    height: 160px; /* 400px * 0.4 */
-    width: 98px; /* 244px * 0.4 */
+    height: 120px; /* 进一步减小高度：160px -> 120px */
+    width: 80px; /* 进一步减小宽度：98px -> 80px */
+  }
+  
+  .timeline-item {
+    margin-bottom: 1rem; /* 确保年份文字有足够空间 */
+  }
+  
+  .timeline-date {
+    margin-top: 0.5rem; /* 增加文字与色块的间距 */
+    font-size: 0.75rem; /* 小屏幕字体更小 */
   }
   
   /* 移除交互样式，只保留基础时间线样式 */
   
   .history-content {
-    padding-top: 40px; /* 100px * 0.4 */
+    padding-top: 30px; /* 进一步减小顶部间距：40px -> 30px */
+    padding-bottom: 3rem; /* 增加底部间距确保内容完整显示 */
   }
   
   .history-content .section-subtitle {
-    margin-bottom: 65.6px; /* 164px * 0.4 */
+    margin-bottom: 30px; /* 进一步减小间距：48px -> 30px */
   }
   
-  /* 在小屏幕禁用拓展效果 */
-  .timeline-bar-expanded {
-    width: 98px !important; /* 保持原始宽度 */
-    position: relative !important;
-    left: auto !important;
-    z-index: 1 !important;
-    box-shadow: none !important;
-  }
-  
-  .timeline-item-dimmed .timeline-bar {
-    opacity: 1 !important; /* 小屏幕不变暗 */
-  }
 
   
   /* 页脚移动端适配 */

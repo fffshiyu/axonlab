@@ -8,7 +8,7 @@
         </div>
         <div class="nav-links">
           <router-link to="/home" class="nav-link">首页</router-link>
-          <router-link to="/news" class="nav-link">新闻</router-link>
+          <a href="#" class="nav-link disabled" @click.prevent>新闻</a>
           <a href="#" class="nav-link active">产品系列</a>
           <div class="nav-dropdown" @mouseenter="showDropdown" @mouseleave="hideDropdown">
             <a href="#" class="nav-link" :class="{ 'active': isDropdownVisible }">线上商城</a>
@@ -57,27 +57,27 @@
             :class="{ active: currentView === 'front' }"
             @click="switchView('front')"
           >
-            <img src="/正视图按钮.png" alt="正视图" class="view-btn-img" />
+            <img src="/front-view-btn.png" alt="正视图" class="view-btn-img" />
           </button>
           <button 
             class="view-btn" 
             :class="{ active: currentView === 'side' }"
             @click="switchView('side')"
           >
-            <img src="/侧视图按钮.png" alt="侧视图" class="view-btn-img" />
+            <img src="/side-view-btn.png" alt="侧视图" class="view-btn-img" />
           </button>
           <button 
             class="view-btn" 
             :class="{ active: currentView === 'top' }"
             @click="switchView('top')"
           >
-            <img src="/俯视图按钮.png" alt="俯视图" class="view-btn-img" />
+            <img src="/top-view-btn.png" alt="俯视图" class="view-btn-img" />
           </button>
         </div>
 
         <!-- 向下箭头 -->
         <div class="scroll-indicator" @click="scrollToSecondProduct">
-          <img src="/箭头.png" alt="向下箭头" class="scroll-arrow-img" />
+          <img src="/arrow.png" alt="向下箭头" class="scroll-arrow-img" />
         </div>
       </div>
     </section>
@@ -103,27 +103,27 @@
             :class="{ active: currentView2 === 'front' }"
             @click="switchView2('front')"
           >
-            <img src="/正视图按钮.png" alt="正视图" class="view-btn-img" />
+            <img src="/front-view-btn.png" alt="正视图" class="view-btn-img" />
           </button>
           <button 
             class="view-btn" 
             :class="{ active: currentView2 === 'side' }"
             @click="switchView2('side')"
           >
-            <img src="/侧视图按钮.png" alt="侧视图" class="view-btn-img" />
+            <img src="/side-view-btn.png" alt="侧视图" class="view-btn-img" />
           </button>
           <button 
             class="view-btn" 
             :class="{ active: currentView2 === 'top' }"
             @click="switchView2('top')"
           >
-            <img src="/俯视图按钮.png" alt="俯视图" class="view-btn-img" />
+            <img src="/top-view-btn.png" alt="俯视图" class="view-btn-img" />
           </button>
         </div>
 
         <!-- 向上箭头 -->
         <div class="scroll-indicator" @click="scrollToFirstProduct">
-          <img src="/箭头.png" alt="向上箭头" class="scroll-arrow-img scroll-arrow-up" />
+          <img src="/arrow.png" alt="向上箭头" class="scroll-arrow-img scroll-arrow-up" />
         </div>
       </div>
     </section>
@@ -140,7 +140,7 @@
         <div class="footer-content">
           <!-- 社交媒体图标 -->
           <div class="social-icons">
-            <img src="/logo/新浪.png" alt="微博" class="social-icon" />
+            <img src="/logo/weibo.png" alt="微博" class="social-icon" />
             <img src="/logo/redbook.png" alt="小红书" class="social-icon" />
             <img src="/logo/bilibil.png" alt="哔哩哔哩" class="social-icon" />
             <img src="/logo/ins.png" alt="Instagram" class="social-icon" />
@@ -180,16 +180,7 @@ import { ref, onMounted, onUnmounted } from 'vue'
 // 导航栏可见性
 const isNavbarVisible = ref(true)
 
-// 导航栏自动隐藏控制
-const updateNavbarVisibility = () => {
-  const currentScrollY = window.scrollY
-  
-  // 如果在页面顶部，始终显示导航栏
-  if (currentScrollY < 100) {
-    isNavbarVisible.value = true
-  }
-  // 其他情况由滚动方向控制（在handleWheel中处理）
-}
+
 
 // 下拉菜单控制
 const isDropdownVisible = ref(false)
@@ -518,6 +509,16 @@ onUnmounted(() => {
   background-color: #01CE7E;
 }
 
+.nav-link.disabled {
+  color: #666666 !important;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.nav-link.disabled:hover {
+  color: #666666 !important;
+}
+
 /* 下拉菜单样式 */
 .nav-dropdown {
   position: relative;
@@ -636,6 +637,7 @@ onUnmounted(() => {
   transition: color 0.3s ease;
   font-family: 'MiSans', 'Noto Sans SC', sans-serif;
   font-weight: 400;
+  font-size: 16px;
 }
 
 .lang-switch:hover {
@@ -649,6 +651,7 @@ onUnmounted(() => {
 .lang-divider {
   color: #cccccc;
   font-family: 'MiSans', 'Noto Sans SC', sans-serif;
+  font-size: 16px;
 }
 
 /* 产品展示区域 */
@@ -731,11 +734,11 @@ onUnmounted(() => {
 /* 视图切换按钮 */
 .view-buttons {
   position: absolute;
-  bottom: 120px; /* 距离底部120px，1920*1080基准 */
+  bottom: 80px; /* 距离底部80px，1920*1080基准 */
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  gap: 2rem;
+  gap: 100px; /* 按钮间距100px */
 }
 
 .view-btn {
@@ -757,8 +760,8 @@ onUnmounted(() => {
 }
 
 .view-btn-img {
-  width: 60px; /* 1920*1080基准宽度 */
-  height: 60px; /* 1920*1080基准高度 */
+  width: 50px; /* 1920*1080基准宽度50px */
+  height: 50px; /* 1920*1080基准高度50px */
   border-radius: 50%;
   transition: all 0.3s ease;
 }
@@ -766,7 +769,7 @@ onUnmounted(() => {
 /* 滚动指示器 */
 .scroll-indicator {
   position: absolute;
-  bottom: 49px;
+  bottom: 10px; /* 更靠近底部，1920*1080基准 */
   left: 50%;
   transform: translateX(-50%);
   text-align: center;
@@ -864,12 +867,17 @@ onUnmounted(() => {
   }
   
   .view-buttons {
-    bottom: 90px; /* 120px * 0.75 */
+    bottom: 60px; /* 80px * 0.75 */
+    gap: 75px; /* 100px * 0.75 */
   }
   
   .view-btn-img {
-    width: 45px; /* 60px * 0.75 */
-    height: 45px; /* 60px * 0.75 */
+    width: 37.5px; /* 50px * 0.75 */
+    height: 37.5px; /* 50px * 0.75 */
+  }
+  
+  .scroll-indicator {
+    bottom: 7.5px; /* 10px * 0.75 */
   }
   
   .scroll-arrow-img {
@@ -919,13 +927,17 @@ onUnmounted(() => {
   }
   
   .view-buttons {
-    bottom: 72px; /* 120px * 0.6 */
-    gap: 1.5rem;
+    bottom: 48px; /* 80px * 0.6 */
+    gap: 60px; /* 100px * 0.6 */
   }
   
   .view-btn-img {
-    width: 36px; /* 60px * 0.6 */
-    height: 36px; /* 60px * 0.6 */
+    width: 30px; /* 50px * 0.6 */
+    height: 30px; /* 50px * 0.6 */
+  }
+  
+  .scroll-indicator {
+    bottom: 6px; /* 10px * 0.6 */
   }
   
   .scroll-arrow-img {
@@ -974,13 +986,17 @@ onUnmounted(() => {
   }
   
   .view-buttons {
-    bottom: 60px; /* 120px * 0.5 */
-    gap: 1rem;
+    bottom: 40px; /* 80px * 0.5 */
+    gap: 50px; /* 100px * 0.5 */
   }
   
   .view-btn-img {
-    width: 30px; /* 60px * 0.5 */
-    height: 30px; /* 60px * 0.5 */
+    width: 25px; /* 50px * 0.5 */
+    height: 25px; /* 50px * 0.5 */
+  }
+  
+  .scroll-indicator {
+    bottom: 5px; /* 10px * 0.5 */
   }
   
   .scroll-arrow-img {
@@ -1029,13 +1045,17 @@ onUnmounted(() => {
   }
   
   .view-buttons {
-    bottom: 48px; /* 120px * 0.4 */
-    gap: 0.8rem;
+    bottom: 32px; /* 80px * 0.4 */
+    gap: 40px; /* 100px * 0.4 */
   }
   
   .view-btn-img {
-    width: 24px; /* 60px * 0.4 */
-    height: 24px; /* 60px * 0.4 */
+    width: 20px; /* 50px * 0.4 */
+    height: 20px; /* 50px * 0.4 */
+  }
+  
+  .scroll-indicator {
+    bottom: 4px; /* 10px * 0.4 */
   }
   
   .scroll-arrow-img {
