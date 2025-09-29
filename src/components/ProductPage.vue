@@ -8,7 +8,7 @@
         </div>
         <div class="nav-links">
           <router-link to="/home" class="nav-link">首页</router-link>
-          <a href="#" class="nav-link disabled" @click.prevent>新闻</a>
+          <a href="#" class="nav-link" @click.prevent>新闻</a>
           <a href="#" class="nav-link active">产品系列</a>
           <div class="nav-dropdown" @mouseenter="showDropdown" @mouseleave="hideDropdown">
             <a href="#" class="nav-link" :class="{ 'active': isDropdownVisible }">线上商城</a>
@@ -507,16 +507,6 @@ onUnmounted(() => {
   width: 100%;
   height: 2px;
   background-color: #01CE7E;
-}
-
-.nav-link.disabled {
-  color: #666666 !important;
-  cursor: not-allowed;
-  opacity: 0.5;
-}
-
-.nav-link.disabled:hover {
-  color: #666666 !important;
 }
 
 /* 下拉菜单样式 */
