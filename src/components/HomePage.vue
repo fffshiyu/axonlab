@@ -1,44 +1,7 @@
 <template>
   <div class="home-container">
     <!-- 导航栏 -->
-    <nav class="navbar" :class="{ 'navbar-hidden': !isNavbarVisible }">
-      <div class="nav-content">
-        <div class="logo">
-          <img src="/logo.svg" alt="AXON LABS" class="logo-img" />
-        </div>
-        <div class="nav-links">
-          <a href="#introduction" class="nav-link active">首页</a>
-          <a href="#" class="nav-link" @click.prevent>新闻</a>
-          <a href="#" class="nav-link" @click.prevent>产品系列</a>
-          <div class="nav-dropdown" @mouseenter="showDropdown" @mouseleave="hideDropdown">
-            <a href="#" class="nav-link" :class="{ 'active': isDropdownVisible }">线上商城</a>
-            <div class="dropdown-menu" :class="{ 'show': isDropdownVisible }">
-              <div class="dropdown-item" @click="showQRCode('tmall')">天猫商城</div>
-              <div class="dropdown-item" @click="showQRCode('douyin')">抖音商城</div>
-              <div class="dropdown-item" @click="showQRCode('jd')">京东商城</div>
-              <div class="dropdown-item" @click="showQRCode('xiaochengxu')">小程序官方商城</div>
-              <!-- 二维码显示区域 - 定位在下拉框右侧 -->
-              <div class="qr-code-container" :class="{ 'show': isQRCodeVisible }">
-                <div class="qr-code-placeholder">二维码</div>
-                <div class="qr-code-title">{{ currentQRTitle }}</div>
-              </div>
-            </div>
-          </div>
-          <a href="#about" class="nav-link">合作</a>
-          <a href="#join" class="nav-link">加入我们</a>
-        </div>
-        <!-- 移动端菜单按钮 -->
-        <div class="mobile-menu-btn" @click="toggleMobileMenu">
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-        
-        <div class="nav-right">
-          <span class="nav-language"><span class="active-lang">CN</span> | EN</span>
-        </div>
-      </div>
-    </nav>
+    <Navbar active-page="home" />
 
     <!-- 主要内容区域 -->
     <main class="main-content">
@@ -46,7 +9,7 @@
       <section class="introduction-section" id="introduction">
         <div class="section-container">
           <div class="section-content">
-            <h2 class="section-title">INTRODUCTION</h2>
+            <h2 class="section-title">BRAND INTRODUCTION</h2>
             <h3 class="section-subtitle">品牌介绍</h3>
             <div class="section-text">
               <p>北京玄圃科技有限公司成立于2024年，为国内领先的AI技术与智能硬件开发公司。AXON LABS羽山作为公司旗下最重要的品牌，以"AI为爱，智趣未来，AI for Love, Smart Fun Future"为品牌理念，以用户情感需求为导向，推动智能产品从功能工具向 "有温度的伙伴" 进化。</p>
@@ -57,27 +20,11 @@
           </div>
     
         </div>
-        <div class="scroll-indicator" @click="scrollToTeam">
-          <img src="/arrow.png" alt="向下箭头" class="scroll-arrow-img" />
-        </div>
-      </section>
-
-      <!-- 团队介绍区域 -->
-      <section class="team-section" id="team">
-        <div class="section-container">
-          <div class="section-content">
-            <h2 class="section-title">TEAM INTRODUCTION</h2>
-            <h3 class="section-subtitle">团队介绍</h3>
-            <div class="team-button">
-              <button class="learn-more-btn">Learn More</button>
-            </div>
-          </div>
-       
-        </div>
         <div class="scroll-indicator" @click="scrollToHistory">
           <img src="/arrow.png" alt="向下箭头" class="scroll-arrow-img" />
         </div>
       </section>
+
 
       <!-- 历史大事件区域 -->
       <section class="history-section" id="history">
@@ -114,7 +61,7 @@
       <div class="footer-container">
         <!-- AXON LABS Logo - 左侧200px -->
         <div class="footer-logo">
-          <img src="/logo/greenlogo.png" alt="AXON LABS" class="footer-logo-img" />
+          <img src="/logo.svg" alt="AXON LABS" class="footer-logo-img" />
         </div>
         
         <!-- 页脚主要内容 - 居中左对齐 -->
@@ -148,12 +95,6 @@
           <div class="footer-text-area">
             <!-- 页脚链接 -->
             <div class="footer-links">
-              <a href="#" class="footer-link">加入我们</a>
-              <span class="separator">|</span>
-              <a href="#" class="footer-link">联系我们</a>
-              <span class="separator">|</span>
-              <a href="#" class="footer-link">廉洁合规</a>
-              <span class="separator">|</span>
               <a href="#" class="footer-link">知识产权保护</a>
               <span class="separator">|</span>
               <a href="#" class="footer-link">隐私声明</a>
@@ -163,12 +104,12 @@
             
             <!-- 联系信息 -->
             <div class="footer-contact">
-              <p>北京东城区光华长安大厦1-615 | 4000252253@POPMART.COM</p>
+              <p>互联网违法和不良信息举报邮箱   LD@axonlabs.com</p>
             </div>
             
             <!-- 版权信息 -->
             <div class="footer-copyright">
-              <p>COPYRIGHT © 泡泡玛特 POPMART.COM ALL RIGHTS RESERVED | 京公网安备 11010502051946号 | 京ICP备11028233号-4 | 营业执照</p>
+              <p>COPYRIGHT © AXON LABS 羽山 ALL RIGHTS RESERVED    |    京公网安备 XXXXXX号    |    京ICP备XXXXX    |    营业执照</p>
             </div>
           </div>
         </div>
@@ -179,14 +120,15 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, computed } from 'vue'
+import Navbar from './Navbar.vue'
 
 // 时间线数据
 const timelineData = ref([
-  { date: '2024', color: '#B0D0C3' }, // 从左到右第一个
-  { date: '2025', color: '#83D5B5' }, // 从左到右第二个
-  { date: '2026', color: '#6AD9A1' }, // 从左到右第三个
-  { date: '2027', color: '#40CF97' }, // 从左到右第四个
-  { date: '2028', color: '#01CE7E' }  // 从左到右第五个
+  { date: '2024.09', color: '#B0D0C3' }, // 从左到右第一个
+  { date: '2024.09', color: '#83D5B5' }, // 从左到右第二个
+  { date: '2024.09', color: '#6AD9A1' }, // 从左到右第三个
+  { date: '2024.09', color: '#40CF97' }, // 从左到右第四个
+  { date: '2024.09', color: '#01CE7E' }  // 从左到右第五个
 ])
 
 
@@ -241,46 +183,10 @@ const handleClickOutside = (event: Event) => {
   }
 }
 
-// 导航栏自动隐藏控制
-const isNavbarVisible = ref(true)
-let lastScrollY = 0
-let ticking = false
-
-const updateNavbarVisibility = () => {
-  const currentScrollY = window.scrollY
-  
-  // 如果在页面顶部，始终显示导航栏
-  if (currentScrollY < 100) {
-    isNavbarVisible.value = true
-  } else {
-    // 向下滚动隐藏，向上滚动显示
-    if (currentScrollY > lastScrollY) {
-      // 向下滚动
-      isNavbarVisible.value = false
-    } else {
-      // 向上滚动
-      isNavbarVisible.value = true
-    }
-  }
-  
-  lastScrollY = currentScrollY
-  ticking = false
-}
-
-const handleScroll = () => {
-  // 如果正在进行全屏滚动，不处理导航栏隐藏
-  if (isScrolling) return
-  
-  if (!ticking) {
-    requestAnimationFrame(updateNavbarVisibility)
-    ticking = true
-  }
-}
-
-// 视差滚动效果
+// 全屏翻页滚动功能
 const updateParallax = () => {
   const scrollY = window.pageYOffset
-  const parallaxElements = document.querySelectorAll('.introduction-section, .team-section, .history-section')
+  const parallaxElements = document.querySelectorAll('.introduction-section, .history-section')
   
   parallaxElements.forEach((element) => {
     const htmlElement = element as HTMLElement
@@ -317,19 +223,14 @@ const handleParallaxScroll = () => {
   }
 }
 
-// 滚动到团队介绍区域
-const scrollToTeam = () => {
-  scrollToSection(1) // 使用统一的滚动函数
-}
-
 // 滚动到历史区域
 const scrollToHistory = () => {
-  scrollToSection(2) // 使用统一的滚动函数
+  scrollToSection(1) // 使用统一的滚动函数
 }
 
 // 全屏滚动功能
 let currentSection = 0
-const sections = ['introduction', 'team', 'history']
+const sections = ['introduction', 'history']
 let isScrolling = false
 let lastScrollTime = 0
 
@@ -409,28 +310,12 @@ const handleWheel = (event: WheelEvent) => {
   
   // 如果在历史区域，允许正常滚动
   if (isInHistorySection) {
-    // 更新导航栏显示状态
-    if (event.deltaY > 0) {
-      isNavbarVisible.value = false
-    } else {
-      isNavbarVisible.value = true
-    }
-    
     // 不阻止默认滚动行为，允许正常滚动
     return
   }
   
   // 对于其他区域，使用全屏翻页
   event.preventDefault()
-  
-  // 更新导航栏显示状态（基于滚动方向）
-  if (event.deltaY > 0) {
-    // 向下滚动 - 隐藏导航栏
-    isNavbarVisible.value = false
-  } else {
-    // 向上滚动 - 显示导航栏
-    isNavbarVisible.value = true
-  }
   
   // 使用更简单的滚动检测，减少复杂性
   const scrollDelta = Math.abs(event.deltaY)
@@ -465,15 +350,12 @@ const initializePagePosition = () => {
     // 接近顶部，滚动到顶部
     window.scrollTo({ top: 0, behavior: 'auto' })
     currentSection = 0
-    isNavbarVisible.value = true // 在顶部显示导航栏
   } else {
     // 找到最近的区域并对齐
     const nearestSection = Math.round(scrollTop / windowHeight)
     if (nearestSection < sections.length) {
       scrollToSection(nearestSection)
     }
-    // 根据当前位置设置导航栏状态
-    isNavbarVisible.value = nearestSection === 0
   }
 }
 
@@ -521,13 +403,11 @@ onMounted(() => {
     
     if (event.key === 'ArrowDown' || event.key === 'PageDown') {
       event.preventDefault()
-      isNavbarVisible.value = false // 向下键隐藏导航栏
       if (currentSection < sections.length - 1) {
         scrollToSection(currentSection + 1)
       }
     } else if (event.key === 'ArrowUp' || event.key === 'PageUp') {
       event.preventDefault()
-      isNavbarVisible.value = true // 向上键显示导航栏
       if (currentSection > 0) {
         scrollToSection(currentSection - 1)
       }
@@ -541,19 +421,13 @@ onMounted(() => {
     }, 200)
   })
   
-  // 添加导航栏自动隐藏的滚动监听
-  window.addEventListener('scroll', handleScroll, { passive: true })
-  
   // 添加视差滚动效果监听器
   window.addEventListener('scroll', handleParallaxScroll, { passive: true })
   
   // 添加页脚区域的正常滚动支持
   const footerObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        // 当页脚可见时，确保导航栏隐藏
-        isNavbarVisible.value = false
-      }
+      // 当页脚可见时的处理逻辑（如果需要）
     })
   }, { threshold: 0.1 })
   
@@ -574,6 +448,23 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+/* 字体定义 */
+@font-face {
+  font-family: 'MiSans-Demibold';
+  src: url('/fonts/MiSans-Demibold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'MiSans-Regular';
+  src: url('/fonts/MiSans-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 .home-container {
   width: 100%;
   min-height: 100vh;
@@ -611,43 +502,11 @@ onUnmounted(() => {
   z-index: 1;
 }
 
-/* 团队介绍区域背景图 */
-.team-section {
-  position: relative;
-  background: url('/BG2.png') no-repeat center center;
-  background-size: cover;
-  background-attachment: fixed; /* 启用视差滚动效果 */
-  width: 100vw;
-  margin-left: calc(-50vw + 50%);
-  height: 100vh; /* 固定高度，确保全屏滚动效果 */
-  min-height: 100vh; /* 确保最小高度 */
-  overflow: hidden; /* 确保背景不会溢出 */
-}
-
-.team-section::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.3);
-  z-index: 1;
-}
-
-.team-section .section-container {
-  position: relative;
-  z-index: 2;
-  height: 100vh; /* 容器也占满整个视口高度 */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 
 /* 历史区域背景 */
 .history-section {
   position: relative;
-  background: url('/BG3.png') no-repeat center center;
+  background: url('/BG2.png') no-repeat center center;
   background-size: cover;
   background-attachment: fixed; /* 启用视差滚动效果 */
   width: 100vw;
@@ -942,16 +801,19 @@ onUnmounted(() => {
 .section-title {
   font-size: 60px; /* 1920*1080基准字号 */
   font-weight: 600; /* 使用Semibold字重 */
-  color: #ffffff;
+  background: linear-gradient(to right, #01CE7E, #016840); /* 绿色渐变从左到右 */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   margin-bottom: 0; /* h2和h3距离为0 */
   letter-spacing: 0.1em;
-  font-family: 'MiSans', 'Noto Sans SC', sans-serif;
+  font-family: 'MiSans-Demibold', 'MiSans', 'Noto Sans SC', sans-serif;
   white-space: nowrap; /* 不换行 */
 }
 
 .section-subtitle {
   font-size: 30px;
-  color: #cccccc;
+  color: #ffffff; /* 中文标题使用白色 */
   margin-bottom: 20px; /* h3和section-text距离为20px */
   margin-top: 0; /* h2和h3距离为0 */
   font-weight: 700; /* 使用Bold字重 */
@@ -963,7 +825,7 @@ onUnmounted(() => {
   color: #cccccc;
   font-size: 16px;
   font-weight: 400; /* 使用Regular字重 */
-  font-family: 'MiSans', 'Noto Sans SC', sans-serif;
+  font-family: 'MiSans-Regular', 'MiSans', 'Noto Sans SC', sans-serif;
 }
 
 .section-text p {
@@ -1070,7 +932,7 @@ onUnmounted(() => {
   left: 0;
   width: 0;
   height: 100%;
-  background: linear-gradient(90deg, #01CE7E 0%, #00b86b 100%);
+  background: rgba(1, 206, 126, 0.5); /* 50%透明度的#01CE7E */
   transition: width 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   z-index: -1;
 }
@@ -1119,9 +981,9 @@ onUnmounted(() => {
   transform: translateY(-5vh); /* 整体上移5% */
 }
 
-/* 大事件标题距离色块144px */
+/* 大事件标题距离色块76px */
 .history-content .section-subtitle {
-  margin-bottom: 120px; /* 调小间距：原164px -> 120px */
+  margin-bottom: 76px; /* 1920*1080基准：76px */
 }
 
 /* 时间线 */
@@ -1186,12 +1048,14 @@ onUnmounted(() => {
 /* 页脚 */
 .footer {
   background: #000000;
-  padding: 2rem 0 32px; /* 底部距离32px，1920*1080基准 */
+  height: 160px; /* 从200px缩小到160px (80%) */
+  padding: 30px 0; /* 从40px缩小到30px */
   color: #ffffff;
+  box-sizing: border-box;
 }
 
 .footer-container {
-  max-width: 1920px; /* 使用1920px基准宽度 */
+  max-width: 1920px;
   margin: 0 auto;
   padding: 0;
   position: relative;
@@ -1200,23 +1064,23 @@ onUnmounted(() => {
 /* AXON LABS Logo - 左侧200px */
 .footer-logo {
   position: absolute;
-  left: 200px; /* 距离左侧200px，1920*1080基准 */
-  top: 2rem;
+  left: 200px;
+  top: 30px; /* 从40px缩小到30px */
 }
 
 .footer-logo-img {
-  width: 250px; /* 1920*1080基准宽度 */
+  width: 200px; /* 从250px缩小到200px (80%) */
   height: auto;
+  filter: brightness(0) invert(1);
 }
 
 /* 页脚主要内容区域 - 居中左对齐 */
 .footer-content {
   max-width: 800px;
   margin: 0 auto;
-  text-align: left; /* 左对齐 */
+  text-align: left;
   padding-left: 2rem;
-  margin-left: 450px; /* logo宽度250px + 距离左侧200px = 450px，确保不重叠 */
-  /* 移除固定高度，使用自然布局 */
+  margin-left: 480px; /* logo位置200px + logo宽度200px + 间距80px = 480px */
   display: flex;
   flex-direction: column;
 }
@@ -1224,15 +1088,15 @@ onUnmounted(() => {
 /* 社交媒体图标 */
 .social-icons {
   display: flex;
-  justify-content: flex-start; /* 左对齐 */
-  gap: 1rem;
-  margin-bottom: 15px; /* 图标距离下面文字15px，1920*1080基准 */
+  justify-content: flex-start;
+  gap: 0.8rem; /* 从1rem缩小到0.8rem */
+  margin-bottom: 12px; /* 从15px缩小到12px */
 }
 
 .social-icon {
   display: inline-block;
-  width: 24px; /* 调整为24px */
-  height: 24px; /* 调整为24px */
+  width: 20px; /* 从24px缩小到20px */
+  height: 20px; /* 从24px缩小到20px */
   transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
@@ -1249,7 +1113,7 @@ onUnmounted(() => {
 
 /* 页脚文字区域 */
 .footer-text-area {
-  height: 90px; /* 1920*1080基准下三行文字总高度90px */
+  height: 75px; /* 从90px缩小到75px */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -1258,16 +1122,16 @@ onUnmounted(() => {
 /* 页脚链接 */
 .footer-links {
   display: flex;
-  justify-content: flex-start; /* 左对齐 */
+  justify-content: flex-start;
   align-items: center;
   flex-wrap: wrap;
   gap: 0.5rem;
-  font-size: 0.85rem;
-  height: 30px; /* 第一行高度30px */
+  font-size: 14px; /* 从16px缩小到14px */
+  height: 20px; /* 从24px缩小到20px */
 }
 
 .footer-link {
-  color: #cccccc;
+  color: #ffffff;
   text-decoration: none;
   transition: color 0.3s ease;
 }
@@ -1277,38 +1141,39 @@ onUnmounted(() => {
 }
 
 .separator {
-  color: #666666;
+  color: #ffffff;
   margin: 0 0.25rem;
 }
 
 /* 联系信息 */
 .footer-contact {
-  height: 30px; /* 第二行高度30px */
+  height: 20px; /* 从24px缩小到20px */
   display: flex;
   align-items: center;
 }
 
 .footer-contact p {
-  color: #cccccc;
-  font-size: 0.85rem;
+  color: #9E9E9E;
+  font-size: 14px; /* 从16px缩小到14px */
   margin: 0;
-  text-align: left; /* 左对齐 */
+  text-align: left;
 }
 
 /* 版权信息 */
 .footer-copyright {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  height: 30px; /* 第三行高度30px */
+  height: 20px; /* 从24px缩小到20px */
   display: flex;
   align-items: center;
 }
 
 .footer-copyright p {
-  color: #888888;
-  font-size: 0.75rem;
+  color: #9E9E9E;
+  font-size: 14px; /* 从16px缩小到14px */
   margin: 0;
   line-height: 1.4;
-  text-align: left; /* 左对齐 */
+  text-align: left;
+  white-space: nowrap;
 }
 
 /* 响应式设计 - 以1920*1080为基准 */
@@ -1408,11 +1273,12 @@ onUnmounted(() => {
   }
   
   .footer {
-    padding-bottom: 19.2px; /* 32px * 0.6 */
+    height: 120px; /* 200px * 0.6 */
+    padding: 24px 0; /* 40px * 0.6 */
   }
   
   .footer-content {
-    margin-left: 270px; /* 150px + 120px，logo宽度 + 距离左侧 */
+    margin-left: 330px; /* logo位置120px + logo宽度150px + 间距60px = 330px */
     max-width: 500px;
   }
   
@@ -1425,15 +1291,15 @@ onUnmounted(() => {
   }
   
   .footer-links {
-    height: 18px; /* 30px * 0.6 */
+    height: 14.4px; /* 24px * 0.6 */
   }
   
   .footer-contact {
-    height: 18px; /* 30px * 0.6 */
+    height: 14.4px; /* 24px * 0.6 */
   }
   
   .footer-copyright {
-    height: 18px; /* 30px * 0.6 */
+    height: 14.4px; /* 24px * 0.6 */
   }
   
   .social-icon {
@@ -1444,6 +1310,15 @@ onUnmounted(() => {
   .footer-logo-img {
     width: 150px; /* 250px * 0.6 */
     height: auto;
+  }
+  
+  .footer-links {
+    font-size: 9.6px; /* 16px * 0.6 */
+  }
+  
+  .footer-contact p,
+  .footer-copyright p {
+    font-size: 9.6px; /* 16px * 0.6 */
   }
   
   .timeline {
@@ -1462,7 +1337,7 @@ onUnmounted(() => {
   }
   
   .history-content .section-subtitle {
-    margin-bottom: 72px; /* 调小间距：原98.4px -> 72px */
+    margin-bottom: 57px; /* 76px * 0.75 */
   }
   
 
@@ -1484,10 +1359,6 @@ onUnmounted(() => {
     background-attachment: scroll;
   }
   
-  .team-section {
-    /* 移动端禁用background-attachment: fixed */
-    background-attachment: scroll;
-  }
   
   .history-section {
     /* 移动端禁用background-attachment: fixed */
@@ -1585,7 +1456,7 @@ onUnmounted(() => {
   }
   
   .history-content .section-subtitle {
-    margin-bottom: 40px; /* 进一步减小间距：60px -> 40px */
+    margin-bottom: 38px; /* 76px * 0.5 */
   }
   
 
@@ -1596,11 +1467,12 @@ onUnmounted(() => {
   }
   
   .footer {
-    padding-bottom: 16px; /* 32px * 0.5 */
+    height: 100px; /* 200px * 0.5 */
+    padding: 20px 0; /* 40px * 0.5 */
   }
   
   .footer-content {
-    margin-left: 225px; /* 125px + 100px，logo宽度 + 距离左侧 */
+    margin-left: 275px; /* logo位置100px + logo宽度125px + 间距50px = 275px */
     max-width: 400px;
   }
   
@@ -1613,15 +1485,15 @@ onUnmounted(() => {
   }
   
   .footer-links {
-    height: 15px; /* 30px * 0.5 */
+    height: 12px; /* 24px * 0.5 */
   }
   
   .footer-contact {
-    height: 15px; /* 30px * 0.5 */
+    height: 12px; /* 24px * 0.5 */
   }
   
   .footer-copyright {
-    height: 15px; /* 30px * 0.5 */
+    height: 12px; /* 24px * 0.5 */
   }
   
   .social-icon {
@@ -1632,6 +1504,15 @@ onUnmounted(() => {
   .footer-logo-img {
     width: 125px; /* 250px * 0.5 */
     height: auto;
+  }
+  
+  .footer-links {
+    font-size: 8px; /* 16px * 0.5 */
+  }
+  
+  .footer-contact p,
+  .footer-copyright p {
+    font-size: 8px; /* 16px * 0.5 */
   }
   
   .timeline {
@@ -1650,7 +1531,7 @@ onUnmounted(() => {
   }
   
   .history-content .section-subtitle {
-    margin-bottom: 90px; /* 调小间距：原123px -> 90px */
+    margin-bottom: 46px; /* 76px * 0.6 */
   }
   
 
@@ -1661,13 +1542,14 @@ onUnmounted(() => {
   }
   
   .footer {
-    padding-bottom: 24px; /* 32px * 0.75 */
+    height: 150px; /* 200px * 0.75 */
+    padding: 30px 0; /* 40px * 0.75 */
   }
   
   .footer-content {
     max-width: 600px;
     padding-left: 1.5rem;
-    margin-left: 337.5px; /* (187.5px + 150px) logo宽度 + 距离左侧 */
+    margin-left: 412.5px; /* logo位置150px + logo宽度187.5px + 间距75px = 412.5px */
   }
   
   .social-icons {
@@ -1680,15 +1562,15 @@ onUnmounted(() => {
   }
   
   .footer-links {
-    height: 22.5px; /* 30px * 0.75 */
+    height: 18px; /* 24px * 0.75 */
   }
   
   .footer-contact {
-    height: 22.5px; /* 30px * 0.75 */
+    height: 18px; /* 24px * 0.75 */
   }
   
   .footer-copyright {
-    height: 22.5px; /* 30px * 0.75 */
+    height: 18px; /* 24px * 0.75 */
   }
   
   .social-icon {
@@ -1703,13 +1585,13 @@ onUnmounted(() => {
   
   .footer-links {
     justify-content: center; /* 移动端居中 */
-    font-size: 0.8rem;
+    font-size: 12px; /* 16px * 0.75 */
     gap: 0.4rem;
   }
   
   .footer-contact p,
   .footer-copyright p {
-    font-size: 0.7rem;
+    font-size: 12px; /* 16px * 0.75 */
   }
 }
 
@@ -1809,7 +1691,7 @@ onUnmounted(() => {
   }
   
   .history-content .section-subtitle {
-    margin-bottom: 30px; /* 进一步减小间距：48px -> 30px */
+    margin-bottom: 30px; /* 76px * 0.4 */
   }
   
 
@@ -1846,16 +1728,16 @@ onUnmounted(() => {
   }
   
   .footer-links {
-    height: 12px; /* 30px * 0.4 */
+    height: 9.6px; /* 24px * 0.4 */
     justify-content: center; /* 移动端居中 */
   }
   
   .footer-contact {
-    height: 12px; /* 30px * 0.4 */
+    height: 9.6px; /* 24px * 0.4 */
   }
   
   .footer-copyright {
-    height: 12px; /* 30px * 0.4 */
+    height: 9.6px; /* 24px * 0.4 */
   }
   
   .social-icon {
@@ -1870,13 +1752,13 @@ onUnmounted(() => {
   
   .footer-links {
     justify-content: center; /* 移动端居中 */
-    font-size: 0.7rem;
+    font-size: 6.4px; /* 16px * 0.4 */
     gap: 0.3rem;
   }
   
   .footer-contact p,
   .footer-copyright p {
-    font-size: 0.65rem;
+    font-size: 6.4px; /* 16px * 0.4 */
     text-align: center; /* 移动端居中 */
   }
 }

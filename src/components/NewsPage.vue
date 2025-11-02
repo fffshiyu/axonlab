@@ -1,130 +1,47 @@
 <template>
   <div class="news-container">
     <!-- 导航栏 -->
-    <nav class="navbar" :class="{ 'navbar-hidden': !isNavbarVisible }">
-      <div class="nav-content">
-        <div class="logo">
-          <img src="/logo.svg" alt="AXON LABS" class="logo-img" />
-        </div>
-        <div class="nav-links">
-          <router-link to="/home" class="nav-link">首页</router-link>
-          <a href="#" class="nav-link active">新闻</a>
-          <a href="#" class="nav-link" @click.prevent>产品系列</a>
-          <div class="nav-dropdown" @mouseenter="showDropdown" @mouseleave="hideDropdown">
-            <a href="#" class="nav-link" :class="{ 'active': isDropdownVisible }">线上商城</a>
-            <div class="dropdown-menu" :class="{ 'show': isDropdownVisible }">
-              <div class="dropdown-item" @click="showQRCode('tmall')">天猫商城</div>
-              <div class="dropdown-item" @click="showQRCode('douyin')">抖音商城</div>
-              <div class="dropdown-item" @click="showQRCode('jd')">京东商城</div>
-              <div class="dropdown-item" @click="showQRCode('xiaochengxu')">小程序官方商城</div>
-              <!-- 二维码显示区域 - 定位在下拉框右侧 -->
-              <div class="qr-code-container" :class="{ 'show': isQRCodeVisible }">
-                <div class="qr-code-placeholder">二维码</div>
-                <div class="qr-code-title">{{ currentQRTitle }}</div>
-              </div>
-            </div>
-          </div>
-          <a href="#" class="nav-link">合作</a>
-          <a href="#" class="nav-link">加入我们</a>
-        </div>
-        <!-- 语言切换 -->
-        <div class="nav-right">
-          <span class="lang-switch active">CN</span>
-          <span class="lang-divider">|</span>
-          <span class="lang-switch">EN</span>
-        </div>
-      </div>
-    </nav>
-    <!-- 第一个新闻轮播区域 -->
-    <section class="news-section" id="news-intro-1">
+    <Navbar active-page="news" />
+    
+    <!-- 新版新闻首屏（按图片设计） -->
+    <section class="news-section" id="news-hero">
       <div class="section-container">
-        <div class="news-content">
-          <!-- 轮播图上移 - 3D层次效果 -->
-          <div class="carousel-container">
-            <div class="carousel-3d-wrapper">
-              <div 
-                v-for="(image, index) in carouselImages1" 
-                :key="index"
-                class="carousel-3d-slide"
-                :class="{
-                  'slide-active': currentSlide1 === index,
-                  'slide-prev': currentSlide1 === (index + 1) % carouselImages1.length,
-                  'slide-next': currentSlide1 === (index - 1 + carouselImages1.length) % carouselImages1.length
-                }"
-                @click="setSlide1(index)">
-                <div class="carousel-image" :style="{ backgroundColor: image.color }">
-                  <span class="placeholder-text">{{ image.text }}</span>
-                </div>
+        <div class="news-hero-layout">
+          <!-- 左侧主图与日期 -->
+          <div class="hero-left">
+            <button class="hero-arrow hero-arrow-left" @click="prevNews">
+              <img src="/arrow_right.png" alt="上一张" class="arrow-icon arrow-icon-left" />
+            </button>
+            <div class="hero-image">
+              <img :src="newsData[currentNewsIndex].image" alt="news" class="hero-img" />
+              <div class="date-overlay">{{ newsData[currentNewsIndex].date }}</div>
+              <!-- 轮播图切换点移到图片内部靠下 -->
+              <div class="hero-dots">
+                <span 
+                  v-for="(_, index) in newsData" 
+                  :key="index"
+                  :class="['dot', { active: currentNewsIndex === index }]"
+                  @click="goToNews(index)">
+                </span>
               </div>
             </div>
-            <div class="carousel-dots">
-              <span 
-                v-for="(_, index) in carouselImages1" 
-                :key="index"
-                :class="['dot', { active: currentSlide1 === index }]"
-                @click="setSlide1(index)">
-              </span>
-            </div>
+            <button class="hero-arrow hero-arrow-right" @click="nextNews">
+              <img src="/arrow_right.png" alt="下一张" class="arrow-icon" />
+            </button>
           </div>
-          
-          <!-- 新闻标题和内容 -->
-          <div class="news-text-content">
-            <h3 class="news-title">AXON LABS发布全新AI智能硬件产品线</h3>
-            <p class="news-description">
-              北京玄圃科技有限公司今日正式发布AXON LABS羽山系列全新AI智能硬件产品，该产品线融合了最新的人工智能技术与创新硬件设计，旨在为用户提供更加智能、便捷的生活体验。新产品采用了先进的机器学习算法，能够自主学习用户习惯，提供个性化的智能服务。
-            </p>
-            <!-- 文字下方箭头 -->
-            <div class="news-arrow" @click="scrollToSecondIntro">
-              <img src="/arrow.png" alt="向下箭头" class="news-arrow-img" />
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
 
-    <!-- 第二个新闻轮播区域 -->
-    <section class="news-section" id="news-intro-2">
-      <div class="section-container">
-        <div class="news-content">
-          <!-- 轮播图上移 - 3D层次效果 -->
-          <div class="carousel-container">
-            <div class="carousel-3d-wrapper">
-              <div 
-                v-for="(image, index) in carouselImages2" 
-                :key="index"
-                class="carousel-3d-slide"
-                :class="{
-                  'slide-active': currentSlide2 === index,
-                  'slide-prev': currentSlide2 === (index + 1) % carouselImages2.length,
-                  'slide-next': currentSlide2 === (index - 1 + carouselImages2.length) % carouselImages2.length
-                }"
-                @click="setSlide2(index)">
-                <div class="carousel-image" :style="{ backgroundColor: image.color }">
-                  <span class="placeholder-text">{{ image.text }}</span>
-                </div>
-              </div>
-            </div>
-            <div class="carousel-dots">
-              <span 
-                v-for="(_, index) in carouselImages2" 
-                :key="index"
-                :class="['dot', { active: currentSlide2 === index }]"
-                @click="setSlide2(index)">
-              </span>
+          <!-- 右侧文字内容 -->
+          <div class="hero-right">
+            <div class="right-text">
+              <p>{{ newsData[currentNewsIndex].content }}</p>
             </div>
           </div>
-          
-          <!-- 新闻标题和内容 -->
-          <div class="news-text-content">
-            <h3 class="news-title">羽山机器人系列获得国际设计大奖</h3>
-            <p class="news-description">
-              AXON LABS羽山机器人系列在2024年国际智能硬件设计大赛中荣获金奖，该系列产品以其独特的情感交互设计和先进的AI技术获得了评委的一致好评。羽山机器人不仅具备强大的智能功能，更重要的是它能够理解和回应用户的情感需求，真正实现了"有温度的科技"这一设计理念。
-            </p>
-            <!-- 文字下方箭头 -->
-            <div class="news-arrow" @click="scrollToTop">
-              <img src="/arrow.png" alt="向上箭头" class="news-arrow-img news-arrow-up" />
-            </div>
-          </div>
+        </div>
+
+        <!-- 底部标题与按钮 -->
+        <div class="news-bottom">
+          <h3 class="news-bottom-title">LOOMI x 邱贻可产品即将发布</h3>
+          <button class="learn-more-btn">Learn More</button>
         </div>
       </div>
     </section>
@@ -134,39 +51,55 @@
       <div class="footer-container">
         <!-- AXON LABS Logo - 左侧200px -->
         <div class="footer-logo">
-          <img src="/logo/greenlogo.png" alt="AXON LABS" class="footer-logo-img" />
+          <img src="/logo.svg" alt="AXON LABS" class="footer-logo-img" />
         </div>
         
-        <!-- 页脚内容 - 中部左对齐 -->
+        <!-- 页脚主要内容 - 居中左对齐 -->
         <div class="footer-content">
           <!-- 社交媒体图标 -->
           <div class="social-icons">
-            <img src="/logo/weibo.png" alt="微博" class="social-icon" />
-            <img src="/logo/redbook.png" alt="小红书" class="social-icon" />
-            <img src="/logo/bilibil.png" alt="哔哩哔哩" class="social-icon" />
-            <img src="/logo/ins.png" alt="Instagram" class="social-icon" />
-            <img src="/logo/wechat.png" alt="微信" class="social-icon" />
+            <a href="#" class="social-icon">
+              <img src="/logo/weibo.png" alt="微博" />
+            </a>
+            <a href="#" class="social-icon">
+              <img src="/logo/bilibil.png" alt="哔哩哔哩" />
+            </a>
+            <a href="#" class="social-icon">
+              <img src="/logo/wechat.png" alt="微信" />
+            </a>
+            <a href="#" class="social-icon">
+              <img src="/logo/redbook.png" alt="小红书" />
+            </a>
+            <a href="#" class="social-icon">
+              <img src="/logo/ins.png" alt="Instagram" />
+            </a>
+            <a href="#" class="social-icon">
+              <img src="/logo/facebook.png" alt="Facebook" />
+            </a>
+            <a href="#" class="social-icon">
+              <img src="/logo/youtube.png" alt="YouTube" />
+            </a>
           </div>
           
-          <!-- 文字区域 -->
+          <!-- 页脚文字区域 -->
           <div class="footer-text-area">
-            <!-- 链接行 -->
+            <!-- 页脚链接 -->
             <div class="footer-links">
-              <a href="#" class="footer-link">隐私政策</a>
-              <span class="footer-divider">|</span>
-              <a href="#" class="footer-link">服务条款</a>
-              <span class="footer-divider">|</span>
-              <a href="#" class="footer-link">联系我们</a>
+              <a href="#" class="footer-link">知识产权保护</a>
+              <span class="separator">|</span>
+              <a href="#" class="footer-link">隐私声明</a>
+              <span class="separator">|</span>
+              <a href="#" class="footer-link">ISO27001信息安全管理体系认证</a>
             </div>
             
-            <!-- 联系信息行 -->
+            <!-- 联系信息 -->
             <div class="footer-contact">
-              <span>客服热线：400-123-4567 | 邮箱：info@axonlabs.com</span>
+              <p>互联网违法和不良信息举报邮箱   LD@axonlabs.com</p>
             </div>
             
-            <!-- 版权信息行 -->
+            <!-- 版权信息 -->
             <div class="footer-copyright">
-              <span>© 2024 北京玄圃科技有限公司 版权所有 | 京ICP备2024000000号</span>
+              <p>COPYRIGHT © AXON LABS 羽山 ALL RIGHTS RESERVED    |    京公网安备 XXXXXX号    |    京ICP备XXXXX    |    营业执照</p>
             </div>
           </div>
         </div>
@@ -177,30 +110,45 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
+import Navbar from './Navbar.vue'
 
-// 轮播图数据和状态
-const currentSlide1 = ref(0)
-const currentSlide2 = ref(0)
-
-const carouselImages1 = ref([
-  { text: '新闻图片 1', color: '#8B9DC3' },
-  { text: '新闻图片 2', color: '#DDB892' },
-  { text: '新闻图片 3', color: '#A8DADC' }
+// 新闻数据
+const newsData = ref([
+  {
+    image: '/news.png',
+    date: '2025.10.24',
+    title: 'AXON LABS发布全新AI智能硬件产品线',
+    content: `北京玄圃科技有限公司今日正式发布AXON LABS羽山系列全新AI智能硬件产品，该产品线融合了最新的人工智能技术与创新硬件设计，旨在为用户提供更加智能、便捷的生活体验。新产品采用了先进的机器学习算法，能够自主学习用户习惯，提供个性化的智能服务。产品设计注重用户体验，简洁的外观搭配强大的功能，完美诠释了科技与美学的结合。`
+  },
+  {
+    image: '/news.png',
+    date: '2025.09.15',
+    title: 'LOOMI x 邱晗可产品即将发布',
+    content: `AXON LABS旗下智能生活品牌LOOMI宣布与知名设计师邱晗可展开深度合作，共同打造全新智能家居产品系列。此次合作将设计美学与智能科技完美融合，为用户带来前所未有的生活体验。邱晗可作为国际知名的工业设计师，曾获得多项设计大奖。此次与LOOMI的合作，她将其独特的设计理念融入智能产品中，打造出既美观又实用的智能家居解决方案。`
+  },
+  {
+    image: '/news.png',
+    date: '2025.08.08',
+    title: 'AXON LABS荣获2025年度最佳创新企业奖',
+    content: `在刚刚结束的2025年度科技创新峰会上，AXON LABS凭借其在人工智能和智能硬件领域的卓越表现，荣获"年度最佳创新企业"大奖。这是对公司长期以来坚持技术创新和产品研发的充分肯定。颁奖典礼上，评委会高度评价了AXON LABS在技术创新、产品设计、市场表现等方面的突出成就。公司研发的多项核心技术已获得国内外专利，产品远销海外多个国家和地区。`
+  }
 ])
 
-const carouselImages2 = ref([
-  { text: '品牌图片 1', color: '#F1FAEE' },
-  { text: '品牌图片 2', color: '#E63946' },
-  { text: '品牌图片 3', color: '#457B9D' }
-])
+const currentNewsIndex = ref(0)
 
-// 轮播图控制函数
-const setSlide1 = (index: number) => {
-  currentSlide1.value = index
+// 切换到上一条新闻
+const prevNews = () => {
+  currentNewsIndex.value = (currentNewsIndex.value - 1 + newsData.value.length) % newsData.value.length
 }
 
-const setSlide2 = (index: number) => {
-  currentSlide2.value = index
+// 切换到下一条新闻
+const nextNews = () => {
+  currentNewsIndex.value = (currentNewsIndex.value + 1) % newsData.value.length
+}
+
+// 切换到指定新闻
+const goToNews = (index: number) => {
+  currentNewsIndex.value = index
 }
 
 // 导航栏可见性
@@ -248,7 +196,7 @@ const handleClickOutside = (event: Event) => {
 
 // 全屏滚动功能 - 参考首页实现
 let currentSection = 0
-const sections = ['news-intro-1', 'news-intro-2', 'footer']
+const sections = ['news-hero', 'footer']
 let isScrolling = false
 let lastScrollTime = 0
 
@@ -310,15 +258,8 @@ const scrollToSection = (index: number) => {
   }
 }
 
-// 滚动到第二个介绍区域
-const scrollToSecondIntro = () => {
-  scrollToSection(1)
-}
-
-// 滚动到顶部
-const scrollToTop = () => {
-  scrollToSection(0)
-}
+// 可选：滚动到顶部
+const scrollToTop = () => scrollToSection(0)
 
 // 全屏滚动处理
 const handleWheel = (event: WheelEvent) => {
@@ -379,40 +320,38 @@ const handleWheel = (event: WheelEvent) => {
   }
 }
 
-// 自动轮播函数
-let autoSlideInterval1: NodeJS.Timeout | null = null
-let autoSlideInterval2: NodeJS.Timeout | null = null
-
-const startAutoSlide = () => {
-  autoSlideInterval1 = setInterval(() => {
-    currentSlide1.value = (currentSlide1.value + 1) % carouselImages1.value.length
-  }, 4000)
+// 初始化页面位置
+const initializePagePosition = () => {
+  const scrollTop = window.pageYOffset || document.documentElement.scrollTop
+  const windowHeight = window.innerHeight
   
-  autoSlideInterval2 = setInterval(() => {
-    currentSlide2.value = (currentSlide2.value + 1) % carouselImages2.value.length
-  }, 4500) // 稍微错开时间
-}
-
-const stopAutoSlide = () => {
-  if (autoSlideInterval1) {
-    clearInterval(autoSlideInterval1)
-    autoSlideInterval1 = null
-  }
-  if (autoSlideInterval2) {
-    clearInterval(autoSlideInterval2)
-    autoSlideInterval2 = null
+  if (scrollTop < windowHeight * 0.1) {
+    window.scrollTo({ top: 0, behavior: 'auto' })
+    currentSection = 0
+  } else {
+    const nearestSection = Math.round(scrollTop / windowHeight)
+    if (nearestSection < sections.length) {
+      scrollToSection(nearestSection)
+    }
   }
 }
 
 onMounted(() => {
-  // 启动自动轮播
-  startAutoSlide()
-  
   // 添加点击空白处隐藏下拉菜单的事件监听
   window.addEventListener('click', handleClickOutside)
   
+  // 初始化页面位置
+  initializePagePosition()
+  
   // 添加全屏滚动事件监听
   window.addEventListener('wheel', handleWheel, { passive: false })
+  
+  // 添加窗口大小变化监听，重新对齐页面
+  window.addEventListener('resize', () => {
+    setTimeout(() => {
+      initializePagePosition()
+    }, 200)
+  })
   
   // 添加键盘事件监听
   window.addEventListener('keydown', (event) => {
@@ -437,8 +376,6 @@ onUnmounted(() => {
   window.removeEventListener('click', handleClickOutside)
   window.removeEventListener('wheel', handleWheel)
   window.removeEventListener('keydown', () => {})
-  // 清理自动轮播定时器
-  stopAutoSlide()
 })
 
 
@@ -688,7 +625,7 @@ onUnmounted(() => {
 /* 新闻区域背景 */
 .news-section {
   position: relative;
-  background: url('/BG3.png') no-repeat center center;
+  background: url('/news_bg.png') no-repeat center center;
   background-size: cover;
   width: 100vw;
   margin-left: calc(-50vw + 50%);
@@ -710,8 +647,9 @@ onUnmounted(() => {
 .news-section .section-container {
   position: relative;
   z-index: 2;
-  justify-content: center;
+  justify-content: flex-start;
   flex-direction: column; /* 垂直布局 */
+  padding-top: 140px; /* 从120px增加到140px，内容下移 */
 }
 
 /* 新闻内容容器 */
@@ -723,14 +661,249 @@ onUnmounted(() => {
   max-width: 1200px;
 }
 
-/* 轮播图容器 - 紧凑布局 */
-.carousel-container {
+/* 新版首屏布局 */
+.news-hero-layout {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* 让图片居中 */
+  width: 100%;
+}
+
+.hero-left {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: 1000px;
+}
+
+.hero-right {
+  position: absolute;
+  left: 50%;
+  bottom: 0; /* 底部对齐 */
+  margin-left: 470px; /* 图片宽度的一半(450px) + 间隔20px */
+  color: #fff;
+  max-width: 240px; /* 从320px继续缩小到240px */
   width: 100%;
-  margin-bottom: 1.5rem; /* 减少与下方文字的间距 */
+}
+
+.hero-image {
+  position: relative;
+  width: 900px; /* 放大图片尺寸 */
+  height: 600px; /* 保持3:2比例 */
+  border-radius: 12px;
+  overflow: hidden;
+  transition: opacity 0.3s ease;
+  margin: 0; /* 移除auto，让flex布局控制居中 */
+}
+
+.hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.6);
+  transition: opacity 0.3s ease;
+}
+
+.date-overlay {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 64px;
+  font-weight: 400; /* 改细，从700改为400 */
+  /* 使用首页的绿色渐变 */
+  background: linear-gradient(to right, #01CE7E, #016840);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 2px;
+  font-family: 'MiSans', 'Noto Sans SC', sans-serif;
+}
+
+.hero-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px; /* 固定宽度 */
+  height: 32px; /* 固定高度 */
+  border-radius: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  z-index: 3;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  flex-shrink: 0; /* 防止缩小 */
+}
+
+.arrow-icon {
+  width: 32px; /* 固定宽度 */
+  height: 32px; /* 固定高度 */
+  object-fit: contain;
+  transition: all 0.3s ease;
+  display: block;
+}
+
+.arrow-icon-left {
+  transform: rotate(180deg); /* 左箭头旋转180度 */
+}
+
+.hero-arrow:hover .arrow-icon {
+  transform: scale(1.2); /* 悬停时放大 */
+}
+
+.hero-arrow:hover .arrow-icon-left {
+  transform: rotate(180deg) scale(1.2); /* 左箭头悬停时保持旋转并放大 */
+}
+
+.hero-arrow-left { left: 16px; } /* 距离左边16px */
+.hero-arrow-right { right: 16px; } /* 距离右边16px */
+
+.hero-dots {
+  position: absolute;
+  bottom: 24px; /* 距离图片底部24px */
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 2; /* 确保在图片上方 */
+}
+
+.hero-dots .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.4);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* 中间的圆点显示为圆角矩形 */
+.hero-dots .dot:nth-child(2) {
+  width: 24px;
+  height: 10px;
+  border-radius: 5px;
+}
+
+.hero-dots .dot:hover {
+  background: rgba(1, 206, 126, 0.7);
+  transform: scale(1.2);
+}
+
+.hero-dots .dot.active { 
+  background: #01CE7E;
+  transform: scale(1.3);
+}
+
+/* 中间圆角矩形激活时不放大太多 */
+.hero-dots .dot:nth-child(2).active {
+  transform: scale(1.1);
+}
+
+.right-text {
+  max-height: 600px; /* 与图片高度一致 */
+  overflow-y: auto;
+  line-height: 1.9;
+  color: #d0d0d0;
+  padding-right: 8px;
+  font-size: 14px; /* 从16px缩小到14px */
+  font-family: 'MiSans', 'Noto Sans SC', sans-serif;
+  text-align: left;
+}
+
+.right-text p {
+  margin-bottom: 16px;
+  text-align: justify;
+}
+
+.right-text p:last-child {
+  margin-bottom: 0;
+}
+
+/* 自定义滚动条样式 */
+.right-text::-webkit-scrollbar {
+  width: 6px;
+}
+
+.right-text::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.right-text::-webkit-scrollbar-thumb {
+  background: rgba(1, 206, 126, 0.5);
+  border-radius: 3px;
+}
+
+.right-text::-webkit-scrollbar-thumb:hover {
+  background: rgba(1, 206, 126, 0.8);
+}
+
+.news-bottom {
+  margin-top: 28px;
+  text-align: center;
+}
+
+.news-bottom-title {
+  color: #fff;
+  font-size: 20px;
+  margin-bottom: 12px;
+  font-family: 'MiSans', 'Noto Sans SC', sans-serif;
+  font-weight: 400; /* Demibold */
+}
+
+.learn-more-btn {
+  position: relative;
+  background: transparent;
+  border: 2px solid #ffffff;
+  color: #ffffff;
+  padding: 0.8rem 2rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  z-index: 1;
+  border-radius: 4px;
+  font-family: 'MiSans', 'Noto Sans SC', sans-serif;
+}
+
+.learn-more-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background: rgba(1, 206, 126, 0.5); /* 50%透明度的#01CE7E */
+  transition: width 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  z-index: -1;
+}
+
+.learn-more-btn:hover::before {
+  width: 100%;
+}
+
+.learn-more-btn:active::before {
+  transition: width 0.1s ease;
+}
+
+.learn-more-btn:hover {
+  color: #ffffff;
+  border-color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(1, 206, 126, 0.3);
+}
+
+.learn-more-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(1, 206, 126, 0.2);
 }
 
 /* 新闻文字内容 */
@@ -1061,186 +1234,76 @@ onUnmounted(() => {
 
 /* 响应式设计 */
 @media (max-width: 1440px) {
-  .carousel-3d-wrapper {
+  .hero-image {
     width: 675px; /* 900px * 0.75 */
     height: 450px; /* 600px * 0.75 */
   }
   
-  .carousel-3d-slide {
-    width: 450px; /* 600px * 0.75 */
-    height: 337px; /* 450px * 0.75 */
+  .hero-right {
+    margin-left: 352.5px; /* 675px / 2 + 15px间隔 */
+    max-width: 180px; /* 240px * 0.75 */
   }
   
-  .slide-prev {
-    transform: translateX(-202px) translateZ(-75px) rotateY(25deg) scale(0.8); /* -270px * 0.75 */
-  }
-  
-  .slide-next {
-    transform: translateX(202px) translateZ(-75px) rotateY(-25deg) scale(0.8); /* 270px * 0.75 */
-  }
-  
-
-  
-  .news-title {
-    font-size: 22px; /* 30px * 0.75 */
-  }
-  
-  .news-description {
-    font-size: 14px; /* 16px * 0.75 */
-  }
-  
-  .news-arrow-img {
-    width: 22.5px; /* 30px * 0.75 */
-    height: 21px; /* 28px * 0.75 */
-  }
-  
-  .scroll-arrow-img {
-    width: 22.5px; /* 30px * 0.75 */
-    height: 21px; /* 28px * 0.75 */
+  .right-text {
+    max-height: 450px; /* 600px * 0.75 */
   }
 }
 
 @media (max-width: 1024px) {
-  .carousel-3d-wrapper {
+  .hero-image {
     width: 540px; /* 900px * 0.6 */
     height: 360px; /* 600px * 0.6 */
   }
   
-  .carousel-3d-slide {
-    width: 360px; /* 600px * 0.6 */
-    height: 270px; /* 450px * 0.6 */
+  .hero-right {
+    margin-left: 282px; /* 540px / 2 + 12px间隔 */
+    max-width: 144px; /* 240px * 0.6 */
   }
   
-  .slide-prev {
-    transform: translateX(-162px) translateZ(-60px) rotateY(25deg) scale(0.8); /* -270px * 0.6 */
-  }
-  
-  .slide-next {
-    transform: translateX(162px) translateZ(-60px) rotateY(-25deg) scale(0.8); /* 270px * 0.6 */
-  }
-  
-  .carousel-dots {
-    bottom: 48px; /* 80px * 0.6 */
-  }
-  
-  .news-title {
-    font-size: 18px; /* 30px * 0.6 */
-  }
-  
-  .news-description {
-    font-size: 12px; /* 16px * 0.6 */
-  }
-  
-  .news-arrow-img {
-    width: 18px; /* 30px * 0.6 */
-    height: 16.8px; /* 28px * 0.6 */
-  }
-  
-  .scroll-arrow-img {
-    width: 18px; /* 30px * 0.6 */
-    height: 16.8px; /* 28px * 0.6 */
+  .right-text {
+    max-height: 360px; /* 600px * 0.6 */
   }
 }
 
 @media (max-width: 768px) {
-  .carousel-3d-wrapper {
+  .hero-image {
     width: 450px; /* 900px * 0.5 */
     height: 300px; /* 600px * 0.5 */
   }
   
-  .carousel-3d-slide {
-    width: 300px; /* 600px * 0.5 */
-    height: 225px; /* 450px * 0.5 */
+  .hero-right {
+    margin-left: 235px; /* 450px / 2 + 10px间隔 */
+    max-width: 120px; /* 240px * 0.5 */
   }
   
-  .slide-prev {
-    transform: translateX(-135px) translateZ(-50px) rotateY(20deg) scale(0.8); /* -270px * 0.5 */
-  }
-  
-  .slide-next {
-    transform: translateX(135px) translateZ(-50px) rotateY(-20deg) scale(0.8); /* 270px * 0.5 */
-  }
-  
-  .carousel-dots {
-    bottom: 40px; /* 80px * 0.5 */
-  }
-  
-  .news-title {
-    font-size: 15px; /* 30px * 0.5 */
-  }
-  
-  .news-description {
-    font-size: 10px; /* 16px * 0.5 */
-  }
-  
-  .news-arrow-img {
-    width: 15px; /* 30px * 0.5 */
-    height: 14px; /* 28px * 0.5 */
-  }
-  
-  .scroll-arrow-img {
-    width: 15px; /* 30px * 0.5 */
-    height: 14px; /* 28px * 0.5 */
+  .right-text {
+    max-height: 300px; /* 600px * 0.5 */
   }
 }
 
 @media (max-width: 480px) {
-  .carousel-3d-wrapper {
+  .hero-image {
     width: 360px; /* 900px * 0.4 */
     height: 240px; /* 600px * 0.4 */
   }
   
-  .carousel-3d-slide {
-    width: 240px; /* 600px * 0.4 */
-    height: 180px; /* 450px * 0.4 */
+  .hero-right {
+    margin-left: 188px; /* 360px / 2 + 8px间隔 */
+    max-width: 96px; /* 240px * 0.4 */
   }
   
-  .slide-prev {
-    transform: translateX(-108px) translateZ(-40px) rotateY(15deg) scale(0.8); /* -270px * 0.4 */
-  }
-  
-  .slide-next {
-    transform: translateX(108px) translateZ(-40px) rotateY(-15deg) scale(0.8); /* 270px * 0.4 */
-  }
-  
-  .carousel-dots {
-    bottom: 32px; /* 80px * 0.4 */
-  }
-  
-  .placeholder-text {
-    font-size: 1rem;
-  }
-  
-  .news-title {
-    font-size: 12px; /* 30px * 0.4 */
-    margin-bottom: 1rem;
-  }
-  
-  .news-description {
-    font-size: 8px; /* 16px * 0.4 */
-    line-height: 1.6;
-  }
-  
-  .carousel-container {
-    margin-bottom: 2rem;
-  }
-  
-  .news-arrow-img {
-    width: 12px; /* 30px * 0.4 */
-    height: 11.2px; /* 28px * 0.4 */
-  }
-  
-  .scroll-arrow-img {
-    width: 12px; /* 30px * 0.4 */
-    height: 11.2px; /* 28px * 0.4 */
+  .right-text {
+    max-height: 240px; /* 600px * 0.4 */
   }
 }
 
 /* 页脚样式 */
 .footer {
   background: #000000;
-  padding: 2rem 0 32px; /* 底部距离32px，1920*1080基准 */
+  height: 200px; /* 1920*1080基准高度200px */
+  padding: 40px 0; /* 上下各40px内边距 */
   color: #ffffff;
+  box-sizing: border-box;
 }
 
 .footer-container {
@@ -1254,21 +1317,22 @@ onUnmounted(() => {
 .footer-logo {
   position: absolute;
   left: 200px; /* 距离左侧200px，1920*1080基准 */
-  top: 2rem;
+  top: 40px; /* 距离顶部40px */
 }
 
 .footer-logo-img {
   width: 250px; /* 1920*1080基准宽度 */
   height: auto;
+  filter: brightness(0) invert(1);
 }
 
-/* 页脚内容 - 中部左对齐 */
+/* 页脚主要内容区域 - 居中左对齐 */
 .footer-content {
   max-width: 800px;
   margin: 0 auto;
   text-align: left; /* 左对齐 */
   padding-left: 2rem;
-  margin-left: 450px; /* logo宽度250px + 距离左侧200px = 450px，确保不重叠 */
+  margin-left: 550px; /* logo位置200px + logo宽度250px + 间距100px = 550px */
   display: flex;
   flex-direction: column;
 }
@@ -1282,9 +1346,16 @@ onUnmounted(() => {
 }
 
 .social-icon {
+  display: inline-block;
   width: 24px; /* 调整为24px */
   height: 24px; /* 调整为24px */
   transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.social-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .social-icon:hover {
@@ -1292,7 +1363,7 @@ onUnmounted(() => {
   opacity: 0.8;
 }
 
-/* 文字区域 */
+/* 页脚文字区域 */
 .footer-text-area {
   height: 90px; /* 1920*1080基准下三行文字总高度90px */
   display: flex;
@@ -1300,44 +1371,61 @@ onUnmounted(() => {
   justify-content: space-between;
 }
 
-.footer-links, .footer-contact, .footer-copyright {
-  height: 30px; /* 每行高度30px */
-  display: flex;
-  align-items: center;
-}
-
+/* 页脚链接 */
 .footer-links {
   display: flex;
-  gap: 1rem;
+  justify-content: flex-start; /* 左对齐 */
   align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-size: 16px; /* 统一16px字体大小 */
+  height: 24px; /* 第一行高度24px */
 }
 
 .footer-link {
-  color: #ffffff;
+  color: #ffffff; /* 第一行纯白色 */
   text-decoration: none;
   transition: color 0.3s ease;
-  font-family: 'MiSans', 'Noto Sans SC', sans-serif;
 }
 
 .footer-link:hover {
   color: #01CE7E;
 }
 
-.footer-divider {
-  color: #666666;
-  margin: 0 0.5rem;
+.separator {
+  color: #ffffff; /* 第一行分隔符也是纯白色 */
+  margin: 0 0.25rem;
 }
 
+/* 联系信息 */
 .footer-contact {
-  color: #cccccc;
-  font-family: 'MiSans', 'Noto Sans SC', sans-serif;
+  height: 24px; /* 第二行高度24px */
+  display: flex;
+  align-items: center;
 }
 
+.footer-contact p {
+  color: #9E9E9E; /* 第二行颜色#9E9E9E */
+  font-size: 16px; /* 统一16px字体大小 */
+  margin: 0;
+  text-align: left; /* 左对齐 */
+}
+
+/* 版权信息 */
 .footer-copyright {
-  color: #999999;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding-top: 0; /* 移除padding，使用flex布局控制间距 */
-  font-family: 'MiSans', 'Noto Sans SC', sans-serif;
+  height: 24px; /* 第三行高度24px */
+  display: flex;
+  align-items: center;
+}
+
+.footer-copyright p {
+  color: #9E9E9E; /* 第三行颜色#9E9E9E */
+  font-size: 16px; /* 统一16px字体大小 */
+  margin: 0;
+  line-height: 1.4;
+  text-align: left; /* 左对齐 */
+  white-space: nowrap; /* 营业执照不换行 */
 }
 
 /* 页脚响应式设计 */

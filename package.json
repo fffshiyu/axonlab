@@ -10,6 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@babylonjs/core": "^8.34.0",
+    "@babylonjs/loaders": "^8.34.0",
+    "@types/three": "^0.180.0",
+    "three": "^0.180.0",
     "vue": "^3.4.0",
     "vue-router": "^4.2.5"
   },

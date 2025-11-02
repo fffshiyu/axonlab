@@ -1,40 +1,7 @@
 <template>
   <div class="product-container">
     <!-- 导航栏 -->
-    <nav class="navbar" :class="{ 'navbar-hidden': !isNavbarVisible }">
-      <div class="nav-content">
-        <div class="logo">
-          <img src="/logo.svg" alt="AXON LABS" class="logo-img" />
-        </div>
-        <div class="nav-links">
-          <router-link to="/home" class="nav-link">首页</router-link>
-          <a href="#" class="nav-link" @click.prevent>新闻</a>
-          <a href="#" class="nav-link active">产品系列</a>
-          <div class="nav-dropdown" @mouseenter="showDropdown" @mouseleave="hideDropdown">
-            <a href="#" class="nav-link" :class="{ 'active': isDropdownVisible }">线上商城</a>
-            <div class="dropdown-menu" :class="{ 'show': isDropdownVisible }">
-              <div class="dropdown-item" @click="showQRCode('tmall')">天猫商城</div>
-              <div class="dropdown-item" @click="showQRCode('douyin')">抖音商城</div>
-              <div class="dropdown-item" @click="showQRCode('jd')">京东商城</div>
-              <div class="dropdown-item" @click="showQRCode('xiaochengxu')">小程序官方商城</div>
-              <!-- 二维码显示区域 - 定位在下拉框右侧 -->
-              <div class="qr-code-container" :class="{ 'show': isQRCodeVisible }">
-                <div class="qr-code-placeholder">二维码</div>
-                <div class="qr-code-title">{{ currentQRTitle }}</div>
-              </div>
-            </div>
-          </div>
-          <a href="#" class="nav-link">合作</a>
-          <a href="#" class="nav-link">加入我们</a>
-        </div>
-        <!-- 语言切换 -->
-        <div class="nav-right">
-          <span class="lang-switch active">CN</span>
-          <span class="lang-divider">|</span>
-          <span class="lang-switch">EN</span>
-        </div>
-      </div>
-    </nav>
+    <Navbar active-page="product-series" />
 
     <!-- 产品展示区域 -->
     <section class="product-section" id="product-1">
@@ -176,6 +143,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
+import Navbar from './Navbar.vue'
 
 // 导航栏可见性
 const isNavbarVisible = ref(true)

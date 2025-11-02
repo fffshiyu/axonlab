@@ -21,6 +21,8 @@
         </div>
       </div>
       
+      <!-- 品牌标语 -->
+      <p class="brand-slogan">AI for Love, Smart Fun Future</p>
 
     </div>
   </div>
@@ -121,7 +123,7 @@ const startCharging = () => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2rem;
+  gap: 1rem; /* 减小间距，让标语更靠近logo */
 }
 
 .svg-logo-container {
@@ -129,6 +131,17 @@ const startCharging = () => {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+/* 品牌标语 */
+.brand-slogan {
+  font-family: 'MiSans-Regular', 'MiSans', 'Noto Sans SC', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: 0.05em;
+  text-align: center;
 }
 
 .logo-layers {
@@ -251,6 +264,10 @@ const startCharging = () => {
     width: 486px; /* 608 * 0.8 */
     height: 46px; /* 57 * 0.8 */
   }
+  
+  .brand-slogan {
+    font-size: 14px; /* 16px * 0.875 */
+  }
 }
 
 /* 1024p屏幕 */
@@ -260,6 +277,10 @@ const startCharging = () => {
   .logo-green {
     width: 365px; /* 608 * 0.6 */
     height: 34px; /* 57 * 0.6 */
+  }
+  
+  .brand-slogan {
+    font-size: 13px; /* 16px * 0.8125 */
   }
 }
 
@@ -273,7 +294,11 @@ const startCharging = () => {
   }
   
   .logo-container {
-    gap: 1.5rem;
+    gap: 0.8rem;
+  }
+  
+  .brand-slogan {
+    font-size: 12px;
   }
 }
 
@@ -287,12 +312,16 @@ const startCharging = () => {
   }
   
   .logo-container {
-    gap: 1rem;
+    gap: 0.6rem;
     padding: 0 1rem;
   }
   
   .loading-container {
     padding: 1rem;
+  }
+  
+  .brand-slogan {
+    font-size: 11px;
   }
 }
 
@@ -307,6 +336,10 @@ const startCharging = () => {
   
   .loading-container {
     padding: 0.5rem;
+  }
+  
+  .brand-slogan {
+    font-size: 10px;
   }
 }
 </style>
