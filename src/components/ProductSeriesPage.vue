@@ -461,11 +461,11 @@ const setContent = (object: THREE.Object3D) => {
   camera.far = size * 100
   camera.updateProjectionMatrix()
 
-  // 设置相机位置
+  // 设置相机位置（调整相机距离让模型看起来更大）
   camera.position.copy(center)
-  camera.position.x += size / 2.0
-  camera.position.y += size / 5.0
-  camera.position.z += size / 2.0
+  camera.position.x += size / 2.6  // 从 2.0 改为 2.5，相机更近
+  camera.position.y += size / 4.8
+  camera.position.z += size / 2.6  // 从 2.0 改为 2.5，相机更近
   camera.lookAt(center)
 
   // 保存controls状态
