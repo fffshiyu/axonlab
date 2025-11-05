@@ -35,20 +35,29 @@
             
             <!-- 时间线 -->
             <div class="timeline" 
-                 @mouseenter="isTimelineHovered = true; hoveredCardIndex = -1" 
-                 @mouseleave="isTimelineHovered = false; hoveredCardIndex = -1">
+                 @mouseleave="expandedCardIndex = -1">
               <div class="timeline-item card" 
                    v-for="(item, index) in timelineData" 
                    :key="index"
                    :class="{ 
-                     'card-dimmed': isTimelineHovered && anyCardHovered && hoveredCardIndex !== index
+                     'hidden-by-overlay': isCardHiddenByOverlay(index),
+                     'dimmed-card': expandedCardIndex !== -1 && expandedCardIndex !== index && !isCardHiddenByOverlay(index)
                    }"
-                   @mouseenter="hoveredCardIndex = index"
-                   @mouseleave="hoveredCardIndex = -1">
+                   @mouseenter="expandedCardIndex = index">
+                <!-- 色块 - 始终显示 -->
                 <div class="timeline-bar" 
                      :style="{ backgroundColor: item.color }">
                 </div>
-                <div class="timeline-date">{{ item.date }}</div>
+                <!-- 展开状态：图片覆盖层 -->
+                <div v-if="expandedCardIndex === index" 
+                     class="timeline-expanded-overlay"
+                     :class="getOverlayPositionClass(index)">
+                  <img src="/Group%203.png" alt="历史事件" class="expanded-image" />
+                </div>
+                <div class="timeline-date" 
+                     :class="{ 'dimmed-date': expandedCardIndex !== -1 && expandedCardIndex !== index }">
+                  {{ item.date }}
+                </div>
               </div>
             </div>
           </div>
@@ -124,19 +133,81 @@ import Navbar from './Navbar.vue'
 
 // 时间线数据
 const timelineData = ref([
-  { date: '2024.09', color: '#B0D0C3' }, // 从左到右第一个
-  { date: '2024.09', color: '#83D5B5' }, // 从左到右第二个
-  { date: '2024.09', color: '#6AD9A1' }, // 从左到右第三个
-  { date: '2024.09', color: '#40CF97' }, // 从左到右第四个
-  { date: '2024.09', color: '#01CE7E' }  // 从左到右第五个
+  { 
+    date: '2024.09', 
+    color: '#B0D0C3',
+    title: '标题标题',
+    description: '北京玄圃科技有限公司成立于2024年，为国内领先的AI技术与智能硬件开发公司。AXON LABS羽山作为公司旗下最重要的品牌，以"AI为爱，智趣未来，AI for Love, Smart Fun Future"为品牌理念，以用户情感需求为导向，推动智能产品从功能工具向 "有温度的伙伴" 进化。'
+  },
+  { 
+    date: '2024.09', 
+    color: '#83D5B5',
+    title: '标题标题',
+    description: '北京玄圃科技有限公司成立于2024年，为国内领先的AI技术与智能硬件开发公司。'
+  },
+  { 
+    date: '2024.09', 
+    color: '#6AD9A1',
+    title: '标题标题',
+    description: '北京玄圃科技有限公司成立于2024年，为国内领先的AI技术与智能硬件开发公司。'
+  },
+  { 
+    date: '2024.09', 
+    color: '#40CF97',
+    title: '标题标题',
+    description: '北京玄圃科技有限公司成立于2024年，为国内领先的AI技术与智能硬件开发公司。'
+  },
+  { 
+    date: '2024.09', 
+    color: '#01CE7E',
+    title: '标题标题',
+    description: '北京玄圃科技有限公司成立于2024年，为国内领先的AI技术与智能硬件开发公司。'
+  }
 ])
 
+// 时间线悬停状态管理 - 简化为只需要展开索引
+const expandedCardIndex = ref(-1)
 
+// 获取覆盖层位置类名
+const getOverlayPositionClass = (index: number) => {
+  // 5个格子，index: 0, 1, 2, 3, 4
+  if (index === 0) {
+    return 'overlay-position-0' // 索引0：覆盖0,1,2
+  } else if (index === 1) {
+    return 'overlay-position-1' // 索引1：覆盖0,1,2
+  } else if (index === 2) {
+    return 'overlay-position-2' // 索引2：覆盖1,2,3
+  } else if (index === 3) {
+    return 'overlay-position-3' // 索引3：覆盖1,2,3
+  } else {
+    return 'overlay-position-4' // 索引4：覆盖2,3,4
+  }
+}
 
-// 时间线悬停状态管理
-const isTimelineHovered = ref(false)
-const hoveredCardIndex = ref(-1)
-const anyCardHovered = computed(() => hoveredCardIndex.value !== -1)
+// 判断某个格子是否应该被隐藏（被图片覆盖）
+const isCardHiddenByOverlay = (index: number) => {
+  if (expandedCardIndex.value === -1) return false // 没有展开，不隐藏
+  
+  const expanded = expandedCardIndex.value
+  
+  // 根据展开的格子，判断哪些格子应该被隐藏
+  if (expanded === 0) {
+    // 展开0：隐藏0,1,2
+    return index >= 0 && index <= 2
+  } else if (expanded === 1) {
+    // 展开1：隐藏0,1,2
+    return index >= 0 && index <= 2
+  } else if (expanded === 2) {
+    // 展开2：隐藏1,2,3
+    return index >= 1 && index <= 3
+  } else if (expanded === 3) {
+    // 展开3：隐藏1,2,3（不隐藏索引4）
+    return index >= 1 && index <= 3
+  } else {
+    // 展开4：隐藏2,3,4
+    return index >= 2 && index <= 4
+  }
+}
 
 // 移动端菜单控制
 const isMobileMenuOpen = ref(false)
@@ -981,9 +1052,9 @@ onUnmounted(() => {
   transform: translateY(-5vh); /* 整体上移5% */
 }
 
-/* 大事件标题距离色块76px */
+/* 大事件标题距离色块 - 减少间距 */
 .history-content .section-subtitle {
-  margin-bottom: 76px; /* 1920*1080基准：76px */
+  margin-bottom: 40px; /* 从76px减少到40px */
 }
 
 /* 时间线 */
@@ -1004,6 +1075,25 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
+  cursor: pointer;
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 100%;
+  position: relative; /* 添加相对定位，作为覆盖层的参考 */
+}
+
+/* 移除展开和收起状态的flex变化 */
+
+/* 被覆盖的格子：完全透明 - 添加延迟让图片先展开 */
+.timeline-item.hidden-by-overlay .timeline-bar {
+  opacity: 0 !important;
+  transition: opacity 0.2s ease 0.1s; /* 延迟0.1s */
+}
+
+/* 其他未选中的格子：色块变暗且半透明 */
+.timeline-item.dimmed-card .timeline-bar {
+  filter: brightness(0.5);
+  opacity: 0.5;
+  transition: filter 0.3s ease, opacity 0.3s ease;
 }
 
 /* 卡片强制始终可见 */
@@ -1019,10 +1109,10 @@ onUnmounted(() => {
   transform: translateY(0);
 }
 
-/* 悬停时的放大效果 */
+/* 悬停时的效果 - 移除scale，保持原位 */
 .card:hover {
-  transform: scale(1.1);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  /* transform: scale(1.1); */ /* 移除放大效果 */
+  /* box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); */ /* 移除阴影 */
   opacity: 1 !important; /* 强制始终可见 */
 }
 
@@ -1042,7 +1132,68 @@ onUnmounted(() => {
   color: #ffffff;
   font-size: 0.9rem;
   font-weight: 500;
+  transition: opacity 0.3s ease;
   /* 年份文字紧贴时间线方框底部 */
+}
+
+/* 其他未选中的年份：透明度50% */
+.timeline-date.dimmed-date {
+  opacity: 0.5;
+}
+
+/* 展开内容样式 - 改为覆盖层 */
+.timeline-expanded-overlay {
+  position: absolute;
+  top: 0;
+  width: 300%; /* 3个格子的宽度 */
+  height: 400px;
+  z-index: 10;
+  animation: expandAnimation 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  pointer-events: none; /* 不阻挡下面元素的点击 */
+  transform-origin: center center;
+}
+
+/* 索引0：从当前位置开始向右，覆盖0,1,2 */
+.overlay-position-0 {
+  left: 0;
+}
+
+/* 索引1：从当前位置向左1个格子，覆盖0,1,2 */
+.overlay-position-1 {
+  left: -100%;
+}
+
+/* 索引2：从当前位置向左1个格子，覆盖1,2,3 */
+.overlay-position-2 {
+  left: -100%;
+}
+
+/* 索引3：从当前位置向左2个格子，覆盖1,2,3（不覆盖索引4） */
+.overlay-position-3 {
+  left: -200%;
+}
+
+/* 索引4：从当前位置向左2个格子，覆盖2,3,4 */
+.overlay-position-4 {
+  left: -200%;
+}
+
+@keyframes expandAnimation {
+  from {
+    opacity: 0;
+    transform: scaleX(0.3) scaleY(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scaleX(1) scaleY(1);
+  }
+}
+
+.expanded-image {
+  width: 100%;
+  height: 400px; /* 与timeline-bar一样的高度 */
+  object-fit: cover; /* 完全填充，裁剪多余部分 */
+  display: block;
 }
 
 /* 页脚 */

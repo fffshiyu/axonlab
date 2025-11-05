@@ -647,9 +647,9 @@ onUnmounted(() => {
 .news-section .section-container {
   position: relative;
   z-index: 2;
-  justify-content: flex-start;
+  justify-content: center; /* 垂直居中 */
   flex-direction: column; /* 垂直布局 */
-  padding-top: 140px; /* 从120px增加到140px，内容下移 */
+  padding-top: 100px; /* 减少顶部padding，让内容更居中 */
 }
 
 /* 新闻内容容器 */
