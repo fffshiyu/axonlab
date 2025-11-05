@@ -780,7 +780,7 @@ onUnmounted(() => {
   position: absolute;
   left: 200px; /* 1920*1080基准：距离左侧200px */
   bottom: 280px; /* 1920*1080基准：距离底部280px，向上移动68px */
-  max-width: 600px;
+  max-width: 900px; /* 增加宽度，确保英文标题完整显示 */
   color: #ffffff;
 }
 
@@ -808,7 +808,7 @@ onUnmounted(() => {
   margin-bottom: 0; /* h2和h3距离为0 */
   letter-spacing: 0.1em;
   font-family: 'MiSans-Demibold', 'MiSans', 'Noto Sans SC', sans-serif;
-  white-space: nowrap; /* 不换行 */
+  white-space: nowrap; /* 保持单行显示 */
 }
 
 .section-subtitle {
@@ -1192,8 +1192,9 @@ onUnmounted(() => {
   }
   
   .section-content {
-    left: 150px; /* 200px * 0.75 */
+    left: 150px; /* 200px * 0.75，与logo左对齐 */
     bottom: 210px; /* 280px * 0.75 */
+    max-width: 700px; /* 增加最大宽度，确保英文标题完整显示 */
   }
   
   .logo {
@@ -1237,8 +1238,9 @@ onUnmounted(() => {
   }
   
   .section-content {
-    left: 120px; /* 200px * 0.6 */
+    left: 120px; /* 200px * 0.6，与logo左对齐 */
     bottom: 168px; /* 280px * 0.6 */
+    max-width: 600px; /* 增加最大宽度，确保英文标题完整显示 */
   }
   
   .logo {

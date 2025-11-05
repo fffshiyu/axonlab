@@ -59,6 +59,15 @@ html, body {
   /* 添加全局滚动优化 */
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch; /* iOS滚动优化 */
+  /* 隐藏滚动条但保持滚动功能 */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 和 Edge */
+}
+
+/* 隐藏 Webkit 浏览器（Chrome, Safari, Edge, Opera）的滚动条 */
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
 }
 
 #app {
