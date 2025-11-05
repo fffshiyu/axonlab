@@ -162,21 +162,28 @@ const jobs = ref([
   }
 ])
 
-// 简单的滚动检测：往下隐藏，往上显示
+// 简单的滚动检测：往下隐藏，往上显示（优化性能）
 let lastScrollY = 0
+let ticking = false
 
 const handleScroll = () => {
-  const currentScrollY = window.pageYOffset || document.documentElement.scrollTop || 0
+  if (!ticking) {
+    window.requestAnimationFrame(() => {
+      const currentScrollY = window.pageYOffset || document.documentElement.scrollTop || 0
 
-  if (currentScrollY > lastScrollY && currentScrollY > 10) {
-    // 往下滚动且不在顶部时，隐藏导航
-    isNavbarVisible.value = false
-  } else if (currentScrollY < lastScrollY) {
-    // 往上滚动，显示导航
-    isNavbarVisible.value = true
+      if (currentScrollY > lastScrollY && currentScrollY > 10) {
+        // 往下滚动且不在顶部时，隐藏导航
+        isNavbarVisible.value = false
+      } else if (currentScrollY < lastScrollY) {
+        // 往上滚动，显示导航
+        isNavbarVisible.value = true
+      }
+
+      lastScrollY = currentScrollY
+      ticking = false
+    })
+    ticking = true
   }
-
-  lastScrollY = currentScrollY
 }
 
 onMounted(() => {
@@ -405,6 +412,15 @@ onUnmounted(() => {
   padding: 140px 0 100px;
   background: url('/join_bg.png') no-repeat center top;
   background-size: cover;
+  /* 移除 background-attachment: fixed 以解决滚动卡顿问题 */
+  /* 优化渲染性能 */
+  will-change: transform;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  perspective: 1000;
+  -webkit-perspective: 1000;
 }
 
 .join-us-section::before {
@@ -412,6 +428,7 @@ onUnmounted(() => {
   position: absolute;
   inset: 0;
   background: rgba(0, 0, 0, 0.35);
+  pointer-events: none;
 }
 
 .section-container {
