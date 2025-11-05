@@ -9,11 +9,8 @@
       <section class="introduction-section" id="introduction">
         <div class="section-container">
           <div class="section-content">
-            <h2 class="section-title">BRAND INTRODUCTION</h2>
-            <h3 class="section-subtitle">品牌介绍</h3>
-            <div class="section-text">
-              <p>北京玄圃科技有限公司成立于2024年，为国内领先的AI技术与智能硬件开发公司。AXON LABS羽山作为公司旗下最重要的品牌，以"AI为爱，智趣未来，AI for Love, Smart Fun Future"为品牌理念，以用户情感需求为导向，推动智能产品从功能工具向 "有温度的伙伴" 进化。</p>
-            </div>
+            <!-- 使用图片替代标题和文字 -->
+            <img src="/index-text.png" alt="品牌介绍" class="intro-text-img" />
             <div class="intro-button">
               <button class="learn-more-btn">Learn More</button>
             </div>
@@ -855,6 +852,14 @@ onUnmounted(() => {
   color: #ffffff;
 }
 
+/* 品牌介绍图片 */
+.intro-text-img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin-bottom: 2rem; /* 图片和按钮之间的间距 */
+}
+
 /* 品牌介绍按钮 */
 .intro-button {
   margin-top: 2rem;
@@ -1519,7 +1524,7 @@ onUnmounted(() => {
   }
   
   .section-content {
-    left: 100px; /* 200px * 0.5 */
+    left: 20px; /* 与logo左对齐 */
     bottom: 140px; /* 280px * 0.5 */
     max-width: calc(100% - 120px); /* 调整最大宽度 */
   }
@@ -1763,7 +1768,7 @@ onUnmounted(() => {
   }
   
   .section-content {
-    left: 20px; /* 移动端左侧边距减小 */
+    left: 15px; /* 与logo左对齐 */
     bottom: 112px; /* 280px * 0.4 */
     max-width: calc(100% - 40px); /* 限制最大宽度 */
   }

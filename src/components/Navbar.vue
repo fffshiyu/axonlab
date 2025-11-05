@@ -585,6 +585,22 @@ onUnmounted(() => {
   }
 }
 
+/* 添加中间断点避免重叠 */
+@media (max-width: 1200px) {
+  .nav-links {
+    left: 380px;
+    gap: 1.5rem;
+  }
+  
+  .nav-link {
+    font-size: 0.85rem;
+  }
+  
+  .nav-right {
+    right: 80px;
+  }
+}
+
 @media (max-width: 1024px) {
   .navbar {
     height: 60px;
@@ -599,12 +615,28 @@ onUnmounted(() => {
   }
   
   .nav-links {
-    left: 390px;
-    gap: 2rem;
+    left: 320px;
+    gap: 1.5rem;
+  }
+  
+  .nav-link {
+    font-size: 0.8rem;
   }
   
   .nav-right {
-    right: 85px;
+    right: 70px;
+  }
+}
+
+/* 小屏幕隐藏导航链接 */
+@media (max-width: 900px) {
+  .nav-links {
+    display: none;
+  }
+  
+  .mobile-menu-btn {
+    display: flex;
+    right: 80px;
   }
 }
 

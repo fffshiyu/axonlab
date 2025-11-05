@@ -705,16 +705,18 @@ onUnmounted(() => {
   cursor: pointer;
   transition: all 0.3s ease;
   opacity: 0.6;
+  outline: none; /* 移除外边框 */
+  box-shadow: none; /* 移除阴影 */
 }
 
 .view-btn:hover {
-  opacity: 0.8;
-  transform: scale(1.1);
+  opacity: 1; /* hover时完全不透明 */
+  transform: scale(1.15); /* 稍微放大一点 */
 }
 
 .view-btn.active {
   opacity: 1;
-  transform: scale(1.1);
+  transform: scale(1.15); /* 激活时放大 */
 }
 
 .view-btn-img {
@@ -722,6 +724,9 @@ onUnmounted(() => {
   height: 50px; /* 1920*1080基准高度50px */
   border-radius: 50%;
   transition: all 0.3s ease;
+  border: none; /* 移除边框 */
+  outline: none; /* 移除外边框 */
+  box-shadow: none; /* 移除阴影 */
 }
 
 /* 滚动指示器 */
