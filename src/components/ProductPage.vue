@@ -1204,82 +1204,144 @@ onUnmounted(() => {
 
 @media (max-width: 768px) {
   .footer {
-    padding-bottom: 16px; /* 32px * 0.5 */
+    height: auto !important;
+    min-height: 150px;
+    padding: 20px 0 !important;
   }
   
   .footer-logo {
-    left: 100px; /* 200px * 0.5 */
-  }
-  
-  .footer-logo-img {
-    width: 125px; /* 250px * 0.5 */
-  }
-  
-  .footer-content {
-    margin-left: 225px; /* 450px * 0.5 */
-  }
-  
-  .social-icons {
-    margin-bottom: 8px; /* 15px * 0.5 */
-  }
-  
-  .social-icon {
-    width: 12px; /* 24px * 0.5 */
-    height: 12px; /* 24px * 0.5 */
-  }
-  
-  .footer-text-area {
-    height: 45px; /* 90px * 0.5 */
-  }
-  
-  .footer-links, .footer-contact, .footer-copyright {
-    height: 15px; /* 30px * 0.5 */
-  }
-}
-
-@media (max-width: 480px) {
-  .footer {
-    padding-bottom: 13px; /* 32px * 0.4 */
-  }
-  
-  /* 页脚移动端适配 */
-  .footer-logo {
-    position: relative; /* 移动端改为相对定位 */
-    left: 0;
+    position: relative !important;
+    left: 0 !important;
+    top: 0 !important;
     text-align: center;
     margin-bottom: 1rem;
   }
   
   .footer-logo-img {
-    width: 100px; /* 250px * 0.4 */
+    width: 150px !important;
   }
   
   .footer-content {
-    margin-left: 0; /* 移动端取消左边距 */
-    text-align: center; /* 移动端居中对齐 */
+    max-width: none !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    text-align: center !important;
+    margin-left: 0 !important;
   }
   
   .social-icons {
-    justify-content: center; /* 移动端图标居中 */
-    margin-bottom: 6px; /* 15px * 0.4 */
+    margin-bottom: 10px !important;
+    justify-content: center !important;
+    gap: 0.8rem;
   }
   
   .social-icon {
-    width: 10px; /* 24px * 0.4 */
-    height: 10px; /* 24px * 0.4 */
-  }
-  
-  .footer-links {
-    justify-content: center; /* 移动端链接居中 */
+    width: 20px !important;
+    height: 20px !important;
   }
   
   .footer-text-area {
-    height: 36px; /* 90px * 0.4 */
+    height: auto !important;
   }
   
-  .footer-links, .footer-contact, .footer-copyright {
-    height: 12px; /* 30px * 0.4 */
-    justify-content: center; /* 移动端文字居中 */
+  .footer-links {
+    height: auto !important;
+    justify-content: center !important;
+    font-size: 12px !important;
+    gap: 0.4rem;
+  }
+  
+  .footer-contact {
+    height: auto !important;
+    justify-content: center;
+  }
+  
+  .footer-contact p {
+    font-size: 12px !important;
+    text-align: center !important;
+  }
+  
+  .footer-copyright {
+    height: auto !important;
+    justify-content: center;
+  }
+  
+  .footer-copyright p {
+    font-size: 12px !important;
+    text-align: center !important;
+    white-space: normal !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer {
+    height: auto !important;
+    min-height: 120px;
+    padding: 15px 0 !important;
+  }
+  
+  /* 页脚移动端适配 */
+  .footer-logo {
+    position: relative !important;
+    left: 0 !important;
+    top: 0 !important;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  
+  .footer-logo-img {
+    width: 120px !important;
+  }
+  
+  .footer-content {
+    max-width: none !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    text-align: center !important;
+    margin-left: 0 !important;
+  }
+  
+  .social-icons {
+    margin-bottom: 8px !important;
+    justify-content: center !important;
+    gap: 0.6rem;
+  }
+  
+  .social-icon {
+    width: 18px !important;
+    height: 18px !important;
+  }
+  
+  .footer-links {
+    height: auto !important;
+    justify-content: center !important;
+    font-size: 10px !important;
+    gap: 0.3rem;
+  }
+  
+  .footer-text-area {
+    height: auto !important;
+  }
+  
+  .footer-contact {
+    height: auto !important;
+    justify-content: center;
+  }
+  
+  .footer-contact p {
+    font-size: 10px !important;
+    text-align: center !important;
+  }
+  
+  .footer-copyright {
+    height: auto !important;
+    justify-content: center;
+  }
+  
+  .footer-copyright p {
+    font-size: 10px !important;
+    text-align: center !important;
+    white-space: normal !important;
   }
 }
 </style>

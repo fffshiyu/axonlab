@@ -32,7 +32,8 @@
             
             <!-- 时间线 -->
             <div class="timeline" 
-                 @mouseleave="expandedCardIndex = -1">
+                 @mouseleave="expandedCardIndex = -1"
+                 @touchend="handleTimelineTouchEnd">
               <div class="timeline-item card" 
                    v-for="(item, index) in timelineData" 
                    :key="index"
@@ -40,7 +41,8 @@
                      'hidden-by-overlay': isCardHiddenByOverlay(index),
                      'dimmed-card': expandedCardIndex !== -1 && expandedCardIndex !== index && !isCardHiddenByOverlay(index)
                    }"
-                   @mouseenter="expandedCardIndex = index">
+                   @mouseenter="expandedCardIndex = index"
+                   @click="handleCardClick(index)">
                 <!-- 色块 - 始终显示 -->
                 <div class="timeline-bar" 
                      :style="{ backgroundColor: item.color }">
@@ -203,6 +205,25 @@ const isCardHiddenByOverlay = (index: number) => {
   } else {
     // 展开4：隐藏2,3,4
     return index >= 2 && index <= 4
+  }
+}
+
+// 移动端点击卡片交互
+const handleCardClick = (index: number) => {
+  // 如果点击的是当前已展开的卡片，则收起
+  if (expandedCardIndex.value === index) {
+    expandedCardIndex.value = -1
+  } else {
+    // 否则展开当前点击的卡片
+    expandedCardIndex.value = index
+  }
+}
+
+// 移动端触摸结束时的处理（点击时间线外部区域收起）
+const handleTimelineTouchEnd = (event: TouchEvent) => {
+  // 如果点击的是时间线容器本身（而不是卡片），则收起
+  if (event.target === event.currentTarget) {
+    expandedCardIndex.value = -1
   }
 }
 
@@ -842,14 +863,20 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0; /* 移除padding，避免影响绝对定位 */
+  max-width: none; /* 移除最大宽度限制 */
+  margin: 0; /* 移除自动居中的margin */
 }
 
 .section-content {
-  position: absolute;
-  left: 200px; /* 1920*1080基准：距离左侧200px */
-  bottom: 280px; /* 1920*1080基准：距离底部280px，向上移动68px */
+  position: absolute; /* 使用absolute，相对于introduction-section定位 */
+  left: 200px; /* 1920*1080基准：距离左侧200px，与logo对齐 */
+  bottom: 280px; /* 1920*1080基准：距离底部280px */
   max-width: 900px; /* 增加宽度，确保英文标题完整显示 */
   color: #ffffff;
+  padding: 0; /* 移除padding */
+  margin: 0; /* 移除margin */
+  z-index: 10; /* 确保在其他内容之上 */
 }
 
 /* 品牌介绍图片 */
@@ -857,12 +884,17 @@ onUnmounted(() => {
   max-width: 100%;
   height: auto;
   display: block;
-  margin-bottom: 2rem; /* 图片和按钮之间的间距 */
+  margin: 0; /* 移除所有margin，完全左对齐 */
+  padding: 0; /* 移除padding */
+  margin-bottom: 2rem; /* 只保留底部间距 */
 }
 
-/* 品牌介绍按钮 */
+/* 品牌介绍按钮容器 */
 .intro-button {
-  margin-top: 2rem;
+  margin: 0; /* 移除margin，完全左对齐 */
+  padding: 0; /* 移除padding */
+  display: flex; /* 使用flex布局 */
+  justify-content: flex-start; /* 确保按钮左对齐 */
 }
 
 .section-decoration {
@@ -1094,11 +1126,10 @@ onUnmounted(() => {
   transition: opacity 0.2s ease 0.1s; /* 延迟0.1s */
 }
 
-/* 其他未选中的格子：色块变暗且半透明 */
+/* 其他未选中的格子：只改变透明度为50%，不变暗 */
 .timeline-item.dimmed-card .timeline-bar {
-  filter: brightness(0.5);
   opacity: 0.5;
-  transition: filter 0.3s ease, opacity 0.3s ease;
+  transition: opacity 0.3s ease;
 }
 
 /* 卡片强制始终可见 */
@@ -1521,20 +1552,48 @@ onUnmounted(() => {
   .history-section {
     /* 移动端禁用background-attachment: fixed */
     background-attachment: scroll;
+    display: flex; /* 使用flex布局 */
+    align-items: center; /* 垂直居中 */
+    justify-content: center; /* 水平居中 */
+    min-height: 100vh; /* 最小高度为一屏 */
+  }
+  
+  .history-content {
+    padding-top: 0; /* 移除顶部padding，使用flex居中 */
+    padding-bottom: 0;
+    transform: none; /* 移除原有的transform */
+  }
+  
+  .history-content .section-subtitle {
+    margin-bottom: 30px; /* 调整副标题与色块的间距 */
   }
   
   .section-content {
     left: 20px; /* 与logo左对齐 */
     bottom: 140px; /* 280px * 0.5 */
-    max-width: calc(100% - 120px); /* 调整最大宽度 */
+    max-width: calc(100% - 40px); /* 调整最大宽度 */
   }
   
-  .logo {
-    left: 20px; /* 移动端logo靠左 */
+  /* 品牌介绍图片移动端样式 */
+  .intro-text-img {
+    max-width: 85%; /* 限制宽度为屏幕的85% */
+    margin-bottom: 1.5rem !important; /* 减少底部间距 */
   }
   
-  .logo-img {
-    width: 100px; /* 移动端logo更小 */
+  /* Learn More按钮移动端样式 */
+  .learn-more-btn {
+    padding: 0.6rem 1.5rem; /* 减小按钮尺寸 */
+    font-size: 0.75rem; /* 减小字体 */
+  }
+  
+  /* 滚动箭头移动端样式 */
+  .scroll-indicator {
+    bottom: 30px; /* 调整位置 */
+  }
+  
+  .scroll-arrow-img {
+    width: 28px;
+    height: 26px;
   }
   
   .nav-links {
@@ -1586,35 +1645,104 @@ onUnmounted(() => {
   }
 
   .timeline {
-    flex-direction: column;
-    gap: 1.5rem; /* 增加间距确保文字显示 */
-    max-width: 610px; /* 1220px * 0.5 */
-    padding: 0 1rem; /* 添加左右内边距 */
+    flex-direction: row; /* 横向排列 */
+    gap: 0; /* 无间距，紧密相连 */
+    max-width: 100%; /* 使用全宽 */
+    padding: 0 1rem; /* 左右内边距 */
+    justify-content: center; /* 居中对齐 */
+    flex-wrap: nowrap; /* 不换行 */
   }
   
   .timeline-bar {
-    height: 160px; /* 减小高度：200px -> 160px */
-    width: 100px; /* 减小宽度：122px -> 100px */
+    height: 100px; /* 紧凑高度 */
+    width: 58px; /* 紧凑宽度，5个色块约290px */
+    flex-shrink: 0; /* 防止压缩 */
   }
   
   .timeline-item {
-    margin-bottom: 1rem; /* 确保年份文字有足够空间 */
+    display: flex;
+    flex-direction: column; /* 垂直排列：色块+日期 */
+    align-items: center;
+    flex-shrink: 0; /* 防止压缩 */
+    position: relative;
   }
   
   .timeline-date {
-    margin-top: 0.5rem; /* 增加文字与色块的间距 */
-    font-size: 0.8rem; /* 移动端字体稍小 */
+    margin-top: 0.4rem;
+    font-size: 0.7rem;
+    color: #cccccc;
+    text-align: center;
+    white-space: nowrap; /* 不换行 */
+  }
+  
+  /* 移动端覆盖层 - 完全复刻桌面端，覆盖3个格子 */
+  .timeline-expanded-overlay {
+    position: absolute;
+    top: 0;
+    width: 300%; /* 覆盖3个格子的宽度 */
+    height: 100px; /* 与色块高度一致 */
+    z-index: 10;
+    animation: expandAnimation 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    pointer-events: none; /* 不阻挡下面元素的点击 */
+    transform-origin: center center;
+  }
+  
+  /* 移动端覆盖层位置类 */
+  .overlay-position-0 {
+    left: 0;
+  }
+  
+  .overlay-position-1 {
+    left: -100%;
+  }
+  
+  .overlay-position-2 {
+    left: -100%;
+  }
+  
+  .overlay-position-3 {
+    left: -200%;
+  }
+  
+  .overlay-position-4 {
+    left: -200%;
+  }
+  
+  .expanded-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  /* 移动端保持桌面端的隐藏逻辑 */
+  .timeline-item.hidden-by-overlay .timeline-bar {
+    opacity: 0 !important;
+    transition: opacity 0.2s ease 0.1s;
+  }
+  
+  /* 移动端保持桌面端的变暗效果 */
+  .timeline-item.dimmed-card .timeline-bar {
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
   }
   
   /* 移除交互样式，只保留基础时间线样式 */
   
+  .history-section {
+    display: flex; /* 使用flex布局 */
+    align-items: center; /* 垂直居中 */
+    justify-content: center; /* 水平居中 */
+    min-height: 100vh; /* 最小高度为一屏 */
+  }
+  
   .history-content {
-    padding-top: 40px; /* 减小顶部间距：50px -> 40px */
-    padding-bottom: 2rem; /* 添加底部间距确保内容不被截断 */
+    padding-top: 0; /* 移除顶部padding，使用flex居中 */
+    padding-bottom: 0;
+    transform: none; /* 移除原有的transform */
   }
   
   .history-content .section-subtitle {
-    margin-bottom: 38px; /* 76px * 0.5 */
+    margin-bottom: 20px; /* 调整副标题与色块的间距 */
   }
   
 
@@ -1769,16 +1897,25 @@ onUnmounted(() => {
   
   .section-content {
     left: 15px; /* 与logo左对齐 */
-    bottom: 112px; /* 280px * 0.4 */
-    max-width: calc(100% - 40px); /* 限制最大宽度 */
+    bottom: 100px; /* 进一步调整底部位置 */
+    max-width: calc(100% - 30px); /* 限制最大宽度 */
   }
   
-  .logo {
-    left: 15px; /* 小屏幕logo靠左 */
+  /* 品牌介绍图片小屏幕样式 */
+  .intro-text-img {
+    max-width: 90%; /* 限制宽度为屏幕的90% */
+    margin-bottom: 1rem !important; /* 减少底部间距 */
   }
   
-  .logo-img {
-    width: 80px; /* 小屏幕logo更小 */
+  /* Learn More按钮小屏幕样式 */
+  .learn-more-btn {
+    padding: 0.5rem 1.2rem; /* 进一步减小按钮尺寸 */
+    font-size: 0.65rem; /* 进一步减小字体 */
+  }
+  
+  /* 滚动箭头小屏幕样式 */
+  .scroll-indicator {
+    bottom: 20px; /* 调整位置 */
   }
   
   .nav-links {
@@ -1822,34 +1959,104 @@ onUnmounted(() => {
   }
   
   .timeline {
-    max-width: 400px; /* 减小最大宽度适应小屏幕 */
-    gap: 1.5rem; /* 保持充足间距 */
-    padding: 0 1rem; /* 添加左右内边距 */
+    flex-direction: row; /* 横向排列 */
+    gap: 0; /* 无间距，紧密相连 */
+    max-width: 100%; /* 使用全宽 */
+    padding: 0 0.5rem; /* 减小左右内边距 */
+    justify-content: center; /* 居中对齐 */
+    flex-wrap: nowrap; /* 不换行 */
   }
   
   .timeline-bar {
-    height: 120px; /* 进一步减小高度：160px -> 120px */
-    width: 80px; /* 进一步减小宽度：98px -> 80px */
+    height: 80px; /* 更紧凑高度 */
+    width: 50px; /* 更紧凑宽度，5个色块约250px */
+    flex-shrink: 0; /* 防止压缩 */
   }
   
   .timeline-item {
-    margin-bottom: 1rem; /* 确保年份文字有足够空间 */
+    display: flex;
+    flex-direction: column; /* 垂直排列：色块+日期 */
+    align-items: center;
+    flex-shrink: 0; /* 防止压缩 */
+    position: relative;
   }
   
   .timeline-date {
-    margin-top: 0.5rem; /* 增加文字与色块的间距 */
-    font-size: 0.75rem; /* 小屏幕字体更小 */
+    margin-top: 0.3rem;
+    font-size: 0.65rem;
+    color: #cccccc;
+    text-align: center;
+    white-space: nowrap; /* 不换行 */
+  }
+  
+  /* 小屏幕覆盖层 - 完全复刻桌面端，覆盖3个格子 */
+  .timeline-expanded-overlay {
+    position: absolute;
+    top: 0;
+    width: 300%; /* 覆盖3个格子的宽度 */
+    height: 80px; /* 与色块高度一致 */
+    z-index: 10;
+    animation: expandAnimation 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    pointer-events: none; /* 不阻挡下面元素的点击 */
+    transform-origin: center center;
+  }
+  
+  /* 小屏幕覆盖层位置类 */
+  .overlay-position-0 {
+    left: 0;
+  }
+  
+  .overlay-position-1 {
+    left: -100%;
+  }
+  
+  .overlay-position-2 {
+    left: -100%;
+  }
+  
+  .overlay-position-3 {
+    left: -200%;
+  }
+  
+  .overlay-position-4 {
+    left: -200%;
+  }
+  
+  .expanded-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  /* 小屏幕保持桌面端的隐藏逻辑 */
+  .timeline-item.hidden-by-overlay .timeline-bar {
+    opacity: 0 !important;
+    transition: opacity 0.2s ease 0.1s;
+  }
+  
+  /* 小屏幕保持桌面端的变暗效果 */
+  .timeline-item.dimmed-card .timeline-bar {
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
   }
   
   /* 移除交互样式，只保留基础时间线样式 */
   
+  .history-section {
+    display: flex; /* 使用flex布局 */
+    align-items: center; /* 垂直居中 */
+    justify-content: center; /* 水平居中 */
+    min-height: 100vh; /* 最小高度为一屏 */
+  }
+  
   .history-content {
-    padding-top: 30px; /* 进一步减小顶部间距：40px -> 30px */
-    padding-bottom: 3rem; /* 增加底部间距确保内容完整显示 */
+    padding-top: 0; /* 移除顶部padding，使用flex居中 */
+    padding-bottom: 0;
+    transform: none; /* 移除原有的transform */
   }
   
   .history-content .section-subtitle {
-    margin-bottom: 30px; /* 76px * 0.4 */
+    margin-bottom: 20px; /* 调整副标题与色块的间距 */
   }
   
 

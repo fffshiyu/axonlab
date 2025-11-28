@@ -627,23 +627,236 @@ onUnmounted(() => {
 }
 
 @media (max-width: 768px) {
-  .navbar { height: 50px; }
-  .main-content { padding-top: 50px; }
-  .logo { left: 100px; }
-  .logo-img { width: 100px; }
+  .navbar { height: 80px; }
+  .main-content { padding-top: 80px; }
+  .logo { left: 20px; }
+  .logo-img { width: 120px; }
   .nav-links { display: none; }
-  .mobile-menu-btn { display: flex; right: 50px; }
+  .mobile-menu-btn { display: flex; right: 80px; }
   .nav-right { right: 20px; }
+  
+  /* 主内容区域移动端优化 */
+  .join-us-section {
+    padding: 2rem 0;
+    min-height: auto;
+    background-attachment: scroll;
+  }
+  
+  .section-container {
+    padding: 0 1.5rem;
+  }
+  
+  .main-title {
+    font-size: 32px;
+    margin-bottom: 8px;
+    letter-spacing: 0.05em;
+    white-space: normal;
+  }
+  
+  .main-subtitle {
+    font-size: 20px;
+    margin-bottom: 2rem;
+  }
+  
+  .jobs-list {
+    gap: 1.5rem;
+    max-width: 100%;
+  }
+  
+  .job-card {
+    padding: 1.5rem 0;
+  }
+  
+  .job-category {
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+  
+  .job-title {
+    display: block;
+    margin-left: 0;
+    margin-top: 0.3rem;
+  }
+  
+  .job-description {
+    font-size: 13px;
+    line-height: 1.7;
+    margin-bottom: 1rem;
+  }
+  
+  .job-contact {
+    gap: 0.6rem;
+  }
+  
+  .contact-item {
+    font-size: 12px;
+  }
+  
+  /* 页脚响应式 */
+  .footer {
+    height: auto !important;
+    min-height: 150px;
+    padding: 20px 0 !important;
+  }
+  
+  .footer-logo {
+    position: relative !important;
+    left: 0 !important;
+    top: 0 !important;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  
+  .footer-logo-img {
+    width: 150px !important;
+  }
+  
+  .footer-content {
+    max-width: none !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    text-align: center !important;
+    margin-left: 0 !important;
+  }
+  
+  .social-icons {
+    margin-bottom: 10px !important;
+    justify-content: center !important;
+    gap: 0.8rem;
+  }
+  
+  .social-icon {
+    width: 20px !important;
+    height: 20px !important;
+  }
+  
+  .footer-text-area {
+    height: auto !important;
+  }
+  
+  .footer-links {
+    height: auto !important;
+    justify-content: center !important;
+    font-size: 12px !important;
+    gap: 0.4rem;
+  }
+  
+  .footer-contact {
+    height: auto !important;
+    justify-content: center;
+  }
+  
+  .footer-contact p {
+    font-size: 12px !important;
+    text-align: center !important;
+  }
+  
+  .footer-copyright {
+    height: auto !important;
+    justify-content: center;
+  }
+  
+  .footer-copyright p {
+    font-size: 12px !important;
+    text-align: center !important;
+    white-space: normal !important;
+  }
 }
 
 @media (max-width: 480px) {
-  .navbar { height: 40px; }
-  .main-content { padding-top: 40px; }
+  .navbar { height: 60px; }
+  .main-content { padding-top: 60px; }
   .logo { left: 15px; }
-  .logo-img { width: 80px; }
-  .mobile-menu-btn { right: 40px; }
+  .logo-img { width: 100px; }
+  .mobile-menu-btn { right: 70px; }
   .nav-right { right: 15px; }
   .nav-content { padding: 0 1rem; }
+  
+  /* 主内容区域小屏优化 */
+  .join-us-section {
+    padding: 1.5rem 0;
+  }
+  
+  .section-container {
+    padding: 0 1rem;
+  }
+  
+  .main-title {
+    font-size: 24px;
+    margin-bottom: 6px;
+    letter-spacing: 0.03em;
+  }
+  
+  .main-subtitle {
+    font-size: 16px;
+    margin-bottom: 1.5rem;
+  }
+  
+  .jobs-list {
+    gap: 1.2rem;
+  }
+  
+  .job-card {
+    padding: 1.2rem 0;
+  }
+  
+  .job-category {
+    font-size: 15px;
+    margin-bottom: 10px;
+  }
+  
+  .job-title {
+    font-size: 15px;
+  }
+  
+  .job-description {
+    font-size: 12px;
+    line-height: 1.6;
+    margin-bottom: 0.8rem;
+  }
+  
+  .job-contact {
+    gap: 0.5rem;
+  }
+  
+  .contact-item {
+    font-size: 11px;
+    word-break: break-word;
+  }
+  
+  /* 页脚响应式 */
+  .footer {
+    height: auto !important;
+    min-height: 120px;
+    padding: 15px 0 !important;
+  }
+  
+  .footer-logo-img {
+    width: 120px !important;
+  }
+  
+  .social-icon {
+    width: 18px !important;
+    height: 18px !important;
+  }
+  
+  .footer-links {
+    font-size: 10px !important;
+    gap: 0.3rem;
+    flex-wrap: wrap;
+  }
+  
+  .footer-contact p {
+    font-size: 10px !important;
+    text-align: center !important;
+    word-break: break-word;
+  }
+  
+  .footer-copyright p {
+    font-size: 10px !important;
+    text-align: center !important;
+    word-break: break-word;
+  }
 }
 </style>
 

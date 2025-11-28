@@ -724,7 +724,6 @@ onUnmounted(() => {
 .hero-arrow {
   position: absolute;
   top: 50%;
-  transform: translateY(-50%);
   width: 32px; /* 固定宽度 */
   height: 32px; /* 固定高度 */
   border-radius: 0;
@@ -738,6 +737,7 @@ onUnmounted(() => {
   justify-content: center;
   padding: 0;
   flex-shrink: 0; /* 防止缩小 */
+  margin-top: -16px; /* 使用margin-top替代transform来垂直居中，避免与旋转冲突 */
 }
 
 .arrow-icon {
@@ -1193,14 +1193,6 @@ onUnmounted(() => {
     height: 50px; /* 100px * 0.5 */
   }
   
-  .logo {
-    left: 100px; /* 200px * 0.5 */
-  }
-  
-  .logo-img {
-    width: 100px; /* 移动端logo更小 */
-  }
-  
   .nav-links {
     display: none; /* 移动端隐藏导航菜单 */
   }
@@ -1213,14 +1205,6 @@ onUnmounted(() => {
 @media (max-width: 480px) {
   .navbar {
     height: 40px; /* 100px * 0.4 */
-  }
-  
-  .logo {
-    left: 80px; /* 200px * 0.4 */
-  }
-  
-  .logo-img {
-    width: 80px; /* 小屏幕logo更小 */
   }
   
   .nav-links {
@@ -1266,34 +1250,307 @@ onUnmounted(() => {
 }
 
 @media (max-width: 768px) {
+  .news-section {
+    background-attachment: scroll; /* 移动端禁用固定背景 */
+  }
+  
+  .news-section .section-container {
+    padding-top: 80px; /* 适配80px导航栏高度 */
+    padding-bottom: 20px;
+  }
+  
+  .news-hero-layout {
+    flex-direction: column; /* 垂直布局 */
+    align-items: center;
+    gap: 1.5rem;
+    width: 100%;
+  }
+  
+  .hero-left {
+    width: 100%;
+    max-width: 90vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative; /* 改为相对定位，箭头放在图片上 */
+  }
+  
   .hero-image {
-    width: 450px; /* 900px * 0.5 */
-    height: 300px; /* 600px * 0.5 */
+    width: 80vw; /* 增加宽度以容纳箭头 */
+    max-width: 450px;
+    height: auto;
+    aspect-ratio: 3/2; /* 保持3:2宽高比 */
+  }
+  
+  .hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .date-overlay {
+    font-size: 1.2rem; /* 放大日期字体 */
+    font-weight: 600; /* 加粗 */
+    padding: 0.5rem 1rem;
+  }
+  
+  .hero-arrow {
+    position: absolute; /* 绝对定位到图片上 */
+    width: 40px;
+    height: 40px;
+    padding: 0.5rem;
+    background: rgba(0, 0, 0, 0.5); /* 半透明背景 */
+    z-index: 10;
+  }
+  
+  .hero-arrow-left {
+    left: 10px; /* 左箭头位置 */
+  }
+  
+  .hero-arrow-right {
+    right: 10px; /* 右箭头位置 */
+  }
+  
+  .arrow-icon {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .hero-dots {
+    bottom: 10px;
+    gap: 6px;
+  }
+  
+  .dot {
+    width: 6px;
+    height: 6px;
   }
   
   .hero-right {
-    margin-left: 235px; /* 450px / 2 + 10px间隔 */
-    max-width: 120px; /* 240px * 0.5 */
+    position: relative !important; /* 移除绝对定位 */
+    margin-left: 0 !important;
+    max-width: 85vw;
+    width: 100%;
+    left: auto !important; /* 重置left属性 */
+    bottom: auto !important; /* 重置bottom属性 */
   }
   
   .right-text {
-    max-height: 300px; /* 600px * 0.5 */
+    max-height: none;
+    padding: 1rem;
+    text-align: center; /* 文字居中 */
+  }
+  
+  .right-text p {
+    font-size: 0.85rem;
+    line-height: 1.6;
+    text-align: center !important; /* 文字居中，使用!important确保生效 */
+  }
+  
+  .news-bottom {
+    margin-top: 1.5rem;
+    width: 85vw;
+  }
+  
+  .news-bottom-title {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .learn-more-btn {
+    padding: 0.6rem 1.5rem;
+    font-size: 0.75rem;
+  }
+  
+  /* 页脚响应式 */
+  .footer {
+    height: auto !important;
+    min-height: 150px;
+    padding: 20px 0 !important;
+  }
+  
+  .footer-logo {
+    position: relative !important;
+    left: 0 !important;
+    top: 0 !important;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  
+  .footer-logo-img {
+    width: 150px !important;
+  }
+  
+  .footer-content {
+    max-width: none !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    text-align: center !important;
+    margin-left: 0 !important;
+  }
+  
+  .social-icons {
+    margin-bottom: 10px !important;
+    justify-content: center !important;
+    gap: 0.8rem;
+  }
+  
+  .social-icon {
+    width: 20px !important;
+    height: 20px !important;
+  }
+  
+  .footer-text-area {
+    height: auto !important;
+  }
+  
+  .footer-links {
+    height: auto !important;
+    justify-content: center !important;
+    font-size: 12px !important;
+    gap: 0.4rem;
+  }
+  
+  .footer-contact {
+    height: auto !important;
+    justify-content: center;
+  }
+  
+  .footer-contact p {
+    font-size: 12px !important;
+    text-align: center !important;
+  }
+  
+  .footer-copyright {
+    height: auto !important;
+    justify-content: center;
+  }
+  
+  .footer-copyright p {
+    font-size: 12px !important;
+    text-align: center !important;
+    white-space: normal !important;
   }
 }
 
 @media (max-width: 480px) {
+  .news-section .section-container {
+    padding-top: 60px; /* 适配60px导航栏高度 */
+    padding-bottom: 15px;
+  }
+  
+  .news-hero-layout {
+    gap: 1rem;
+  }
+  
+  .hero-left {
+    max-width: 95vw;
+  }
+  
   .hero-image {
-    width: 360px; /* 900px * 0.4 */
-    height: 240px; /* 600px * 0.4 */
+    width: 85vw; /* 增加宽度 */
+    max-width: 400px;
+    aspect-ratio: 3/2;
+  }
+  
+  .date-overlay {
+    font-size: 1rem; /* 放大日期字体 */
+    font-weight: 600; /* 加粗 */
+    padding: 0.4rem 0.8rem;
+  }
+  
+  .hero-arrow {
+    width: 35px;
+    height: 35px;
+    padding: 0.4rem;
+  }
+  
+  .hero-arrow-left {
+    left: 8px; /* 调整位置 */
+  }
+  
+  .hero-arrow-right {
+    right: 8px; /* 调整位置 */
+  }
+  
+  .arrow-icon {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .hero-dots {
+    bottom: 8px;
+    gap: 5px;
+  }
+  
+  .dot {
+    width: 5px;
+    height: 5px;
   }
   
   .hero-right {
-    margin-left: 188px; /* 360px / 2 + 8px间隔 */
-    max-width: 96px; /* 240px * 0.4 */
+    position: relative !important; /* 移除绝对定位 */
+    max-width: 90vw;
+    left: auto !important; /* 重置left属性 */
+    bottom: auto !important; /* 重置bottom属性 */
+    margin-left: 0 !important;
   }
   
   .right-text {
-    max-height: 240px; /* 600px * 0.4 */
+    padding: 0.8rem;
+    text-align: center; /* 文字居中 */
+  }
+  
+  .right-text p {
+    font-size: 0.75rem;
+    line-height: 1.5;
+    text-align: center !important; /* 文字居中，使用!important确保生效 */
+  }
+  
+  .news-bottom {
+    margin-top: 1rem;
+    width: 90vw;
+  }
+  
+  .news-bottom-title {
+    font-size: 1rem;
+    margin-bottom: 0.8rem;
+  }
+  
+  .learn-more-btn {
+    padding: 0.5rem 1.2rem;
+    font-size: 0.65rem;
+  }
+  
+  /* 页脚响应式 */
+  .footer {
+    height: auto !important;
+    min-height: 120px;
+    padding: 15px 0 !important;
+  }
+  
+  .footer-logo-img {
+    width: 120px !important;
+  }
+  
+  .social-icon {
+    width: 18px !important;
+    height: 18px !important;
+  }
+  
+  .footer-links {
+    font-size: 10px !important;
+    gap: 0.3rem;
+  }
+  
+  .footer-contact p {
+    font-size: 10px !important;
+    text-align: center !important;
+  }
+  
+  .footer-copyright p {
+    font-size: 10px !important;
+    text-align: center !important;
   }
 }
 

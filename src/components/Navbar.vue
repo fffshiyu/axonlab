@@ -95,10 +95,34 @@
         <div class="mobile-dropdown">
           <div class="mobile-nav-link" @click="toggleMobileDropdown">线上商城</div>
           <div class="mobile-dropdown-menu" :class="{ 'active': isMobileDropdownOpen }">
-            <div class="mobile-dropdown-item">天猫商城</div>
-            <div class="mobile-dropdown-item">抖音商城</div>
-            <div class="mobile-dropdown-item">京东商城</div>
-            <div class="mobile-dropdown-item">小程序官方商城</div>
+            <div class="mobile-dropdown-item" @click="toggleMobileQRCode('tmall')">
+              <span>天猫商城</span>
+              <div class="mobile-qr-code" :class="{ 'show': mobileQRCode === 'tmall' }">
+                <div class="mobile-qr-placeholder">二维码</div>
+                <div class="mobile-qr-title">天猫商城</div>
+              </div>
+            </div>
+            <div class="mobile-dropdown-item" @click="toggleMobileQRCode('douyin')">
+              <span>抖音商城</span>
+              <div class="mobile-qr-code" :class="{ 'show': mobileQRCode === 'douyin' }">
+                <div class="mobile-qr-placeholder">二维码</div>
+                <div class="mobile-qr-title">抖音商城</div>
+              </div>
+            </div>
+            <div class="mobile-dropdown-item" @click="toggleMobileQRCode('jd')">
+              <span>京东商城</span>
+              <div class="mobile-qr-code" :class="{ 'show': mobileQRCode === 'jd' }">
+                <div class="mobile-qr-placeholder">二维码</div>
+                <div class="mobile-qr-title">京东商城</div>
+              </div>
+            </div>
+            <div class="mobile-dropdown-item" @click="toggleMobileQRCode('xiaochengxu')">
+              <span>小程序官方商城</span>
+              <div class="mobile-qr-code" :class="{ 'show': mobileQRCode === 'xiaochengxu' }">
+                <div class="mobile-qr-placeholder">二维码</div>
+                <div class="mobile-qr-title">小程序官方商城</div>
+              </div>
+            </div>
           </div>
         </div>
         
@@ -166,22 +190,39 @@ const showQRCode = (platform: string) => {
 // 移动端菜单控制
 const isMobileMenuOpen = ref(false)
 const isMobileDropdownOpen = ref(false)
+const mobileQRCode = ref<string | null>(null)
 
 const toggleMobileMenu = () => {
   isMobileMenuOpen.value = !isMobileMenuOpen.value
-  // 关闭移动菜单时也关闭下拉菜单
+  // 关闭移动菜单时也关闭下拉菜单和二维码
   if (!isMobileMenuOpen.value) {
     isMobileDropdownOpen.value = false
+    mobileQRCode.value = null
   }
 }
 
 const closeMobileMenu = () => {
   isMobileMenuOpen.value = false
   isMobileDropdownOpen.value = false
+  mobileQRCode.value = null
 }
 
 const toggleMobileDropdown = () => {
   isMobileDropdownOpen.value = !isMobileDropdownOpen.value
+  // 收起下拉菜单时也关闭二维码
+  if (!isMobileDropdownOpen.value) {
+    mobileQRCode.value = null
+  }
+}
+
+const toggleMobileQRCode = (platform: string) => {
+  // 如果点击的是已经打开的二维码，则关闭它
+  if (mobileQRCode.value === platform) {
+    mobileQRCode.value = null
+  } else {
+    // 否则显示新的二维码
+    mobileQRCode.value = platform
+  }
 }
 
 // 滚动隐藏导航栏逻辑
@@ -281,13 +322,15 @@ onUnmounted(() => {
   margin: 0 auto;
   display: flex;
   align-items: center;
-  padding: 0 2rem;
+  padding: 0;
   position: relative;
 }
 
 .logo {
-  position: absolute;
+  position: fixed; /* 改为fixed，相对于视口定位 */
   left: 200px;
+  top: 25px; /* 调整垂直位置使其在导航栏中居中 */
+  z-index: 1001; /* 确保在导航栏之上 */
 }
 
 .logo-img {
@@ -540,7 +583,7 @@ onUnmounted(() => {
 }
 
 .mobile-dropdown-menu.active {
-  max-height: 300px;
+  max-height: 800px; /* 增加高度以容纳展开的二维码 */
 }
 
 .mobile-dropdown-item {
@@ -550,6 +593,13 @@ onUnmounted(() => {
   font-family: 'MiSans', 'Noto Sans SC', sans-serif;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   transition: all 0.3s ease;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+}
+
+.mobile-dropdown-item span {
+  display: block;
 }
 
 .mobile-dropdown-item:last-child {
@@ -562,6 +612,48 @@ onUnmounted(() => {
   padding-left: 2rem;
 }
 
+/* 移动端二维码样式 */
+.mobile-qr-code {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 0;
+  padding: 0;
+}
+
+.mobile-qr-code.show {
+  max-height: 200px;
+  opacity: 1;
+  margin-top: 1rem;
+  padding: 1rem 0;
+}
+
+.mobile-qr-placeholder {
+  width: 120px;
+  height: 120px;
+  background: #666666;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-family: 'MiSans', 'Noto Sans SC', sans-serif;
+  font-size: 14px;
+  margin-bottom: 0.5rem;
+}
+
+.mobile-qr-title {
+  color: #ffffff;
+  font-family: 'MiSans', 'Noto Sans SC', sans-serif;
+  font-size: 12px;
+  text-align: center;
+  font-weight: 500;
+}
+
 /* 响应式设计 */
 @media (max-width: 1440px) {
   .navbar {
@@ -570,6 +662,7 @@ onUnmounted(() => {
   
   .logo {
     left: 150px;
+    top: 18.75px; /* 75px导航栏高度的中心 */
   }
   
   .logo-img {
@@ -608,6 +701,7 @@ onUnmounted(() => {
   
   .logo {
     left: 120px;
+    top: 15px; /* 60px导航栏高度的中心 */
   }
   
   .logo-img {
@@ -647,10 +741,13 @@ onUnmounted(() => {
   
   .logo {
     left: 20px;
+    display: flex;
+    align-items: flex-end; /* 底部对齐 */
   }
   
   .logo-img {
-    width: 100px;
+    height: 16px; /* 缩小移动端logo */
+    width: auto; /* 宽度自适应 */
   }
   
   .nav-links {
@@ -683,10 +780,13 @@ onUnmounted(() => {
   
   .logo {
     left: 15px;
+    display: flex;
+    align-items: flex-end; /* 底部对齐 */
   }
   
   .logo-img {
-    width: 80px;
+    height: 14px; /* 缩小小屏幕logo */
+    width: auto; /* 宽度自适应 */
   }
   
   .mobile-menu-btn {

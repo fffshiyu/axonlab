@@ -1205,59 +1205,290 @@ onUnmounted(() => {
 }
 
 @media (max-width: 768px) {
+  .cooperation-container {
+    --nav-h: 80px;
+  }
+  
+  .navbar {
+    height: 80px;
+  }
+  
+  .main-content {
+    padding-top: 80px;
+  }
+  
+  /* 业务联系部分移动端优化 */
+  .business-section {
+    height: auto;
+    min-height: 100vh;
+    padding: 2rem 0;
+  }
+  
+  .business-section .section-container {
+    transform: none;
+    padding-top: 2rem;
+  }
+  
   .section-container {
-    padding: 0 2rem;
+    padding: 0 1.5rem;
   }
   
   .main-title {
-    font-size: 32px;
+    font-size: 28px;
+    margin-bottom: 8px;
   }
   
   .main-subtitle {
-    font-size: 20px;
-    margin-bottom: 36px;
+    font-size: 18px;
+    margin-bottom: 1.5rem;
   }
   
   .contacts-grid {
-    gap: 28px;
+    gap: 1.5rem;
+    max-width: 100%;
   }
   
   .contact-card {
-    padding: 20px;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 12px;
+  }
+  
+  .contact-info {
+    flex: 1;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .contact-title {
+    font-size: 14px;
+    margin-bottom: 0.8rem;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .contact-title-cn {
+    font-size: 13px;
+  }
+  
+  .contact-desc {
+    font-size: 13px;
+    line-height: 1.6;
+    margin-bottom: 0.8rem;
+    text-align: center;
+  }
+  
+  .contact-details {
+    gap: 0.5rem;
+    align-items: center;
+  }
+  
+  .contact-item {
+    font-size: 13px;
+    text-align: center;
+  }
+  
+  .qr-code-box {
+    width: 100%;
+    padding: 1rem 0;
+  }
+  
+  .qr-image {
+    width: 140px;
+    height: 140px;
+  }
+  
+  .qr-label {
+    font-size: 13px;
+  }
+  
+  /* 品牌合作部分移动端优化 */
+  .cobranding-section {
+    height: auto;
+    min-height: 100vh;
+    padding: 2rem 0;
   }
   
   .brands-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
+    gap: 1rem;
+    max-width: 100%;
+    margin-bottom: 1.5rem;
   }
   
   .brand-item {
-    padding: 20px;
-    min-height: 100px;
+    padding: 0;
+    min-height: auto;
   }
   
   .brand-logo {
-    max-height: 60px;
+    width: 100%;
+    max-width: 140px;
+    height: auto;
+    max-height: 80px;
+  }
+  
+  .learn-more-btn {
+    margin-top: 1.5rem;
+    padding: 0.7rem 1.5rem;
+    font-size: 0.85rem;
+  }
+  
+  /* 滚动指示器移动端 */
+  .scroll-indicator {
+    bottom: 1rem;
+  }
+  
+  .scroll-arrow-img {
+    width: 24px;
+    height: 22px;
+  }
+  
+  /* 页脚响应式 */
+  .footer {
+    height: auto !important;
+    min-height: 150px;
+    padding: 20px 0 !important;
+  }
+  
+  .footer-logo {
+    position: relative !important;
+    left: 0 !important;
+    top: 0 !important;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  
+  .footer-logo-img {
+    width: 150px !important;
+  }
+  
+  .footer-content {
+    max-width: none !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    text-align: center !important;
+    margin-left: 0 !important;
+  }
+  
+  .social-icons {
+    margin-bottom: 10px !important;
+    justify-content: center !important;
+    gap: 0.8rem;
+  }
+  
+  .social-icon {
+    width: 20px !important;
+    height: 20px !important;
+  }
+  
+  .footer-text-area {
+    height: auto !important;
+  }
+  
+  .footer-links {
+    height: auto !important;
+    justify-content: center !important;
+    font-size: 12px !important;
+    gap: 0.4rem;
+  }
+  
+  .footer-contact {
+    height: auto !important;
+    justify-content: center;
+  }
+  
+  .footer-contact p {
+    font-size: 12px !important;
+    text-align: center !important;
+  }
+  
+  .footer-copyright {
+    height: auto !important;
+    justify-content: center;
+  }
+  
+  .footer-copyright p {
+    font-size: 12px !important;
+    text-align: center !important;
+    white-space: normal !important;
   }
 }
 
 @media (max-width: 480px) {
+  .cooperation-container {
+    --nav-h: 60px;
+  }
+  
+  .navbar {
+    height: 60px;
+  }
+  
+  .main-content {
+    padding-top: 60px;
+  }
+  
+  /* 业务联系部分 */
+  .business-section {
+    padding: 1.5rem 0;
+  }
+  
+  .business-section .section-container {
+    padding-top: 1rem;
+  }
+  
+  .section-container {
+    padding: 0 1rem;
+  }
+  
   .main-title {
-    font-size: 24px;
+    font-size: 22px;
+    margin-bottom: 6px;
   }
   
   .main-subtitle {
     font-size: 16px;
-    margin-bottom: 24px;
+    margin-bottom: 1.2rem;
+  }
+  
+  .contacts-grid {
+    gap: 1.2rem;
+  }
+  
+  .contact-card {
+    padding: 1.2rem;
+    gap: 0.8rem;
   }
   
   .contact-title {
-    font-size: 16px;
+    font-size: 13px;
+    margin-bottom: 0.6rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   
-  .contact-desc,
+  .contact-title-cn {
+    font-size: 12px;
+  }
+  
+  .contact-desc {
+    font-size: 12px;
+    line-height: 1.5;
+    margin-bottom: 0.6rem;
+  }
+  
   .contact-item {
     font-size: 12px;
+  }
+  
+  .contact-item .label {
+    display: inline-block;
+    min-width: 70px;
   }
   
   .qr-image {
@@ -1265,14 +1496,74 @@ onUnmounted(() => {
     height: 120px;
   }
   
+  .qr-label {
+    font-size: 12px;
+  }
+  
+  /* 品牌合作部分 */
+  .cobranding-section {
+    padding: 1.5rem 0;
+  }
+  
   .brands-grid {
-    grid-template-columns: 1fr;
-    gap: 16px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.8rem;
+    margin-bottom: 1.2rem;
+  }
+  
+  .brand-logo {
+    max-width: 120px;
+    max-height: 70px;
   }
   
   .learn-more-btn {
-    padding: 0.7rem 1.8rem; /* 与首页响应式统一 */
-    font-size: 0.85rem;
+    margin-top: 1.2rem;
+    padding: 0.6rem 1.2rem;
+    font-size: 0.8rem;
+  }
+  
+  /* 滚动指示器 */
+  .scroll-indicator {
+    bottom: 0.8rem;
+  }
+  
+  .scroll-arrow-img {
+    width: 20px;
+    height: 18px;
+  }
+  
+  /* 页脚响应式 */
+  .footer {
+    height: auto !important;
+    min-height: 120px;
+    padding: 15px 0 !important;
+  }
+  
+  .footer-logo-img {
+    width: 120px !important;
+  }
+  
+  .social-icon {
+    width: 18px !important;
+    height: 18px !important;
+  }
+  
+  .footer-links {
+    font-size: 10px !important;
+    gap: 0.3rem;
+    flex-wrap: wrap;
+  }
+  
+  .footer-contact p {
+    font-size: 10px !important;
+    text-align: center !important;
+    word-break: break-word;
+  }
+  
+  .footer-copyright p {
+    font-size: 10px !important;
+    text-align: center !important;
+    word-break: break-word;
   }
 }
 </style>

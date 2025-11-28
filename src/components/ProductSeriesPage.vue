@@ -12,7 +12,7 @@
       <div class="product-series-content">
         <!-- 小标题 -->
         <div class="product-title-container">
-          <img src="/loomi_text.png" alt="LOOMI" class="product-title-img" />
+          <img src="/loomi_text.png" alt="LOOMI" class="product-title-img loomi-title" />
         </div>
         
         <!-- 产品图片 -->
@@ -975,10 +975,16 @@ onUnmounted(() => {
 
 .product-title-img {
   max-width: 400px;
-  width: auto;
+  width: 400px; /* 固定宽度 */
   height: auto;
   object-fit: contain;
   display: block;
+}
+
+/* loomi标题缩小以匹配axonrob - 原图860*127 */
+.loomi-title {
+  max-width: 250px !important;
+  width: 250px !important;
 }
 
 /* 产品图片容器 */
@@ -1009,12 +1015,14 @@ onUnmounted(() => {
   object-fit: contain;
 }
 
-/* 3D模型容器 - 放大到整个区域 */
+/* 3D模型容器 - 居中显示 */
 .model-3d-container {
-  width: 100vw;
-  height: 80vh;
+  width: 60vw;
+  max-width: 800px;
+  height: 60vh;
   position: relative;
   z-index: 1;
+  margin: 0 auto; /* 水平居中 */
 }
 
 .model-3d-container canvas {
@@ -1405,7 +1413,13 @@ onUnmounted(() => {
 /* 响应式设计 */
 @media (max-width: 1440px) {
   .product-title-img {
-    max-width: 350px;
+    max-width: 400px; /* 保持与桌面端一致 */
+    width: 400px;
+  }
+  
+  .loomi-title {
+    max-width: 250px !important;
+    width: 250px !important;
   }
   
   .product-title-container {
@@ -1424,7 +1438,13 @@ onUnmounted(() => {
   }
   
   .product-title-img {
-    max-width: 300px;
+    max-width: 400px !important; /* 保持与桌面端一致 */
+    width: 400px !important;
+  }
+  
+  .loomi-title {
+    max-width: 250px !important;
+    width: 250px !important;
   }
   
   .product-image-container {
@@ -1439,15 +1459,27 @@ onUnmounted(() => {
 
 @media (max-width: 768px) {
   .product-series-content {
-    padding-top: 80px;
+    height: auto !important; /* 强制改为auto，不再固定100vh高度 */
+    min-height: 100vh !important; /* 最小高度保持100vh */
+    padding-top: 60px !important; /* 紧贴导航栏下方，约等于导航栏高度 */
+    padding-bottom: 0 !important;
+    justify-content: flex-start !important; /* 从顶部开始，标题在顶部 */
   }
   
   .product-title-container {
-    margin-bottom: 30px;
+    margin-top: 10px !important; /* 距离导航栏10px */
+    margin-bottom: 20px !important; /* 从30px减少到20px */
+    overflow: visible !important; /* 允许内容溢出 */
   }
   
   .product-title-img {
-    max-width: 250px;
+    max-width: 250px !important; /* 移动端缩小标题 */
+    width: 250px !important;
+  }
+  
+  .loomi-title {
+    max-width: 200px !important;
+    width: 200px !important;
   }
   
   .product-image-container {
@@ -1455,23 +1487,63 @@ onUnmounted(() => {
     max-height: 45vh;
   }
   
+  /* 3D容器移动端样式 - 往下移动到中间 */
+  .model-3d-container {
+    width: 90vw;
+    max-width: 100%;
+    height: 50vh;
+    margin-top: 15vh; /* 往下移动，使3D内容在页面中间 */
+  }
+  
   .icon-column {
     right: 30px;
     gap: 15px;
+  }
+  
+  /* 右侧icon缩小 */
+  .icon-item {
+    width: 40px; /* 从50px缩小到40px */
+    height: 40px; /* 从50px缩小到40px */
+    border-radius: 20px; /* 对应调整圆角 */
+  }
+  
+  .icon-fill {
+    border-radius: 20px; /* 对应调整圆角 */
+  }
+  
+  .icon-img {
+    width: 40px; /* 从50px缩小到40px */
+    height: 40px; /* 从50px缩小到40px */
+  }
+  
+  .icon-label {
+    font-size: 14px; /* 从16px缩小到14px */
   }
 }
 
 @media (max-width: 480px) {
   .product-series-content {
-    padding-top: 60px;
+    height: auto !important; /* 强制改为auto，不再固定100vh高度 */
+    min-height: 100vh !important; /* 最小高度保持100vh */
+    padding-top: 50px !important; /* 紧贴导航栏下方，约等于导航栏高度 */
+    padding-bottom: 0 !important;
+    justify-content: flex-start !important; /* 从顶部开始，标题在顶部 */
   }
   
   .product-title-container {
-    margin-bottom: 20px;
+    margin-top: 10px !important; /* 距离导航栏10px */
+    margin-bottom: 15px !important; /* 从20px减少到15px */
+    overflow: visible !important; /* 允许内容溢出 */
   }
   
   .product-title-img {
-    max-width: 200px;
+    max-width: 200px !important; /* 小屏幕进一步缩小标题 */
+    width: 200px !important;
+  }
+  
+  .loomi-title {
+    max-width: 160px !important;
+    width: 160px !important;
   }
   
   .product-image-container {
@@ -1479,9 +1551,37 @@ onUnmounted(() => {
     max-height: 40vh;
   }
   
+  /* 3D容器移动端样式 - 往下移动到中间 */
+  .model-3d-container {
+    width: 95vw;
+    max-width: 100%;
+    height: 45vh;
+    margin-top: 12vh; /* 往下移动，使3D内容在页面中间 */
+  }
+  
   .icon-column {
     right: 20px;
     gap: 10px;
+  }
+  
+  /* 右侧icon进一步缩小 */
+  .icon-item {
+    width: 35px; /* 从40px进一步缩小到35px */
+    height: 35px; /* 从40px进一步缩小到35px */
+    border-radius: 17.5px; /* 对应调整圆角 */
+  }
+  
+  .icon-fill {
+    border-radius: 17.5px; /* 对应调整圆角 */
+  }
+  
+  .icon-img {
+    width: 35px; /* 从40px进一步缩小到35px */
+    height: 35px; /* 从40px进一步缩小到35px */
+  }
+  
+  .icon-label {
+    font-size: 12px; /* 从14px进一步缩小到12px */
   }
 }
 </style>
