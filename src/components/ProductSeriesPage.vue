@@ -17,9 +17,15 @@
         
         <!-- 产品图片 -->
         <div class="product-image-container">
-          <!-- 主产品图 -->
+          <!-- 主产品图 - 3D模型 -->
           <div class="product-main-wrapper">
-            <img src="/loomi.png" alt="LOOMI产品" class="product-img" />
+            <div ref="modelContainer1" class="model-3d-container">
+              <!-- 3D模型加载状态 -->
+              <div v-if="!isFirstModelLoaded" class="model-loading">
+                <div class="model-loading-spinner"></div>
+                <p class="model-loading-text">3D模型加载中...</p>
+              </div>
+            </div>
             
             <!-- 顶部按钮 -->
             <button 
@@ -121,7 +127,13 @@
         <div class="product-image-container">
           <!-- 3D模型容器 -->
           <div class="product-main-wrapper">
-            <div ref="modelContainer" class="model-3d-container"></div>
+            <div ref="modelContainer" class="model-3d-container">
+              <!-- 3D模型加载状态 -->
+              <div v-if="!isSecondModelLoaded" class="model-loading">
+                <div class="model-loading-spinner"></div>
+                <p class="model-loading-text">3D模型加载中...</p>
+              </div>
+            </div>
             
             <!-- 顶部按钮 -->
             <button 
@@ -284,7 +296,19 @@ const sideImage2 = ref<string | null>(null)
 const overlayPosition2 = ref<string>('')
 const showParamsImage2 = ref(false)
 
-// 3D模型相关（Three.js）
+// 第一个产品的3D模型相关（LOOMI - loomy.glb）
+const modelContainer1 = ref<HTMLDivElement | null>(null)
+let scene1: THREE.Scene
+let camera1: THREE.PerspectiveCamera
+let renderer1: THREE.WebGLRenderer
+let controls1: OrbitControls
+let content1: THREE.Object3D | null = null
+let animationId1: number
+let retryCount1 = 0
+let isSection1Visible = ref(true) // 第一个区域是否可见
+const isFirstModelLoaded = ref(false) // 第一个模型是否加载完成（响应式）
+
+// 第二个产品的3D模型相关（AXONROB - zbh.glb）
 const modelContainer = ref<HTMLDivElement | null>(null)
 let scene: THREE.Scene
 let camera: THREE.PerspectiveCamera
@@ -294,11 +318,290 @@ let content: THREE.Object3D | null = null
 let animationId: number
 let retryCount = 0
 let resizeTimeout: number | null = null
+let isSection2Visible = ref(false) // 第二个区域是否可见
+const isSecondModelLoaded = ref(false) // 第二个模型是否已加载（响应式）
 
-// 初始化Three.js场景
+// 初始化第一个产品的Three.js场景（LOOMI）
+const init3DScene1 = () => {
+  if (!modelContainer1.value) {
+    console.error('第一个产品模型容器未找到')
+    return
+  }
+
+  const width = modelContainer1.value.clientWidth
+  const height = modelContainer1.value.clientHeight
+  
+  if (width === 0 || height === 0) {
+    retryCount1++
+    if (retryCount1 > 10) {
+      console.error('第一个产品模型容器尺寸始终为0，停止重试。')
+      return
+    }
+    console.log('第一个产品模型容器尺寸为0，延迟重试 (', retryCount1, '/10)')
+    setTimeout(() => init3DScene1(), 200)
+    return
+  }
+
+  console.log('初始化第一个产品Three.js场景，容器尺寸:', width, height)
+
+  // 创建场景
+  scene1 = new THREE.Scene()
+  scene1.background = null // 透明背景
+
+  // 创建相机
+  camera1 = new THREE.PerspectiveCamera(60, width / height, 0.01, 1000)
+  camera1.position.set(0, 0, 5)
+  scene1.add(camera1)
+
+  // 创建渲染器
+  renderer1 = new THREE.WebGLRenderer({ 
+    alpha: true, 
+    antialias: true, // 启用抗锯齿以更好显示玻璃材质
+    powerPreference: 'high-performance',
+    stencil: false,
+    depth: true
+  })
+  renderer1.setSize(width, height)
+  renderer1.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+  renderer1.setClearColor(0x000000, 0)
+  renderer1.outputColorSpace = THREE.SRGBColorSpace
+  // 启用物理正确的光照模式，对玻璃材质很重要
+  renderer1.toneMapping = THREE.ACESFilmicToneMapping
+  renderer1.toneMappingExposure = 1.0
+  modelContainer1.value.appendChild(renderer1.domElement)
+
+  // 创建OrbitControls
+  controls1 = new OrbitControls(camera1, renderer1.domElement)
+  controls1.screenSpacePanning = false // 禁用平移
+  controls1.enableDamping = true
+  controls1.dampingFactor = 0.1
+  controls1.autoRotate = false // 关闭自动旋转
+  controls1.enableRotate = true // 允许旋转查看各个方向
+  controls1.enableZoom = true // 允许轻微缩放
+  controls1.zoomSpeed = 0.3 // 更低的缩放速度，配合距离限制，实现微微放大
+  controls1.rotateSpeed = 0.8 // 旋转速度
+  controls1.enablePan = false // 禁用平移，保持模型居中
+
+  // 添加灯光 - 为玻璃材质优化
+  // 增强环境光，让玻璃更明亮
+  const ambientLight1 = new THREE.AmbientLight(0xffffff, 0.6)
+  scene1.add(ambientLight1)
+
+  // 主光源 - 从多个角度照射玻璃
+  const directionalLight1 = new THREE.DirectionalLight(0xffffff, 1.2)
+  directionalLight1.position.set(5, 5, 5)
+  scene1.add(directionalLight1)
+
+  // 添加补光
+  const directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.8)
+  directionalLight2.position.set(-5, 3, -5)
+  scene1.add(directionalLight2)
+
+  // 半球光，模拟天空和地面反射
+  const hemiLight1 = new THREE.HemisphereLight(0xffffff, 0x444444, 1.5)
+  hemiLight1.position.set(0, 200, 0)
+  scene1.add(hemiLight1)
+  
+  // 添加点光源，增强玻璃的反射效果
+  const pointLight1 = new THREE.PointLight(0xffffff, 1.0, 100)
+  pointLight1.position.set(0, 10, 10)
+  scene1.add(pointLight1)
+
+  // 加载3D模型 - loomy.glb
+  const dracoLoader1 = new DRACOLoader()
+  dracoLoader1.setDecoderPath('/draco/')
+  
+  const loader1 = new GLTFLoader()
+  loader1.setDRACOLoader(dracoLoader1)
+  
+  loader1.load(
+    '/models/loomydraco.glb',
+    (gltf) => {
+      const object = gltf.scene || gltf.scenes[0]
+      
+      if (!object) {
+        console.error('第一个产品模型中没有场景')
+        return
+      }
+      
+      console.log('第一个产品模型（Draco压缩版）加载成功')
+
+      // 材质优化 - 正确处理玻璃材质
+      object.traverse((child) => {
+        if (child instanceof THREE.Mesh) {
+          child.frustumCulled = true
+          
+          if (child.material) {
+            const materials = Array.isArray(child.material) ? child.material : [child.material]
+            materials.forEach(material => {
+              // 启用透明渲染（对玻璃材质很重要）
+              if (material.transparent || material.opacity < 1.0) {
+                material.transparent = true
+                material.depthWrite = false // 玻璃材质关闭深度写入
+                material.side = THREE.DoubleSide // 双面渲染
+              }
+              
+              // 如果是物理材质，确保正确配置
+              if (material.type === 'MeshPhysicalMaterial' || material.type === 'MeshStandardMaterial') {
+                material.envMapIntensity = material.envMapIntensity || 1.0
+                material.metalness = material.metalness !== undefined ? material.metalness : 0
+                material.roughness = material.roughness !== undefined ? material.roughness : 0.5
+              }
+              
+              material.needsUpdate = true
+            })
+          }
+          
+          if (child.geometry) {
+            child.geometry.computeBoundingBox()
+            child.geometry.computeBoundingSphere()
+          }
+        }
+      })
+
+      setContent1(object)
+      isFirstModelLoaded.value = true // 标记第一个模型加载完成
+      console.log('第一个产品模型加载成功并已优化')
+      
+      // 加载完成后，添加一个短暂延迟，然后播放旋转到正面的动画
+      setTimeout(() => {
+        resetCameraToFront1()
+      }, 100)
+    },
+    (progress) => {
+      console.log('第一个产品加载进度:', (progress.loaded / progress.total * 100).toFixed(2) + '%')
+    },
+    (error) => {
+      console.error('加载第一个产品模型失败:', error)
+      isFirstModelLoaded.value = false
+    }
+  )
+
+  // 开始动画循环
+  startAnimation1()
+
+  // 处理窗口大小变化
+  window.addEventListener('resize', onWindowResize1)
+}
+
+// 设置第一个产品模型内容
+const setContent1 = (object: THREE.Object3D) => {
+  if (content1) {
+    scene1.remove(content1)
+  }
+
+  object.updateMatrixWorld()
+
+  const box = new THREE.Box3().setFromObject(object)
+  const size = box.getSize(new THREE.Vector3()).length()
+  const center = box.getCenter(new THREE.Vector3())
+
+  console.log('第一个产品模型中心:', center)
+  console.log('第一个产品模型尺寸:', size)
+
+  controls1.reset()
+
+  object.position.x -= center.x
+  object.position.y -= center.y
+  object.position.z -= center.z
+
+  // 设置缩放范围，只允许轻微缩放
+  const distance = Math.sqrt(
+    Math.pow(size / 1.8, 2) + 
+    Math.pow(size / 3.5, 2) + 
+    Math.pow(size / 1.8, 2)
+  )
+  controls1.minDistance = distance * 0.9 // 限制放大，只能微微放大到90%
+  controls1.maxDistance = distance * 1.3 // 最多缩小到130%
+
+  camera1.near = size / 100
+  camera1.far = size * 100
+  camera1.updateProjectionMatrix()
+
+  camera1.position.copy(center)
+  camera1.position.x += size / 1.8  // 从2.6改为1.8，相机更远
+  camera1.position.y += size / 3.5  // 从4.8改为3.5，相机更远
+  camera1.position.z += size / 1.8  // 从2.6改为1.8，相机更远
+  camera1.lookAt(center)
+
+  controls1.saveState()
+
+  scene1.add(object)
+  content1 = object
+
+  console.log('第一个产品模型已居中，相机位置:', camera1.position)
+}
+
+// 窗口大小变化处理 - 第一个产品（节流优化）
+let resizeTimeout1: number | null = null
+const onWindowResize1 = () => {
+  if (!modelContainer1.value) return
+  
+  // 使用节流，避免频繁调整大小
+  if (resizeTimeout1) {
+    clearTimeout(resizeTimeout1)
+  }
+  
+  resizeTimeout1 = window.setTimeout(() => {
+    if (!modelContainer1.value) return
+    
+    const width = modelContainer1.value.clientWidth
+    const height = modelContainer1.value.clientHeight
+    
+    camera1.aspect = width / height
+    camera1.updateProjectionMatrix()
+    renderer1.setSize(width, height)
+    resizeTimeout1 = null
+  }, 150) // 150ms节流
+}
+
+// 动画循环 - 第一个产品（优化帧率，只在可见时渲染）
+let lastFrameTime1 = 0
+const targetFrameRate1 = 1000 / 30 // 30 FPS，降低渲染频率节省性能
+let isAnimating1 = false
+
+const animate1 = () => {
+  if (!isAnimating1) return // 如果动画已停止，不继续请求帧
+  
+  animationId1 = requestAnimationFrame(animate1)
+  
+  const now = Date.now()
+  const delta = now - lastFrameTime1
+  
+  // 限制帧率到30fps，减少GPU负载
+  if (delta < targetFrameRate1) {
+    return
+  }
+  
+  lastFrameTime1 = now - (delta % targetFrameRate1)
+  
+  // 只在第一个区域可见时才渲染
+  if (isSection1Visible.value && controls1 && renderer1 && scene1 && camera1) {
+    controls1.update()
+    renderer1.render(scene1, camera1)
+  }
+}
+
+// 启动动画1
+const startAnimation1 = () => {
+  if (!isAnimating1) {
+    isAnimating1 = true
+    animate1()
+  }
+}
+
+// 停止动画1
+const stopAnimation1 = () => {
+  isAnimating1 = false
+  if (animationId1) {
+    cancelAnimationFrame(animationId1)
+  }
+}
+
+// 初始化第二个产品的Three.js场景（AXONROB）
 const init3DScene = () => {
   if (!modelContainer.value) {
-    console.error('模型容器未找到')
+    console.error('第二个产品模型容器未找到')
     return
   }
 
@@ -347,12 +650,15 @@ const init3DScene = () => {
 
   // 创建OrbitControls
   controls = new OrbitControls(camera, renderer.domElement)
-  controls.screenSpacePanning = true
+  controls.screenSpacePanning = false // 禁用平移
   controls.enableDamping = true
-  controls.dampingFactor = 0.05
-  controls.autoRotate = true  // 启用自动旋转
-  controls.autoRotateSpeed = 1.0  // 设置旋转速度
-  controls.enableZoom = false  // 禁用缩放功能
+  controls.dampingFactor = 0.1
+  controls.autoRotate = false // 关闭自动旋转
+  controls.enableRotate = true // 允许旋转查看各个方向
+  controls.enableZoom = true // 允许轻微缩放
+  controls.zoomSpeed = 0.3 // 更低的缩放速度，配合距离限制，实现微微放大
+  controls.rotateSpeed = 0.8 // 旋转速度
+  controls.enablePan = false // 禁用平移，保持模型居中
 
   // 添加灯光（优化方向以减少正面反光）
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.3) // 恢复原始强度
@@ -376,14 +682,16 @@ const init3DScene = () => {
   loader.setDRACOLoader(dracoLoader)
   
   loader.load(
-    '/models/zbh.glb',
+    '/models/zbhdraco.glb',
     (gltf) => {
       const object = gltf.scene || gltf.scenes[0]
       
       if (!object) {
-        console.error('模型中没有场景')
+        console.error('第二个产品模型中没有场景')
         return
       }
+      
+      console.log('第二个产品模型（Draco压缩版）加载成功')
 
       // 性能优化：遍历模型并优化材质和几何体
       object.traverse((child) => {
@@ -411,18 +719,20 @@ const init3DScene = () => {
       })
 
       setContent(object)
-      console.log('模型加载成功并已优化')
+      isSecondModelLoaded.value = true // 标记第二个模型加载完成
+      console.log('第二个产品模型加载成功并已优化')
     },
     (progress) => {
-      console.log('加载进度:', (progress.loaded / progress.total * 100).toFixed(2) + '%')
+      console.log('第二个产品加载进度:', (progress.loaded / progress.total * 100).toFixed(2) + '%')
     },
     (error) => {
-      console.error('加载模型失败:', error)
+      console.error('加载第二个产品模型失败:', error)
+      isSecondModelLoaded.value = false
     }
   )
 
   // 开始动画循环
-  animate()
+  startAnimation2()
 
   // 处理窗口大小变化
   window.addEventListener('resize', onWindowResize)
@@ -453,19 +763,28 @@ const setContent = (object: THREE.Object3D) => {
   object.position.y -= center.y
   object.position.z -= center.z
 
-  // 设置controls的最大距离
-  controls.maxDistance = size * 10
+  // 将模型稍微往下移动（减少偏移量，让模型显示更高）
+  object.position.y -= size * 0.05  // 向下移动模型高度的5%（从15%减少到5%）
+
+  // 设置缩放范围，只允许轻微缩放
+  const distance = Math.sqrt(
+    Math.pow(size / 1.8, 2) + 
+    Math.pow(size / 3.5, 2) + 
+    Math.pow(size / 1.8, 2)
+  )
+  controls.minDistance = distance * 0.9 // 限制放大，只能微微放大到90%
+  controls.maxDistance = distance * 1.3 // 最多缩小到130%
 
   // 设置相机的近远裁剪面
   camera.near = size / 100
   camera.far = size * 100
   camera.updateProjectionMatrix()
 
-  // 设置相机位置（调整相机距离让模型看起来更大）
+  // 设置相机位置（调整相机距离让模型缩小）
   camera.position.copy(center)
-  camera.position.x += size / 2.6  // 从 2.0 改为 2.5，相机更近
-  camera.position.y += size / 4.8
-  camera.position.z += size / 2.6  // 从 2.0 改为 2.5，相机更近
+  camera.position.x += size / 1.8  // 从2.6改为1.8，相机更远
+  camera.position.y += size / 3.5  // 从4.8改为3.5，相机更远
+  camera.position.z += size / 1.8  // 从2.6改为1.8，相机更远
   camera.lookAt(center)
 
   // 保存controls状态
@@ -498,22 +817,122 @@ const onWindowResize = () => {
   }, 100) // 100ms节流
 }
 
-// 动画循环
+// 动画循环 - 第二个产品（优化帧率，只在可见时渲染）
+let lastFrameTime2 = 0
+const targetFrameRate2 = 1000 / 30 // 30 FPS，降低渲染频率节省性能
+let isAnimating2 = false
+
 const animate = () => {
+  if (!isAnimating2) return // 如果动画已停止，不继续请求帧
+  
   animationId = requestAnimationFrame(animate)
   
-  // 更新controls（OrbitControls会处理autoRotate）
-  controls.update()
+  const now = Date.now()
+  const delta = now - lastFrameTime2
   
-  renderer.render(scene, camera)
+  // 限制帧率到30fps，减少GPU负载
+  if (delta < targetFrameRate2) {
+    return
+  }
+  
+  lastFrameTime2 = now - (delta % targetFrameRate2)
+  
+  // 只在第二个区域可见时才渲染
+  if (isSection2Visible.value && controls && renderer && scene && camera) {
+    controls.update()
+    renderer.render(scene, camera)
+  }
 }
 
-// 清理3D场景（完整的资源释放）
-const cleanup3DScene = () => {
-  // 取消动画循环
+// 启动动画2
+const startAnimation2 = () => {
+  if (!isAnimating2) {
+    isAnimating2 = true
+    animate()
+  }
+}
+
+// 停止动画2
+const stopAnimation2 = () => {
+  isAnimating2 = false
   if (animationId) {
     cancelAnimationFrame(animationId)
   }
+}
+
+// 清理第一个产品的3D场景（完整的资源释放）
+const cleanup3DScene1 = () => {
+  // 停止动画循环
+  stopAnimation1()
+  
+  // 清理resize timeout
+  if (resizeTimeout1) {
+    clearTimeout(resizeTimeout1)
+    resizeTimeout1 = null
+  }
+  
+  // 移除事件监听
+  window.removeEventListener('resize', onWindowResize1)
+  
+  // 清理controls
+  if (controls1) {
+    controls1.dispose()
+  }
+  
+  // 清理场景中的所有对象
+  if (scene1) {
+    scene1.traverse((object) => {
+      if (object instanceof THREE.Mesh) {
+        if (object.geometry) {
+          object.geometry.dispose()
+        }
+        
+        if (object.material) {
+          if (Array.isArray(object.material)) {
+            object.material.forEach(material => {
+              Object.keys(material).forEach(key => {
+                const value = material[key]
+                if (value && value instanceof THREE.Texture) {
+                  value.dispose()
+                }
+              })
+              material.dispose()
+            })
+          } else {
+            Object.keys(object.material).forEach(key => {
+              const value = object.material[key]
+              if (value && value instanceof THREE.Texture) {
+                value.dispose()
+              }
+            })
+            object.material.dispose()
+          }
+        }
+      }
+    })
+    
+    while(scene1.children.length > 0) { 
+      scene1.remove(scene1.children[0])
+    }
+  }
+  
+  // 清理渲染器
+  if (renderer1 && modelContainer1.value) {
+    renderer1.renderLists.dispose()
+    if (modelContainer1.value.contains(renderer1.domElement)) {
+      modelContainer1.value.removeChild(renderer1.domElement)
+    }
+    renderer1.dispose()
+  }
+  
+  // 清空引用
+  content1 = null
+}
+
+// 清理第二个产品的3D场景（完整的资源释放）
+const cleanup3DScene = () => {
+  // 停止动画循环
+  stopAnimation2()
   
   // 清理resize定时器
   if (resizeTimeout) {
@@ -617,7 +1036,93 @@ const closeOverlay = () => {
 const handleIconClick = (type: string) => {
   if (type === '参数') {
     showParamsImage.value = !showParamsImage.value
+  } else if (type === '正面' || type === '侧面' || type === '背面') {
+    // 旋转相机到对应视角
+    rotateCameraToView1(type)
   }
+}
+
+// 第一个产品 - 旋转相机到指定视角
+const rotateCameraToView1 = (view: string) => {
+  if (!content1 || !controls1) return
+  
+  // 获取当前相机到目标点的距离
+  const currentDistance = camera1.position.distanceTo(controls1.target)
+  const center = controls1.target.clone() // 使用当前的观察目标点
+  
+  // 根据视角设置相机目标位置，保持当前的距离
+  let targetPosition = new THREE.Vector3()
+  
+  switch (view) {
+    case '正面':
+      // 正面视角 - 相机在Z轴正方向
+      targetPosition.set(center.x, center.y, center.z + currentDistance)
+      break
+    case '侧面':
+      // 侧面视角 - 相机在X轴正方向
+      targetPosition.set(center.x + currentDistance, center.y, center.z)
+      break
+    case '背面':
+      // 背面视角 - 相机在Z轴负方向
+      targetPosition.set(center.x, center.y, center.z - currentDistance)
+      break
+  }
+  
+  // 使用动画平滑过渡到目标位置
+  animateCameraToPosition1(targetPosition, center)
+}
+
+// 第一个产品 - 相机位置动画
+const animateCameraToPosition1 = (targetPosition: THREE.Vector3, targetLookAt: THREE.Vector3) => {
+  const startPosition = camera1.position.clone()
+  const startLookAt = controls1.target.clone()
+  const duration = 1000 // 1秒动画
+  const startTime = Date.now()
+  
+  const animate = () => {
+    const elapsed = Date.now() - startTime
+    const progress = Math.min(elapsed / duration, 1)
+    
+    // 使用easeInOutCubic缓动函数
+    const eased = progress < 0.5
+      ? 4 * progress * progress * progress
+      : 1 - Math.pow(-2 * progress + 2, 3) / 2
+    
+    // 插值相机位置
+    camera1.position.lerpVectors(startPosition, targetPosition, eased)
+    
+    // 插值相机目标
+    const newTarget = new THREE.Vector3().lerpVectors(startLookAt, targetLookAt, eased)
+    controls1.target.copy(newTarget)
+    camera1.lookAt(newTarget)
+    
+    controls1.update()
+    
+    if (progress < 1) {
+      requestAnimationFrame(animate)
+    }
+    // 不再恢复自动旋转，保持静止
+  }
+  
+  animate()
+}
+
+// 第一个产品 - 重置相机到正面视角
+const resetCameraToFront1 = () => {
+  if (!content1 || !controls1 || !camera1) return
+  
+  // 获取当前相机到目标点的距离
+  const currentDistance = camera1.position.distanceTo(controls1.target)
+  const center = controls1.target.clone()
+  
+  // 正面视角 - 相机在Z轴正方向
+  const targetPosition = new THREE.Vector3(center.x, center.y, center.z + currentDistance)
+  
+  // 保持静止，不自动旋转
+  controls1.autoRotate = false
+  
+  // 平滑过渡到正面视角
+  animateCameraToPosition1(targetPosition, center)
 }
 
 // 第一个产品 - 关闭参数图片
@@ -690,9 +1195,6 @@ const rotateCameraToView = (view: string) => {
       break
   }
   
-  // 暂停自动旋转
-  controls.autoRotate = false
-  
   // 使用动画平滑过渡到目标位置
   animateCameraToPosition(targetPosition, center)
 }
@@ -732,6 +1234,24 @@ const animateCameraToPosition = (targetPosition: THREE.Vector3, targetLookAt: TH
   }
   
   animate()
+}
+
+// 第二个产品 - 重置相机到正面视角
+const resetCameraToFront2 = () => {
+  if (!content || !controls || !camera) return
+  
+  // 获取当前相机到目标点的距离
+  const currentDistance = camera.position.distanceTo(controls.target)
+  const center = controls.target.clone()
+  
+  // 正面视角 - 相机在Z轴正方向
+  const targetPosition = new THREE.Vector3(center.x, center.y, center.z + currentDistance)
+  
+  // 保持静止，不自动旋转
+  controls.autoRotate = false
+  
+  // 平滑过渡到正面视角
+  animateCameraToPosition(targetPosition, center)
 }
 
 // 第二个产品 - 关闭参数图片
@@ -886,7 +1406,8 @@ const initializePagePosition = () => {
 onMounted(() => {
   // 增加延迟，确保canvas元素完全渲染
   setTimeout(() => {
-    init3DScene()
+    init3DScene1() // 初始化第一个产品的3D场景（LOOMI）
+    init3DScene()  // 同时初始化第二个产品的3D场景（AXONROB）
   }, 300)
   
   // 初始化页面位置
@@ -901,11 +1422,75 @@ onMounted(() => {
       initializePagePosition()
     }, 200)
   })
+  
+  // 性能优化：使用Intersection Observer监控section可见性
+  const observerOptions = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.3 // 当30%的内容可见时触发
+  }
+  
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.target.classList.contains('product-section')) {
+        // 判断是第几个section
+        const sections = document.querySelectorAll('.product-section')
+        const index = Array.from(sections).indexOf(entry.target as Element)
+        
+        if (index === 0) {
+          // 第一个产品区域
+          const wasVisible = isSection1Visible.value
+          isSection1Visible.value = entry.isIntersecting
+          console.log('第一个产品区域可见:', entry.isIntersecting)
+          
+          // 性能优化：根据可见性启动/停止动画
+          if (entry.isIntersecting) {
+            startAnimation1()
+          } else {
+            stopAnimation1()
+          }
+          
+          // 当区域从不可见变为可见时，重置相机到正面视角
+          if (!wasVisible && entry.isIntersecting && content1 && controls1) {
+            console.log('重置第一个产品相机到正面视角')
+            resetCameraToFront1()
+          }
+        } else if (index === 1) {
+          // 第二个产品区域
+          const wasVisible = isSection2Visible.value
+          isSection2Visible.value = entry.isIntersecting
+          console.log('第二个产品区域可见:', entry.isIntersecting)
+          
+          // 性能优化：根据可见性启动/停止动画
+          if (entry.isIntersecting) {
+            startAnimation2()
+          } else {
+            stopAnimation2()
+          }
+          
+          // 当区域从不可见变为可见时，重置相机到正面视角
+          if (!wasVisible && entry.isIntersecting && content && controls) {
+            console.log('重置第二个产品相机到正面视角')
+            resetCameraToFront2()
+          }
+        }
+      }
+    })
+  }, observerOptions)
+  
+  // 观察所有product-section
+  setTimeout(() => {
+    const sections = document.querySelectorAll('.product-section')
+    sections.forEach(section => {
+      observer.observe(section)
+    })
+  }, 500)
 })
 
 // 组件卸载时清理3D场景
 onUnmounted(() => {
-  cleanup3DScene()
+  cleanup3DScene1() // 清理第一个产品的3D场景
+  cleanup3DScene()  // 清理第二个产品的3D场景
   
   // 移除事件监听器
   window.removeEventListener('wheel', handleWheel)
@@ -920,6 +1505,46 @@ onUnmounted(() => {
   position: relative;
   overflow-x: hidden;
   overflow-y: auto;
+}
+
+/* 3D模型加载状态（局部） */
+.model-loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent; /* 纯透明，不遮挡背景 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  z-index: 5;
+  pointer-events: none; /* 不阻止鼠标事件 */
+}
+
+.model-loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 3px solid rgba(1, 206, 126, 0.2);
+  border-top-color: #01CE7E;
+  border-radius: 50%;
+  animation: model-spin 1s linear infinite;
+}
+
+@keyframes model-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.model-loading-text {
+  color: #ffffff;
+  font-family: 'MiSans', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  margin: 0;
 }
 
 /* 产品区域 */
@@ -965,12 +1590,19 @@ onUnmounted(() => {
   z-index: 1;
   padding-top: 0; /* 移除顶部padding，让内容完全居中 */
   padding-bottom: 0; /* 移除底部padding */
+  pointer-events: none; /* 容器本身不阻止点击 */
+}
+
+.product-series-content > * {
+  pointer-events: auto; /* 子元素可以点击 */
 }
 
 /* 小标题容器 */
 .product-title-container {
   margin-bottom: 40px;
-  z-index: 3;
+  position: relative; /* 必须有position才能让z-index生效 */
+  z-index: 10; /* 提高z-index，确保在3D之上 */
+  pointer-events: auto; /* 确保可点击 */
 }
 
 .product-title-img {
@@ -978,6 +1610,8 @@ onUnmounted(() => {
   width: 400px; /* 固定宽度 */
   height: auto;
   object-fit: contain;
+  position: relative;
+  z-index: 10; /* 确保图片也在最上层 */
   display: block;
 }
 
@@ -1001,9 +1635,10 @@ onUnmounted(() => {
 /* 主产品图包装器 */
 .product-main-wrapper {
   position: relative;
-  width: 60vw;
-  height: 60vh;
-  max-height: 60vh;
+  width: 85vw; /* 匹配放大后的canvas */
+  height: 75vh; /* 匹配放大后的canvas */
+  max-width: 1200px;
+  max-height: 75vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1015,20 +1650,22 @@ onUnmounted(() => {
   object-fit: contain;
 }
 
-/* 3D模型容器 - 居中显示 */
+/* 3D模型容器 - 居中显示，放大canvas */
 .model-3d-container {
-  width: 60vw;
-  max-width: 800px;
-  height: 60vh;
+  width: 85vw; /* 从60vw放大到85vw */
+  max-width: 1200px; /* 从800px放大到1200px */
+  height: 75vh; /* 从60vh放大到75vh */
   position: relative;
-  z-index: 1;
+  z-index: 1; /* 保持在文字下方 */
   margin: 0 auto; /* 水平居中 */
+  pointer-events: auto; /* canvas可以交互 */
 }
 
 .model-3d-container canvas {
   display: block;
   width: 100% !important;
   height: 100% !important;
+  pointer-events: auto; /* 允许canvas上的鼠标交互 */
 }
 
 /* 叠加图片 */
@@ -1138,7 +1775,8 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   gap: clamp(20px, 3vh, 40px);
-  z-index: 2;
+  z-index: 10; /* 提高z-index，确保在3D之上 */
+  pointer-events: auto; /* 确保图标可点击 */
 }
 
 /* 参数详情图片 */

@@ -12,9 +12,9 @@
           <h2 class="product-subtitle">鹿米系列</h2>
         </div>
 
-        <!-- 产品图片 -->
+        <!-- 产品3D模型 -->
         <div class="product-image-container">
-          <img :src="currentProductImage" alt="LUUMI产品" class="product-image" />
+          <div ref="modelContainer" class="model-container"></div>
         </div>
 
         <!-- 视图切换按钮 -->
@@ -144,9 +144,24 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import Navbar from './Navbar.vue'
+import * as THREE from 'three'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
 // 导航栏可见性
 const isNavbarVisible = ref(true)
+
+// 3D模型相关
+const modelContainer = ref<HTMLDivElement | null>(null)
+let scene: THREE.Scene
+let camera: THREE.PerspectiveCamera
+let renderer: THREE.WebGLRenderer
+let controls: OrbitControls
+let content: THREE.Object3D | null = null
+let animationId: number
+let retryCount = 0
+let resizeTimeout: number | null = null
 
 
 
@@ -206,16 +221,252 @@ const productImages2 = {
 }
 const currentProductImage2 = ref(productImages2.front)
 
-// 切换第一个产品视图
+// 切换第一个产品视图（切换3D模型相机视角）
 const switchView = (view: 'front' | 'side' | 'top') => {
   currentView.value = view
-  currentProductImage.value = productImages[view]
+  if (!content || !camera || !controls) return
+  
+  const box = new THREE.Box3().setFromObject(content)
+  const size = box.getSize(new THREE.Vector3()).length()
+  const center = box.getCenter(new THREE.Vector3())
+  
+  let targetPosition = new THREE.Vector3()
+  
+  // 根据视图设置相机位置
+  switch(view) {
+    case 'front':
+      targetPosition.set(center.x + size / 2.6, center.y + size / 4.8, center.z + size / 2.6)
+      break
+    case 'side':
+      targetPosition.set(center.x + size / 1.5, center.y + size / 4.8, center.z)
+      break
+    case 'top':
+      targetPosition.set(center.x, center.y + size / 1.5, center.z + size / 4.8)
+      break
+  }
+  
+  animateCameraToPosition(targetPosition, center)
 }
 
 // 切换第二个产品视图
 const switchView2 = (view: 'front' | 'side' | 'top') => {
   currentView2.value = view
   currentProductImage2.value = productImages2[view]
+}
+
+// 初始化Three.js场景
+const init3DScene = () => {
+  if (!modelContainer.value) {
+    console.error('模型容器未找到')
+    return
+  }
+
+  const width = modelContainer.value.clientWidth
+  const height = modelContainer.value.clientHeight
+  
+  // 确保容器有有效的尺寸
+  if (width === 0 || height === 0) {
+    retryCount++
+    if (retryCount > 10) {
+      console.error('模型容器尺寸始终为0，停止重试。')
+      return
+    }
+    console.log('模型容器尺寸为0，延迟重试 (', retryCount, '/10)')
+    setTimeout(() => init3DScene(), 200)
+    return
+  }
+
+  console.log('初始化Three.js场景，容器尺寸:', width, height)
+
+  // 创建场景
+  scene = new THREE.Scene()
+  scene.background = null // 透明背景
+
+  // 创建相机
+  camera = new THREE.PerspectiveCamera(60, width / height, 0.01, 1000)
+  camera.position.set(0, 0, 5)
+  scene.add(camera)
+
+  // 创建渲染器
+  renderer = new THREE.WebGLRenderer({ 
+    alpha: true, 
+    antialias: window.devicePixelRatio === 1,
+    powerPreference: 'high-performance',
+    stencil: false,
+    depth: true
+  })
+  renderer.setSize(width, height)
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+  renderer.setClearColor(0x000000, 0)
+  renderer.outputColorSpace = THREE.SRGBColorSpace
+  modelContainer.value.appendChild(renderer.domElement)
+
+  // 创建OrbitControls
+  controls = new OrbitControls(camera, renderer.domElement)
+  controls.screenSpacePanning = true
+  controls.enableDamping = true
+  controls.dampingFactor = 0.05
+  controls.autoRotate = true
+  controls.autoRotateSpeed = 1.0
+  controls.enableZoom = false
+
+  // 添加灯光
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.3)
+  camera.add(ambientLight)
+
+  const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8 * Math.PI)
+  directionalLight.position.set(0.866, 0.5, 0.5)
+  camera.add(directionalLight)
+
+  const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 1)
+  hemiLight.position.set(0, 200, 0)
+  scene.add(hemiLight)
+
+  // 加载3D模型
+  const dracoLoader = new DRACOLoader()
+  dracoLoader.setDecoderPath('/draco/')
+  
+  const loader = new GLTFLoader()
+  loader.setDRACOLoader(dracoLoader)
+  
+  loader.load(
+    '/models/loomy.glb',
+    (gltf) => {
+      const object = gltf.scene || gltf.scenes[0]
+      
+      if (!object) {
+        console.error('模型中没有场景')
+        return
+      }
+
+      // 性能优化
+      object.traverse((child) => {
+        if (child instanceof THREE.Mesh) {
+          child.frustumCulled = true
+          
+          if (child.material) {
+            const materials = Array.isArray(child.material) ? child.material : [child.material]
+            materials.forEach(material => {
+              material.precision = 'mediump'
+              material.needsUpdate = true
+            })
+          }
+          
+          if (child.geometry) {
+            child.geometry.computeBoundingBox()
+            child.geometry.computeBoundingSphere()
+          }
+        }
+      })
+
+      setContent(object)
+      console.log('模型加载成功并已优化')
+    },
+    (progress) => {
+      console.log('加载进度:', (progress.loaded / progress.total * 100).toFixed(2) + '%')
+    },
+    (error) => {
+      console.error('加载模型失败:', error)
+    }
+  )
+
+  // 开始动画循环
+  animate()
+
+  // 处理窗口大小变化
+  window.addEventListener('resize', onWindowResize)
+}
+
+// 设置模型内容
+const setContent = (object: THREE.Object3D) => {
+  if (content) {
+    scene.remove(content)
+  }
+
+  object.updateMatrixWorld()
+
+  const box = new THREE.Box3().setFromObject(object)
+  const size = box.getSize(new THREE.Vector3()).length()
+  const center = box.getCenter(new THREE.Vector3())
+
+  console.log('模型中心:', center)
+  console.log('模型尺寸:', size)
+
+  controls.reset()
+
+  object.position.x -= center.x
+  object.position.y -= center.y
+  object.position.z -= center.z
+
+  controls.maxDistance = size * 10
+
+  camera.near = size / 100
+  camera.far = size * 100
+  camera.updateProjectionMatrix()
+
+  camera.position.copy(center)
+  camera.position.x += size / 2.6
+  camera.position.y += size / 4.8
+  camera.position.z += size / 2.6
+  camera.lookAt(center)
+
+  controls.saveState()
+
+  scene.add(object)
+  content = object
+
+  console.log('模型已居中，相机位置:', camera.position)
+}
+
+// 窗口大小变化处理
+const onWindowResize = () => {
+  if (!modelContainer.value) return
+  
+  if (resizeTimeout) {
+    clearTimeout(resizeTimeout)
+  }
+  
+  resizeTimeout = window.setTimeout(() => {
+    const width = modelContainer.value!.clientWidth
+    const height = modelContainer.value!.clientHeight
+    
+    camera.aspect = width / height
+    camera.updateProjectionMatrix()
+    renderer.setSize(width, height)
+    resizeTimeout = null
+  }, 100)
+}
+
+// 动画循环
+const animate = () => {
+  animationId = requestAnimationFrame(animate)
+  controls.update()
+  renderer.render(scene, camera)
+}
+
+// 相机位置动画
+const animateCameraToPosition = (targetPosition: THREE.Vector3, targetLookAt: THREE.Vector3) => {
+  const startPosition = camera.position.clone()
+  const startLookAt = controls.target.clone()
+  const duration = 1000
+  const startTime = Date.now()
+  
+  const animateCamera = () => {
+    const elapsed = Date.now() - startTime
+    const progress = Math.min(elapsed / duration, 1)
+    const eased = 1 - Math.pow(1 - progress, 3)
+    
+    camera.position.lerpVectors(startPosition, targetPosition, eased)
+    const newTarget = new THREE.Vector3().lerpVectors(startLookAt, targetLookAt, eased)
+    controls.target.copy(newTarget)
+    controls.update()
+    
+    if (progress < 1) {
+      requestAnimationFrame(animateCamera)
+    }
+  }
+  
+  animateCamera()
 }
 
 // 全屏滚动功能 - 参考首页实现
@@ -352,6 +603,9 @@ const handleWheel = (event: WheelEvent) => {
 }
 
 onMounted(() => {
+  // 初始化3D场景
+  init3DScene()
+  
   // 添加点击空白处隐藏下拉菜单的事件监听
   window.addEventListener('click', handleClickOutside)
   
@@ -377,9 +631,21 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
+  // 清理3D场景
+  if (animationId) {
+    cancelAnimationFrame(animationId)
+  }
+  if (renderer) {
+    renderer.dispose()
+  }
+  if (content) {
+    scene.remove(content)
+  }
+  
   // 清理事件监听器
   window.removeEventListener('click', handleClickOutside)
   window.removeEventListener('wheel', handleWheel)
+  window.removeEventListener('resize', onWindowResize)
   window.removeEventListener('keydown', () => {})
 })
 </script>
@@ -687,6 +953,13 @@ onUnmounted(() => {
   height: auto;
   object-fit: contain; /* 保持图片比例 */
   transition: all 0.3s ease;
+}
+
+/* 3D模型容器 */
+.model-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
 }
 
 /* 视图切换按钮 */

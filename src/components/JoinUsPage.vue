@@ -123,7 +123,7 @@ const handleClickOutside = (event: Event) => {
   }
 }
 
-// 职位数据
+// 职位数据（只保留2个，让页面内容适中）
 const jobs = ref([
   {
     category: '职能类型',
@@ -138,55 +138,63 @@ const jobs = ref([
     description: '职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求',
     contact: 'XXX',
     email: 'BD@axonlabs.com'
-  },
-  {
-    category: '职能类型',
-    title: '职位名称',
-    description: '职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求',
-    contact: 'XXX',
-    email: 'BD@axonlabs.com'
-  },
-  {
-    category: '职能类型',
-    title: '职位名称',
-    description: '职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求',
-    contact: 'XXX',
-    email: 'BD@axonlabs.com'
-  },
-  {
-    category: '职能类型',
-    title: '职位名称',
-    description: '职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求',
-    contact: 'XXX',
-    email: 'BD@axonlabs.com'
   }
 ])
+
+// 背景图片加载状态
+const isBackgroundLoaded = ref(false)
 
 // 简单的滚动检测：往下隐藏，往上显示（优化性能）
 let lastScrollY = 0
 let ticking = false
+let scrollTimeout: number | null = null
 
 const handleScroll = () => {
-  if (!ticking) {
-    window.requestAnimationFrame(() => {
-      const currentScrollY = window.pageYOffset || document.documentElement.scrollTop || 0
-
-      if (currentScrollY > lastScrollY && currentScrollY > 10) {
-        // 往下滚动且不在顶部时，隐藏导航
-        isNavbarVisible.value = false
-      } else if (currentScrollY < lastScrollY) {
-        // 往上滚动，显示导航
-        isNavbarVisible.value = true
-      }
-
-      lastScrollY = currentScrollY
-      ticking = false
-    })
-    ticking = true
+  // 添加防抖，减少计算频率
+  if (scrollTimeout) {
+    window.clearTimeout(scrollTimeout)
   }
+  
+  scrollTimeout = window.setTimeout(() => {
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        const currentScrollY = window.pageYOffset || document.documentElement.scrollTop || 0
+
+        if (currentScrollY > lastScrollY && currentScrollY > 10) {
+          // 往下滚动且不在顶部时，隐藏导航
+          isNavbarVisible.value = false
+        } else if (currentScrollY < lastScrollY) {
+          // 往上滚动，显示导航
+          isNavbarVisible.value = true
+        }
+
+        lastScrollY = currentScrollY
+        ticking = false
+      })
+      ticking = true
+    }
+  }, 10) // 10ms 防抖
+}
+
+// 预加载背景图片以避免首次滚动卡顿
+const preloadBackground = () => {
+  const img = new Image()
+  img.onload = () => {
+    isBackgroundLoaded.value = true
+    console.log('加入我们页面背景图片加载完成')
+  }
+  img.onerror = () => {
+    // 即使加载失败也标记为已加载，避免永久阻塞
+    isBackgroundLoaded.value = true
+    console.warn('加入我们页面背景图片加载失败')
+  }
+  img.src = '/join_bg.png'
 }
 
 onMounted(() => {
+  // 预加载背景图片
+  preloadBackground()
+  
   window.addEventListener('click', handleClickOutside)
   window.addEventListener('scroll', handleScroll, { passive: true })
   lastScrollY = window.pageYOffset || document.documentElement.scrollTop || 0
@@ -195,6 +203,9 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener('click', handleClickOutside)
   window.removeEventListener('scroll', handleScroll)
+  if (scrollTimeout) {
+    window.clearTimeout(scrollTimeout)
+  }
 })
 </script>
 
@@ -205,6 +216,16 @@ onUnmounted(() => {
   background: #000000;
   color: #ffffff;
   overflow-x: hidden;
+  /* 强制覆盖全局设置，确保连续流畅滚动 */
+  scroll-snap-type: none !important;
+  scroll-snap-align: none !important;
+  scroll-snap-stop: normal !important;
+  -webkit-overflow-scrolling: touch;
+  /* 禁用平滑滚动，避免卡顿 */
+  scroll-behavior: auto !important;
+  /* 优化渲染性能，减少首次加载卡顿 */
+  isolation: isolate;
+  transform: translateZ(0);
 }
 
 /* 导航栏样式 */
@@ -220,6 +241,9 @@ onUnmounted(() => {
   z-index: 1000;
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   transform: translateY(0);
+  /* 优化导航栏渲染性能 */
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 .navbar-hidden {
@@ -402,25 +426,31 @@ onUnmounted(() => {
 .mobile-menu-btn span { width: 24px; height: 2px; background: #ffffff; transition: all 0.3s ease; }
 
 /* 主要内容 */
-.main-content { padding-top: 100px; }
+.main-content { 
+  padding-top: 100px;
+  /* 强制禁用滚动吸附 */
+  scroll-snap-align: none !important;
+  scroll-snap-stop: normal !important;
+}
 
 .join-us-section {
   position: relative;
   width: 100vw;
   margin-left: calc(-50vw + 50%);
-  min-height: 100vh;
+  min-height: auto; /* 改为auto，让内容自然流动，避免分页效果 */
   padding: 140px 0 100px;
   background: url('/join_bg.png') no-repeat center top;
   background-size: cover;
-  /* 移除 background-attachment: fixed 以解决滚动卡顿问题 */
-  /* 优化渲染性能 */
-  will-change: transform;
+  background-attachment: scroll; /* 使用scroll而不是fixed以避免卡顿 */
+  /* 强制禁用滚动吸附 */
+  scroll-snap-align: none !important;
+  scroll-snap-stop: normal !important;
+  /* 优化首次渲染性能 */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 1000px;
+  /* GPU加速，减少重排 */
   transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  perspective: 1000;
-  -webkit-perspective: 1000;
+  will-change: auto;
 }
 
 .join-us-section::before {
@@ -437,6 +467,8 @@ onUnmounted(() => {
   padding: 0 2rem;
   position: relative;
   z-index: 1;
+  /* 优化渲染 */
+  transform: translateZ(0);
 }
 
 .main-title {
@@ -463,9 +495,24 @@ onUnmounted(() => {
   font-family: 'MiSans', 'Noto Sans SC', sans-serif;
 }
 
-.jobs-list { display: flex; flex-direction: column; gap: 40px; max-width: 820px; margin: 0 auto; }
+.jobs-list { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 40px; 
+  max-width: 820px; 
+  margin: 0 auto;
+  /* 优化渲染性能 */
+  contain: layout style paint;
+}
 
-.job-card { background: transparent; padding: 24px 0; border-top: 1px solid rgba(255, 255, 255, 0.25); }
+.job-card { 
+  background: transparent; 
+  padding: 24px 0; 
+  border-top: 1px solid rgba(255, 255, 255, 0.25);
+  /* 优化每个卡片的渲染 */
+  transform: translateZ(0);
+  will-change: auto;
+}
 .job-card:first-child { border-top: none; }
 
 .job-card:last-child {
