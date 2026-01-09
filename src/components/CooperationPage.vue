@@ -27,7 +27,7 @@
               </div>
               
               <div class="qr-code-box">
-                <img src="/qr.png" alt="商务合作二维码" class="qr-image" />
+                <img src="/qr.webp" alt="商务合作二维码" class="qr-image" />
                 <p class="qr-label">二维码</p>
               </div>
             </div>
@@ -46,7 +46,7 @@
               </div>
               
               <div class="qr-code-box">
-                <img src="/qr.png" alt="品牌合作二维码" class="qr-image" />
+                <img src="/qr.webp" alt="品牌合作二维码" class="qr-image" />
                 <p class="qr-label">二维码</p>
               </div>
             </div>
@@ -56,7 +56,7 @@
         
         <!-- 滚动指示器 -->
         <div class="scroll-indicator" @click="scrollToCobranding">
-          <img src="/arrow.png" alt="向下箭头" class="scroll-arrow-img" />
+          <img src="/arrow.webp" alt="向下箭头" class="scroll-arrow-img" />
         </div>
       </section>
 
@@ -70,44 +70,44 @@
             <div class="brands-grid">
             <!-- 第一行：4个品牌logo -->
             <div class="brand-item">
-              <img src="/logo1.png" alt="合作品牌" class="brand-logo" />
+              <img src="/logo1.webp" alt="合作品牌" class="brand-logo" />
             </div>
             <div class="brand-item">
-              <img src="/logo2.png" alt="合作品牌" class="brand-logo" />
+              <img src="/logo2.webp" alt="合作品牌" class="brand-logo" />
             </div>
             <div class="brand-item">
-              <img src="/logo3.png" alt="合作品牌" class="brand-logo" />
+              <img src="/logo3.webp" alt="合作品牌" class="brand-logo" />
             </div>
             <div class="brand-item">
-              <img src="/iplogo.png" alt="合作品牌" class="brand-logo placeholder" />
+              <img src="/iplogo.webp" alt="合作品牌" class="brand-logo placeholder" />
             </div>
             
             <!-- 第二行：4个占位logo -->
             <div class="brand-item">
-              <img src="/iplogo.png" alt="合作品牌" class="brand-logo placeholder" />
+              <img src="/iplogo.webp" alt="合作品牌" class="brand-logo placeholder" />
             </div>
             <div class="brand-item">
-              <img src="/iplogo.png" alt="合作品牌" class="brand-logo placeholder" />
+              <img src="/iplogo.webp" alt="合作品牌" class="brand-logo placeholder" />
             </div>
             <div class="brand-item">
-              <img src="/iplogo.png" alt="合作品牌" class="brand-logo placeholder" />
+              <img src="/iplogo.webp" alt="合作品牌" class="brand-logo placeholder" />
             </div>
             <div class="brand-item">
-              <img src="/iplogo.png" alt="合作品牌" class="brand-logo placeholder" />
+              <img src="/iplogo.webp" alt="合作品牌" class="brand-logo placeholder" />
             </div>
             
             <!-- 第三行：4个占位logo -->
             <div class="brand-item">
-              <img src="/iplogo.png" alt="合作品牌" class="brand-logo placeholder" />
+              <img src="/iplogo.webp" alt="合作品牌" class="brand-logo placeholder" />
             </div>
             <div class="brand-item">
-              <img src="/iplogo.png" alt="合作品牌" class="brand-logo placeholder" />
+              <img src="/iplogo.webp" alt="合作品牌" class="brand-logo placeholder" />
             </div>
             <div class="brand-item">
-              <img src="/iplogo.png" alt="合作品牌" class="brand-logo placeholder" />
+              <img src="/iplogo.webp" alt="合作品牌" class="brand-logo placeholder" />
             </div>
             <div class="brand-item">
-              <img src="/iplogo.png" alt="合作品牌" class="brand-logo placeholder" />
+              <img src="/iplogo.webp" alt="合作品牌" class="brand-logo placeholder" />
             </div>
             </div>
 
@@ -132,25 +132,25 @@
           <!-- 社交媒体图标 -->
           <div class="social-icons">
             <a href="#" class="social-icon">
-              <img src="/logo/weibo.png" alt="微博" />
+              <img src="/logo/weibo.webp" alt="微博" />
             </a>
             <a href="#" class="social-icon">
-              <img src="/logo/bilibil.png" alt="哔哩哔哩" />
+              <img src="/logo/bilibil.webp" alt="哔哩哔哩" />
             </a>
             <a href="#" class="social-icon">
-              <img src="/logo/wechat.png" alt="微信" />
+              <img src="/logo/wechat.webp" alt="微信" />
             </a>
             <a href="#" class="social-icon">
-              <img src="/logo/redbook.png" alt="小红书" />
+              <img src="/logo/redbook.webp" alt="小红书" />
             </a>
             <a href="#" class="social-icon">
-              <img src="/logo/ins.png" alt="Instagram" />
+              <img src="/logo/ins.webp" alt="Instagram" />
             </a>
             <a href="#" class="social-icon">
-              <img src="/logo/facebook.png" alt="Facebook" />
+              <img src="/logo/facebook.webp" alt="Facebook" />
             </a>
             <a href="#" class="social-icon">
-              <img src="/logo/youtube.png" alt="YouTube" />
+              <img src="/logo/youtube.webp" alt="YouTube" />
             </a>
           </div>
           
@@ -643,7 +643,7 @@ onUnmounted(() => {
 /* 业务联系部分 */
 .business-section {
   height: calc(100vh - var(--nav-h));
-  background: url('/hz_bg1.png') no-repeat center center;
+  background: url('/hz_bg1.webp') no-repeat center center;
   background-size: cover;
   display: flex;
   align-items: center;
@@ -780,7 +780,7 @@ onUnmounted(() => {
 .cobranding-section {
   min-height: 100vh; /* 至少占满整个屏幕 */
   height: 100vh; /* 固定为整个屏幕高度 */
-  background: url('/hz_bg2.png') no-repeat center center;
+  background: url('/hz_bg2.webp') no-repeat center center;
   background-size: cover;
   display: flex;
   align-items: center;

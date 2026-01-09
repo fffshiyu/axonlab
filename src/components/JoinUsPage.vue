@@ -34,25 +34,25 @@
         <div class="footer-content">
           <div class="social-icons">
             <a href="#" class="social-icon">
-              <img src="/logo/weibo.png" alt="微博" />
+              <img src="/logo/weibo.webp" alt="微博" />
             </a>
             <a href="#" class="social-icon">
-              <img src="/logo/bilibil.png" alt="哔哩哔哩" />
+              <img src="/logo/bilibil.webp" alt="哔哩哔哩" />
             </a>
             <a href="#" class="social-icon">
-              <img src="/logo/wechat.png" alt="微信" />
+              <img src="/logo/wechat.webp" alt="微信" />
             </a>
             <a href="#" class="social-icon">
-              <img src="/logo/redbook.png" alt="小红书" />
+              <img src="/logo/redbook.webp" alt="小红书" />
             </a>
             <a href="#" class="social-icon">
-              <img src="/logo/ins.png" alt="Instagram" />
+              <img src="/logo/ins.webp" alt="Instagram" />
             </a>
             <a href="#" class="social-icon">
-              <img src="/logo/facebook.png" alt="Facebook" />
+              <img src="/logo/facebook.webp" alt="Facebook" />
             </a>
             <a href="#" class="social-icon">
-              <img src="/logo/youtube.png" alt="YouTube" />
+              <img src="/logo/youtube.webp" alt="YouTube" />
             </a>
           </div>
           
@@ -188,7 +188,7 @@ const preloadBackground = () => {
     isBackgroundLoaded.value = true
     console.warn('加入我们页面背景图片加载失败')
   }
-  img.src = '/join_bg.png'
+  img.src = '/join_bg.webp'
 }
 
 onMounted(() => {
@@ -439,7 +439,7 @@ onUnmounted(() => {
   margin-left: calc(-50vw + 50%);
   min-height: auto; /* 改为auto，让内容自然流动，避免分页效果 */
   padding: 140px 0 100px;
-  background: url('/join_bg.png') no-repeat center top;
+  background: url('/join_bg.webp') no-repeat center top;
   background-size: cover;
   background-attachment: scroll; /* 使用scroll而不是fixed以避免卡顿 */
   /* 强制禁用滚动吸附 */

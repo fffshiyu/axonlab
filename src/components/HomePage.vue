@@ -10,7 +10,7 @@
         <div class="section-container">
           <div class="section-content">
             <!-- 使用图片替代标题和文字 -->
-            <img src="/index-text.png" alt="品牌介绍" class="intro-text-img" />
+            <img src="/index-text.webp" alt="品牌介绍" class="intro-text-img" />
             <div class="intro-button">
               <button class="learn-more-btn">Learn More</button>
             </div>
@@ -18,7 +18,7 @@
     
         </div>
         <div class="scroll-indicator" @click="scrollToHistory">
-          <img src="/arrow.png" alt="向下箭头" class="scroll-arrow-img" />
+          <img src="/arrow.webp" alt="向下箭头" class="scroll-arrow-img" />
         </div>
       </section>
 
@@ -51,7 +51,7 @@
                 <div v-if="expandedCardIndex === index" 
                      class="timeline-expanded-overlay"
                      :class="getOverlayPositionClass(index)">
-                  <img src="/Group%203.png" alt="历史事件" class="expanded-image" />
+                  <img src="/Group%203.webp" alt="历史事件" class="expanded-image" />
                 </div>
                 <div class="timeline-date" 
                      :class="{ 'dimmed-date': expandedCardIndex !== -1 && expandedCardIndex !== index }">
@@ -77,25 +77,25 @@
           <!-- 社交媒体图标 -->
           <div class="social-icons">
             <a href="#" class="social-icon">
-              <img src="/logo/weibo.png" alt="微博" />
+              <img src="/logo/weibo.webp" alt="微博" />
             </a>
             <a href="#" class="social-icon">
-              <img src="/logo/bilibil.png" alt="哔哩哔哩" />
+              <img src="/logo/bilibil.webp" alt="哔哩哔哩" />
             </a>
             <a href="#" class="social-icon">
-              <img src="/logo/wechat.png" alt="微信" />
+              <img src="/logo/wechat.webp" alt="微信" />
             </a>
             <a href="#" class="social-icon">
-              <img src="/logo/redbook.png" alt="小红书" />
+              <img src="/logo/redbook.webp" alt="小红书" />
             </a>
             <a href="#" class="social-icon">
-              <img src="/logo/ins.png" alt="Instagram" />
+              <img src="/logo/ins.webp" alt="Instagram" />
             </a>
             <a href="#" class="social-icon">
-              <img src="/logo/facebook.png" alt="Facebook" />
+              <img src="/logo/facebook.webp" alt="Facebook" />
             </a>
             <a href="#" class="social-icon">
-              <img src="/logo/youtube.png" alt="YouTube" />
+              <img src="/logo/youtube.webp" alt="YouTube" />
             </a>
           </div>
           
@@ -574,7 +574,7 @@ onUnmounted(() => {
   margin-top: -100px; /* 向上偏移导航栏高度100px */
   padding-top: 100px; /* 内容区域保持原位置 */
   z-index: 1;
-  background: url('/BG1.png') no-repeat center center;
+  background: url('/BG1.webp') no-repeat center center;
   background-size: cover;
   background-attachment: fixed; /* 启用视差滚动效果 */
   overflow: hidden;
@@ -595,7 +595,7 @@ onUnmounted(() => {
 /* 历史区域背景 */
 .history-section {
   position: relative;
-  background: url('/BG2.png') no-repeat center center;
+  background: url('/BG2.webp') no-repeat center center;
   background-size: cover;
   background-attachment: fixed; /* 启用视差滚动效果 */
   width: 100vw;

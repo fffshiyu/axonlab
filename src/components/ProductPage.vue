@@ -24,27 +24,27 @@
             :class="{ active: currentView === 'front' }"
             @click="switchView('front')"
           >
-            <img src="/front-view-btn.png" alt="正视图" class="view-btn-img" />
+            <img src="/front-view-btn.webp" alt="正视图" class="view-btn-img" />
           </button>
           <button 
             class="view-btn" 
             :class="{ active: currentView === 'side' }"
             @click="switchView('side')"
           >
-            <img src="/side-view-btn.png" alt="侧视图" class="view-btn-img" />
+            <img src="/side-view-btn.webp" alt="侧视图" class="view-btn-img" />
           </button>
           <button 
             class="view-btn" 
             :class="{ active: currentView === 'top' }"
             @click="switchView('top')"
           >
-            <img src="/top-view-btn.png" alt="俯视图" class="view-btn-img" />
+            <img src="/top-view-btn.webp" alt="俯视图" class="view-btn-img" />
           </button>
         </div>
 
         <!-- 向下箭头 -->
         <div class="scroll-indicator" @click="scrollToSecondProduct">
-          <img src="/arrow.png" alt="向下箭头" class="scroll-arrow-img" />
+          <img src="/arrow.webp" alt="向下箭头" class="scroll-arrow-img" />
         </div>
       </div>
     </section>
@@ -70,27 +70,27 @@
             :class="{ active: currentView2 === 'front' }"
             @click="switchView2('front')"
           >
-            <img src="/front-view-btn.png" alt="正视图" class="view-btn-img" />
+            <img src="/front-view-btn.webp" alt="正视图" class="view-btn-img" />
           </button>
           <button 
             class="view-btn" 
             :class="{ active: currentView2 === 'side' }"
             @click="switchView2('side')"
           >
-            <img src="/side-view-btn.png" alt="侧视图" class="view-btn-img" />
+            <img src="/side-view-btn.webp" alt="侧视图" class="view-btn-img" />
           </button>
           <button 
             class="view-btn" 
             :class="{ active: currentView2 === 'top' }"
             @click="switchView2('top')"
           >
-            <img src="/top-view-btn.png" alt="俯视图" class="view-btn-img" />
+            <img src="/top-view-btn.webp" alt="俯视图" class="view-btn-img" />
           </button>
         </div>
 
         <!-- 向上箭头 -->
         <div class="scroll-indicator" @click="scrollToFirstProduct">
-          <img src="/arrow.png" alt="向上箭头" class="scroll-arrow-img scroll-arrow-up" />
+          <img src="/arrow.webp" alt="向上箭头" class="scroll-arrow-img scroll-arrow-up" />
         </div>
       </div>
     </section>
@@ -100,18 +100,18 @@
       <div class="footer-container">
         <!-- AXON LABS Logo - 左侧200px -->
         <div class="footer-logo">
-          <img src="/logo/greenlogo.png" alt="AXON LABS" class="footer-logo-img" />
+          <img src="/logo/greenlogo.webp" alt="AXON LABS" class="footer-logo-img" />
         </div>
         
         <!-- 页脚内容 - 中部左对齐 -->
         <div class="footer-content">
           <!-- 社交媒体图标 -->
           <div class="social-icons">
-            <img src="/logo/weibo.png" alt="微博" class="social-icon" />
-            <img src="/logo/redbook.png" alt="小红书" class="social-icon" />
-            <img src="/logo/bilibil.png" alt="哔哩哔哩" class="social-icon" />
-            <img src="/logo/ins.png" alt="Instagram" class="social-icon" />
-            <img src="/logo/wechat.png" alt="微信" class="social-icon" />
+            <img src="/logo/weibo.webp" alt="微博" class="social-icon" />
+            <img src="/logo/redbook.webp" alt="小红书" class="social-icon" />
+            <img src="/logo/bilibil.webp" alt="哔哩哔哩" class="social-icon" />
+            <img src="/logo/ins.webp" alt="Instagram" class="social-icon" />
+            <img src="/logo/wechat.webp" alt="微信" class="social-icon" />
           </div>
           
           <!-- 文字区域 -->
@@ -206,18 +206,18 @@ const handleClickOutside = (event: Event) => {
 // 第一个产品的视图状态
 const currentView = ref('front')
 const productImages = {
-  front: '/product1.png',
-  side: '/product1.png',  // 暂时使用同一张图片
-  top: '/product1.png'    // 暂时使用同一张图片
+  front: '/product1.webp',
+  side: '/product1.webp',  // 暂时使用同一张图片
+  top: '/product1.webp'    // 暂时使用同一张图片
 }
 const currentProductImage = ref(productImages.front)
 
 // 第二个产品的视图状态
 const currentView2 = ref('front')
 const productImages2 = {
-  front: '/product1.png',
-  side: '/product1.png',  // 暂时使用同一张图片
-  top: '/product1.png'    // 暂时使用同一张图片
+  front: '/product1.webp',
+  side: '/product1.webp',  // 暂时使用同一张图片
+  top: '/product1.webp'    // 暂时使用同一张图片
 }
 const currentProductImage2 = ref(productImages2.front)
 
@@ -881,7 +881,7 @@ onUnmounted(() => {
 /* 产品展示区域 */
 .product-section {
   min-height: 100vh;
-  background-image: url('/BG3.png');
+  background-image: url('/BG3.webp');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

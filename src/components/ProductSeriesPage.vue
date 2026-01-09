@@ -12,7 +12,7 @@
       <div class="product-series-content">
         <!-- 小标题 -->
         <div class="product-title-container">
-          <img src="/loomi_text.png" alt="LOOMI" class="product-title-img loomi-title" />
+          <img src="/loomi_text.webp" alt="LOOMI" class="product-title-img loomi-title" />
         </div>
         
         <!-- 产品图片 -->
@@ -33,7 +33,7 @@
               :class="{ active: activeButton === 'top' }"
               @click="handleButtonClick('top')"
             >
-              <img :src="activeButton === 'top' ? '/BTN_onmodel.png' : '/BTN_before.png'" alt="顶部" />
+              <img :src="activeButton === 'top' ? '/BTN_onmodel.webp' : '/BTN_before.webp'" alt="顶部" />
             </button>
             
             <!-- 左侧按钮 -->
@@ -43,7 +43,7 @@
               :class="{ active: activeButton === 'left' }"
               @click="handleButtonClick('left')"
             >
-              <img :src="activeButton === 'left' ? '/BTN_onmodel.png' : '/BTN_before.png'" alt="左侧" />
+              <img :src="activeButton === 'left' ? '/BTN_onmodel.webp' : '/BTN_before.webp'" alt="左侧" />
             </button>
             
             <!-- 底部按钮 -->
@@ -53,7 +53,7 @@
               :class="{ active: activeButton === 'bottom' }"
               @click="handleButtonClick('bottom')"
             >
-              <img :src="activeButton === 'bottom' ? '/BTN_onmodel.png' : '/BTN_before.png'" alt="底部" />
+              <img :src="activeButton === 'bottom' ? '/BTN_onmodel.webp' : '/BTN_before.webp'" alt="底部" />
             </button>
             
             <!-- 叠加的侧边图片 -->
@@ -75,7 +75,7 @@
           <transition name="fade-params">
             <img 
               v-if="showParamsImage" 
-              src="/csys.png" 
+              src="/csys.webp" 
               alt="参数详情" 
               class="params-detail-img"
               @click="closeParamsImage"
@@ -84,22 +84,22 @@
           
           <div class="icon-item" @click="handleIconClick('参数')">
             <div class="icon-fill"></div>
-            <img src="/canshu_icon.png" alt="参数" class="icon-img" />
+            <img src="/canshu_icon.webp" alt="参数" class="icon-img" />
             <span class="icon-label">参数</span>
           </div>
           <div class="icon-item" @click="handleIconClick('正面')">
             <div class="icon-fill"></div>
-            <img src="/zhengmian_icon.png" alt="正面" class="icon-img" />
+            <img src="/zhengmian_icon.webp" alt="正面" class="icon-img" />
             <span class="icon-label">正面</span>
           </div>
           <div class="icon-item" @click="handleIconClick('侧面')">
             <div class="icon-fill"></div>
-            <img src="/cemian_icon.png" alt="侧面" class="icon-img" />
+            <img src="/cemian_icon.webp" alt="侧面" class="icon-img" />
             <span class="icon-label">侧面</span>
           </div>
           <div class="icon-item" @click="handleIconClick('背面')">
             <div class="icon-fill"></div>
-            <img src="/beimian_icon.png" alt="背面" class="icon-img" />
+            <img src="/beimian_icon.webp" alt="背面" class="icon-img" />
             <span class="icon-label">背面</span>
           </div>
         </div>
@@ -107,7 +107,7 @@
       
       <!-- 滚动指示器 -->
       <div class="scroll-indicator" @click="scrollToNextProduct">
-        <img src="/arrow.png" alt="向下箭头" class="scroll-arrow-img" />
+        <img src="/arrow.webp" alt="向下箭头" class="scroll-arrow-img" />
       </div>
     </div>
 
@@ -120,7 +120,7 @@
       <div class="product-series-content">
         <!-- 小标题 -->
         <div class="product-title-container">
-          <img src="/axonrob_text.png" alt="AXONROB" class="product-title-img" />
+          <img src="/axonrob_text.webp" alt="AXONROB" class="product-title-img" />
         </div>
         
         <!-- 产品图片 - 3D模型 -->
@@ -141,7 +141,7 @@
               :class="{ active: activeButton2 === 'top' }"
               @click="handleButtonClick2('top')"
             >
-              <img :src="activeButton2 === 'top' ? '/BTN_onmodel.png' : '/BTN_before.png'" alt="顶部" />
+              <img :src="activeButton2 === 'top' ? '/BTN_onmodel.webp' : '/BTN_before.webp'" alt="顶部" />
             </button>
             
             <!-- 左侧按钮 -->
@@ -151,7 +151,7 @@
               :class="{ active: activeButton2 === 'left' }"
               @click="handleButtonClick2('left')"
             >
-              <img :src="activeButton2 === 'left' ? '/BTN_onmodel.png' : '/BTN_before.png'" alt="左侧" />
+              <img :src="activeButton2 === 'left' ? '/BTN_onmodel.webp' : '/BTN_before.webp'" alt="左侧" />
             </button>
             
             <!-- 底部按钮 -->
@@ -161,7 +161,7 @@
               :class="{ active: activeButton2 === 'bottom' }"
               @click="handleButtonClick2('bottom')"
             >
-              <img :src="activeButton2 === 'bottom' ? '/BTN_onmodel.png' : '/BTN_before.png'" alt="底部" />
+              <img :src="activeButton2 === 'bottom' ? '/BTN_onmodel.webp' : '/BTN_before.webp'" alt="底部" />
             </button>
             
             <!-- 叠加的侧边图片 -->
@@ -183,7 +183,7 @@
           <transition name="fade-params">
             <img 
               v-if="showParamsImage2" 
-              src="/csys.png" 
+              src="/csys.webp" 
               alt="参数详情" 
               class="params-detail-img"
               @click="closeParamsImage2"
@@ -192,22 +192,22 @@
           
           <div class="icon-item" @click="handleIconClick2('参数')">
             <div class="icon-fill"></div>
-            <img src="/canshu_icon.png" alt="参数" class="icon-img" />
+            <img src="/canshu_icon.webp" alt="参数" class="icon-img" />
             <span class="icon-label">参数</span>
           </div>
           <div class="icon-item" @click="handleIconClick2('正面')">
             <div class="icon-fill"></div>
-            <img src="/zhengmian_icon.png" alt="正面" class="icon-img" />
+            <img src="/zhengmian_icon.webp" alt="正面" class="icon-img" />
             <span class="icon-label">正面</span>
           </div>
           <div class="icon-item" @click="handleIconClick2('侧面')">
             <div class="icon-fill"></div>
-            <img src="/cemian_icon.png" alt="侧面" class="icon-img" />
+            <img src="/cemian_icon.webp" alt="侧面" class="icon-img" />
             <span class="icon-label">侧面</span>
           </div>
           <div class="icon-item" @click="handleIconClick2('背面')">
             <div class="icon-fill"></div>
-            <img src="/beimian_icon.png" alt="背面" class="icon-img" />
+            <img src="/beimian_icon.webp" alt="背面" class="icon-img" />
             <span class="icon-label">背面</span>
           </div>
         </div>
@@ -227,25 +227,25 @@
           <!-- 社交媒体图标 -->
           <div class="social-icons">
             <a href="#" class="social-icon">
-              <img src="/logo/weibo.png" alt="微博" />
+              <img src="/logo/weibo.webp" alt="微博" />
             </a>
             <a href="#" class="social-icon">
-              <img src="/logo/bilibil.png" alt="哔哩哔哩" />
+              <img src="/logo/bilibil.webp" alt="哔哩哔哩" />
             </a>
             <a href="#" class="social-icon">
-              <img src="/logo/wechat.png" alt="微信" />
+              <img src="/logo/wechat.webp" alt="微信" />
             </a>
             <a href="#" class="social-icon">
-              <img src="/logo/redbook.png" alt="小红书" />
+              <img src="/logo/redbook.webp" alt="小红书" />
             </a>
             <a href="#" class="social-icon">
-              <img src="/logo/ins.png" alt="Instagram" />
+              <img src="/logo/ins.webp" alt="Instagram" />
             </a>
             <a href="#" class="social-icon">
-              <img src="/logo/facebook.png" alt="Facebook" />
+              <img src="/logo/facebook.webp" alt="Facebook" />
             </a>
             <a href="#" class="social-icon">
-              <img src="/logo/youtube.png" alt="YouTube" />
+              <img src="/logo/youtube.webp" alt="YouTube" />
             </a>
           </div>
           
@@ -1013,10 +1013,10 @@ const handleButtonClick = (position: string) => {
     activeButton.value = position
     
     if (position === 'left') {
-      sideImage.value = '/button2.png'
+      sideImage.value = '/button2.webp'
       overlayPosition.value = 'left-overlay'
     } else if (position === 'bottom') {
-      sideImage.value = '/button3.png'
+      sideImage.value = '/button3.webp'
       overlayPosition.value = 'bottom-overlay'
     } else {
       sideImage.value = null
@@ -1140,10 +1140,10 @@ const handleButtonClick2 = (position: string) => {
     activeButton2.value = position
     
     if (position === 'left') {
-      sideImage2.value = '/button2.png'
+      sideImage2.value = '/button2.webp'
       overlayPosition2.value = 'left-overlay'
     } else if (position === 'bottom') {
-      sideImage2.value = '/button3.png'
+      sideImage2.value = '/button3.webp'
       overlayPosition2.value = 'bottom-overlay'
     } else {
       sideImage2.value = null
@@ -1570,12 +1570,12 @@ onUnmounted(() => {
 
 /* LOOMI 背景 */
 .loomi-bg {
-  background-image: url('/loomi_bg.png');
+  background-image: url('/loomi_bg.webp');
 }
 
 /* AXONROB 背景 */
 .axonrob-bg {
-  background-image: url('/axonrob_bg.png');
+  background-image: url('/axonrob_bg.webp');
 }
 
 /* 主要内容 */

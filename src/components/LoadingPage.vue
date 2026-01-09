@@ -53,7 +53,7 @@ onMounted(() => {
 // 预加载主页资源
 const preloadHomePage = () => {
   // 预加载主页背景图片
-  const images = ['/BG1.png', '/BG2.png', '/arrow.png']
+  const images = ['/BG1.webp', '/BG2.webp', '/arrow.webp']
   images.forEach(src => {
     const img = new Image()
     img.src = src
@@ -110,7 +110,7 @@ const startCharging = () => {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('/BG.png');
+  background-image: url('/BG.webp');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

@@ -10,7 +10,7 @@
           <!-- 左侧主图与日期 -->
           <div class="hero-left">
             <button class="hero-arrow hero-arrow-left" @click="prevNews">
-              <img src="/arrow_right.png" alt="上一张" class="arrow-icon arrow-icon-left" />
+              <img src="/arrow_right.webp" alt="上一张" class="arrow-icon arrow-icon-left" />
             </button>
             <div class="hero-image">
               <img :src="newsData[currentNewsIndex].image" alt="news" class="hero-img" />
@@ -26,7 +26,7 @@
               </div>
             </div>
             <button class="hero-arrow hero-arrow-right" @click="nextNews">
-              <img src="/arrow_right.png" alt="下一张" class="arrow-icon" />
+              <img src="/arrow_right.webp" alt="下一张" class="arrow-icon" />
             </button>
           </div>
 
@@ -59,25 +59,25 @@
           <!-- 社交媒体图标 -->
           <div class="social-icons">
             <a href="#" class="social-icon">
-              <img src="/logo/weibo.png" alt="微博" />
+              <img src="/logo/weibo.webp" alt="微博" />
             </a>
             <a href="#" class="social-icon">
-              <img src="/logo/bilibil.png" alt="哔哩哔哩" />
+              <img src="/logo/bilibil.webp" alt="哔哩哔哩" />
             </a>
             <a href="#" class="social-icon">
-              <img src="/logo/wechat.png" alt="微信" />
+              <img src="/logo/wechat.webp" alt="微信" />
             </a>
             <a href="#" class="social-icon">
-              <img src="/logo/redbook.png" alt="小红书" />
+              <img src="/logo/redbook.webp" alt="小红书" />
             </a>
             <a href="#" class="social-icon">
-              <img src="/logo/ins.png" alt="Instagram" />
+              <img src="/logo/ins.webp" alt="Instagram" />
             </a>
             <a href="#" class="social-icon">
-              <img src="/logo/facebook.png" alt="Facebook" />
+              <img src="/logo/facebook.webp" alt="Facebook" />
             </a>
             <a href="#" class="social-icon">
-              <img src="/logo/youtube.png" alt="YouTube" />
+              <img src="/logo/youtube.webp" alt="YouTube" />
             </a>
           </div>
           
@@ -115,19 +115,19 @@ import Navbar from './Navbar.vue'
 // 新闻数据
 const newsData = ref([
   {
-    image: '/news.png',
+    image: '/news.webp',
     date: '2025.10.24',
     title: 'AXON LABS发布全新AI智能硬件产品线',
     content: `北京玄圃科技有限公司今日正式发布AXON LABS羽山系列全新AI智能硬件产品，该产品线融合了最新的人工智能技术与创新硬件设计，旨在为用户提供更加智能、便捷的生活体验。新产品采用了先进的机器学习算法，能够自主学习用户习惯，提供个性化的智能服务。产品设计注重用户体验，简洁的外观搭配强大的功能，完美诠释了科技与美学的结合。`
   },
   {
-    image: '/news.png',
+    image: '/news.webp',
     date: '2025.09.15',
     title: 'LOOMI x 邱晗可产品即将发布',
     content: `AXON LABS旗下智能生活品牌LOOMI宣布与知名设计师邱晗可展开深度合作，共同打造全新智能家居产品系列。此次合作将设计美学与智能科技完美融合，为用户带来前所未有的生活体验。邱晗可作为国际知名的工业设计师，曾获得多项设计大奖。此次与LOOMI的合作，她将其独特的设计理念融入智能产品中，打造出既美观又实用的智能家居解决方案。`
   },
   {
-    image: '/news.png',
+    image: '/news.webp',
     date: '2025.08.08',
     title: 'AXON LABS荣获2025年度最佳创新企业奖',
     content: `在刚刚结束的2025年度科技创新峰会上，AXON LABS凭借其在人工智能和智能硬件领域的卓越表现，荣获"年度最佳创新企业"大奖。这是对公司长期以来坚持技术创新和产品研发的充分肯定。颁奖典礼上，评委会高度评价了AXON LABS在技术创新、产品设计、市场表现等方面的突出成就。公司研发的多项核心技术已获得国内外专利，产品远销海外多个国家和地区。`
@@ -625,7 +625,7 @@ onUnmounted(() => {
 /* 新闻区域背景 */
 .news-section {
   position: relative;
-  background: url('/news_bg.png') no-repeat center center;
+  background: url('/news_bg.webp') no-repeat center center;
   background-size: cover;
   width: 100vw;
   margin-left: calc(-50vw + 50%);
