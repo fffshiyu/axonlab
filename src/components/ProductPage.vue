@@ -108,10 +108,10 @@
           <!-- 社交媒体图标 -->
           <div class="social-icons">
             <img src="/logo/weibo.webp" alt="微博" class="social-icon" />
-            <img src="/logo/redbook.webp" alt="小红书" class="social-icon" />
-            <img src="/logo/bilibil.webp" alt="哔哩哔哩" class="social-icon" />
-            <img src="/logo/ins.webp" alt="Instagram" class="social-icon" />
-            <img src="/logo/wechat.webp" alt="微信" class="social-icon" />
+            <img src="/redbook.png" alt="小红书" class="social-icon" />
+            <img src="/bilibil.png" alt="哔哩哔哩" class="social-icon" />
+            <img src="/ins.png" alt="Instagram" class="social-icon" />
+            <img src="/wechat.png" alt="微信" class="social-icon" />
           </div>
           
           <!-- 文字区域 -->
@@ -1349,6 +1349,7 @@ onUnmounted(() => {
   width: 24px; /* 调整为24px */
   height: 24px; /* 调整为24px */
   transition: transform 0.3s ease, opacity 0.3s ease;
+  object-fit: fill;
 }
 
 .social-icon:hover {

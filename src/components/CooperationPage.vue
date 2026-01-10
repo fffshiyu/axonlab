@@ -17,12 +17,12 @@
             <div class="contact-card">
               <div class="contact-info">
                 <h3 class="contact-title">BUSINESS COOPERATION <span class="contact-title-cn">| 商业合作</span></h3>
-                <p class="contact-desc">欢迎世界各地经销商与我们联系，XXXX（商业合作描述）。</p>
+                <p class="contact-desc">欢迎国内外知名IP及渠道方与我们联系，展开交流与探讨。</p>
                 
                 <div class="contact-details">
-                  <p class="contact-item"><span class="label">联系人：</span>XXX</p>
-                  <p class="contact-item"><span class="label">企业邮箱：</span>BD@axonlabs.com</p>
-                  <p class="contact-item"><span class="label">企业微信：</span>XXX</p>
+                  <p class="contact-item"><span class="label">联系人：</span>芮先生</p>
+                  <p class="contact-item"><span class="label">企业邮箱：</span>bd@axonlabs.com</p>
+                  <p class="contact-item"><span class="label">联系电话：</span>18301200484</p>
                 </div>
               </div>
               
@@ -36,12 +36,12 @@
             <div class="contact-card">
               <div class="contact-info">
                 <h3 class="contact-title">BRAND COOPERATION <span class="contact-title-cn">| 媒体联系</span></h3>
-                <p class="contact-desc">欢迎各地企业与本公司联系洽谈，共建品牌文化合作交流资讯。</p>
+                <p class="contact-desc">欢迎国内外各类媒体与我们联系，展开交流与探讨。</p>
                 
                 <div class="contact-details">
-                  <p class="contact-item"><span class="label">联系人：</span>XXX</p>
-                  <p class="contact-item"><span class="label">企业邮箱：</span>BD@axonlabs.com</p>
-                  <p class="contact-item"><span class="label">企业微信：</span>XXX</p>
+                  <p class="contact-item"><span class="label">联系人：</span>陈小姐</p>
+                  <p class="contact-item"><span class="label">企业邮箱：</span>mrkt@axonlabs.com</p>
+                  <p class="contact-item"><span class="label">联系电话：</span>13986329545</p>
                 </div>
               </div>
               
@@ -135,22 +135,22 @@
               <img src="/logo/weibo.webp" alt="微博" />
             </a>
             <a href="#" class="social-icon">
-              <img src="/logo/bilibil.webp" alt="哔哩哔哩" />
+              <img src="/bilibil.png" alt="哔哩哔哩" />
             </a>
             <a href="#" class="social-icon">
-              <img src="/logo/wechat.webp" alt="微信" />
+              <img src="/wechat.png" alt="微信" />
             </a>
             <a href="#" class="social-icon">
-              <img src="/logo/redbook.webp" alt="小红书" />
+              <img src="/redbook.png" alt="小红书" />
             </a>
             <a href="#" class="social-icon">
-              <img src="/logo/ins.webp" alt="Instagram" />
+              <img src="/ins.png" alt="Instagram" />
             </a>
             <a href="#" class="social-icon">
-              <img src="/logo/facebook.webp" alt="Facebook" />
+              <img src="/facebook.png" alt="Facebook" />
             </a>
             <a href="#" class="social-icon">
-              <img src="/logo/youtube.webp" alt="YouTube" />
+              <img src="/youtube.png" alt="YouTube" />
             </a>
           </div>
           
@@ -970,7 +970,7 @@ onUnmounted(() => {
 .social-icon img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: fill;
 }
 
 .social-icon:hover {

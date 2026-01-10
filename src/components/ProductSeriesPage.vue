@@ -230,22 +230,22 @@
               <img src="/logo/weibo.webp" alt="微博" />
             </a>
             <a href="#" class="social-icon">
-              <img src="/logo/bilibil.webp" alt="哔哩哔哩" />
+              <img src="/bilibil.png" alt="哔哩哔哩" />
             </a>
             <a href="#" class="social-icon">
-              <img src="/logo/wechat.webp" alt="微信" />
+              <img src="/wechat.png" alt="微信" />
             </a>
             <a href="#" class="social-icon">
-              <img src="/logo/redbook.webp" alt="小红书" />
+              <img src="/redbook.png" alt="小红书" />
             </a>
             <a href="#" class="social-icon">
-              <img src="/logo/ins.webp" alt="Instagram" />
+              <img src="/ins.png" alt="Instagram" />
             </a>
             <a href="#" class="social-icon">
-              <img src="/logo/facebook.webp" alt="Facebook" />
+              <img src="/facebook.png" alt="Facebook" />
             </a>
             <a href="#" class="social-icon">
-              <img src="/logo/youtube.webp" alt="YouTube" />
+              <img src="/youtube.png" alt="YouTube" />
             </a>
           </div>
           
@@ -1975,7 +1975,7 @@ onUnmounted(() => {
 .social-icon img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: fill;
 }
 
 .social-icon:hover {

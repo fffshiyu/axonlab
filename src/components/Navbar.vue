@@ -37,8 +37,9 @@
             <div class="dropdown-item" @click="showQRCode('xiaochengxu')">小程序官方商城</div>
             <!-- 二维码显示区域 -->
             <div class="qr-code-container" :class="{ 'show': isQRCodeVisible }">
-              <div class="qr-code-placeholder">二维码</div>
+              <img v-if="currentQRImage" :src="currentQRImage" :alt="currentQRTitle" class="qr-code-image" />
               <div class="qr-code-title">{{ currentQRTitle }}</div>
+              <a v-if="currentQRLink" :href="currentQRLink" target="_blank" rel="noopener noreferrer" class="qr-code-link">点击进入</a>
             </div>
           </div>
         </div>
@@ -98,22 +99,24 @@
             <div class="mobile-dropdown-item" @click="toggleMobileQRCode('tmall')">
               <span>天猫商城</span>
               <div class="mobile-qr-code" :class="{ 'show': mobileQRCode === 'tmall' }">
-                <div class="mobile-qr-placeholder">二维码</div>
+                <img src="/天猫qr.png" alt="天猫商城" class="mobile-qr-image" />
                 <div class="mobile-qr-title">天猫商城</div>
+                <a href="https://yushanznjj.world.tmall.com/shop/view_shop.html" target="_blank" rel="noopener noreferrer" class="mobile-qr-link" @click.stop>点击进入</a>
               </div>
             </div>
             <div class="mobile-dropdown-item" @click="toggleMobileQRCode('douyin')">
               <span>抖音商城</span>
               <div class="mobile-qr-code" :class="{ 'show': mobileQRCode === 'douyin' }">
-                <div class="mobile-qr-placeholder">二维码</div>
+                <img src="/抖音qr.jpg" alt="抖音商城" class="mobile-qr-image" />
                 <div class="mobile-qr-title">抖音商城</div>
               </div>
             </div>
             <div class="mobile-dropdown-item" @click="toggleMobileQRCode('jd')">
               <span>京东商城</span>
               <div class="mobile-qr-code" :class="{ 'show': mobileQRCode === 'jd' }">
-                <div class="mobile-qr-placeholder">二维码</div>
+                <img src="/京东qr.jpg" alt="京东商城" class="mobile-qr-image" />
                 <div class="mobile-qr-title">京东商城</div>
+                <a href="https://mall.jd.com/index-157316165.html?from=pc" target="_blank" rel="noopener noreferrer" class="mobile-qr-link" @click.stop>点击进入</a>
               </div>
             </div>
             <div class="mobile-dropdown-item" @click="toggleMobileQRCode('xiaochengxu')">
@@ -163,6 +166,8 @@ const isNavbarVisible = ref(true)
 const isDropdownVisible = ref(false)
 const isQRCodeVisible = ref(false)
 const currentQRTitle = ref('')
+const currentQRImage = ref('')
+const currentQRLink = ref('')
 
 const showDropdown = () => {
   isDropdownVisible.value = true
@@ -182,7 +187,23 @@ const showQRCode = (platform: string) => {
     xiaochengxu: '小程序官方商城'
   }
   
+  const images = {
+    tmall: '/天猫qr.png',
+    douyin: '/抖音qr.jpg',
+    jd: '/京东qr.jpg',
+    xiaochengxu: ''
+  }
+  
+  const links = {
+    tmall: 'https://yushanznjj.world.tmall.com/shop/view_shop.html',
+    douyin: '',
+    jd: 'https://mall.jd.com/index-157316165.html?from=pc',
+    xiaochengxu: ''
+  }
+  
   currentQRTitle.value = titles[platform as keyof typeof titles] || ''
+  currentQRImage.value = images[platform as keyof typeof images] || ''
+  currentQRLink.value = links[platform as keyof typeof links] || ''
   isQRCodeVisible.value = true
   isDropdownVisible.value = true
 }
@@ -452,17 +473,11 @@ onUnmounted(() => {
   visibility: visible;
 }
 
-.qr-code-placeholder {
+.qr-code-image {
   width: 100px;
   height: 100px;
-  background: #666666;
   border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #ffffff;
-  font-family: 'MiSans', 'Noto Sans SC', sans-serif;
-  font-size: 12px;
+  object-fit: contain;
   margin-bottom: 0.5rem;
 }
 
@@ -472,6 +487,23 @@ onUnmounted(() => {
   font-size: 11px;
   text-align: center;
   font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+.qr-code-link {
+  color: #01CE7E;
+  font-family: 'MiSans', 'Noto Sans SC', sans-serif;
+  font-size: 10px;
+  text-align: center;
+  text-decoration: none;
+  transition: color 0.3s ease, opacity 0.3s ease;
+  cursor: pointer;
+}
+
+.qr-code-link:hover {
+  color: #00b870;
+  opacity: 0.8;
+  text-decoration: underline;
 }
 
 .nav-right {
@@ -632,17 +664,11 @@ onUnmounted(() => {
   padding: 1rem 0;
 }
 
-.mobile-qr-placeholder {
+.mobile-qr-image {
   width: 120px;
   height: 120px;
-  background: #666666;
   border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #ffffff;
-  font-family: 'MiSans', 'Noto Sans SC', sans-serif;
-  font-size: 14px;
+  object-fit: contain;
   margin-bottom: 0.5rem;
 }
 
@@ -652,6 +678,24 @@ onUnmounted(() => {
   font-size: 12px;
   text-align: center;
   font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+.mobile-qr-link {
+  color: #01CE7E;
+  font-family: 'MiSans', 'Noto Sans SC', sans-serif;
+  font-size: 11px;
+  text-align: center;
+  text-decoration: none;
+  transition: color 0.3s ease, opacity 0.3s ease;
+  cursor: pointer;
+  display: block;
+}
+
+.mobile-qr-link:hover {
+  color: #00b870;
+  opacity: 0.8;
+  text-decoration: underline;
 }
 
 /* 响应式设计 */
