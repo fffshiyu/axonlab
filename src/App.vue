@@ -5,7 +5,16 @@
 </template>
 
 <script setup lang="ts">
-// App根组件
+import { onMounted } from 'vue'
+import { preloadAllModels } from './utils/modelPreloader'
+
+// 在应用启动时预加载3D模型
+onMounted(() => {
+  // 延迟预加载，避免影响首屏加载
+  setTimeout(() => {
+    preloadAllModels()
+  }, 2000)
+})
 </script>
 
 <style>

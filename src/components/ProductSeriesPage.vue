@@ -283,6 +283,8 @@ import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import { getCachedModel } from '../utils/modelPreloader'
+import { getCachedScene, cacheScene, restoreScene, hasCachedScene } from '../utils/sceneCache'
 
 // 第一个产品的状态
 const activeButton = ref<string | null>(null)
@@ -328,6 +330,35 @@ const init3DScene1 = () => {
     return
   }
 
+  const sceneKey1 = 'product-series-scene1'
+  
+  // 检查是否有缓存的场景
+  if (hasCachedScene(sceneKey1)) {
+    console.log('发现缓存的第一个产品场景，正在恢复...')
+    if (restoreScene(sceneKey1, modelContainer1.value)) {
+      // 恢复场景变量引用
+      const cached = getCachedScene(sceneKey1)!
+      scene1 = cached.scene as THREE.Scene
+      camera1 = cached.camera as THREE.PerspectiveCamera
+      renderer1 = cached.renderer as THREE.WebGLRenderer
+      controls1 = cached.controls as OrbitControls
+      content1 = cached.content
+      
+      // 重置动画状态
+      isAnimating1 = false
+      
+      // 重新启动动画
+      startAnimation1()
+      
+      // 重新绑定窗口大小变化事件
+      window.addEventListener('resize', onWindowResize1)
+      
+      isFirstModelLoaded.value = true
+      console.log('第一个产品场景已从缓存恢复，无需重新加载模型')
+      return
+    }
+  }
+
   const width = modelContainer1.value.clientWidth
   const height = modelContainer1.value.clientHeight
   
@@ -342,7 +373,7 @@ const init3DScene1 = () => {
     return
   }
 
-  console.log('初始化第一个产品Three.js场景，容器尺寸:', width, height)
+  console.log('初始化新的第一个产品Three.js场景，容器尺寸:', width, height)
 
   // 创建场景
   scene1 = new THREE.Scene()
@@ -407,15 +438,31 @@ const init3DScene1 = () => {
   pointLight1.position.set(0, 10, 10)
   scene1.add(pointLight1)
 
+  const modelPath1 = '/models/loomydraco.glb'
+  
+  // 检查全局缓存
+  const cachedModel1 = getCachedModel(modelPath1)
+  if (cachedModel1) {
+    setContent1(cachedModel1.clone())
+    isFirstModelLoaded.value = true
+    console.log('使用预加载的第一个产品模型缓存')
+    setTimeout(() => {
+      resetCameraToFront1()
+    }, 100)
+    return
+  }
+  
   // 加载3D模型 - loomy.glb
   const dracoLoader1 = new DRACOLoader()
   dracoLoader1.setDecoderPath('/draco/')
+  dracoLoader1.preload()
   
   const loader1 = new GLTFLoader()
   loader1.setDRACOLoader(dracoLoader1)
+  loader1.setRequestHeader({ 'Accept': 'application/octet-stream' })
   
   loader1.load(
-    '/models/loomydraco.glb',
+    modelPath1,
     (gltf) => {
       const object = gltf.scene || gltf.scenes[0]
       
@@ -476,6 +523,17 @@ const init3DScene1 = () => {
       isFirstModelLoaded.value = false
     }
   )
+
+  // 缓存场景
+  cacheScene(sceneKey1, {
+    scene: scene1,
+    camera: camera1,
+    renderer: renderer1,
+    controls: controls1,
+    content: content1,
+    container: modelContainer1.value,
+    animationId: null // 动画ID会在startAnimation1中设置
+  })
 
   // 开始动画循环
   startAnimation1()
@@ -565,6 +623,13 @@ const animate1 = () => {
   
   animationId1 = requestAnimationFrame(animate1)
   
+  // 更新缓存的动画ID
+  const sceneKey1 = 'product-series-scene1'
+  const cached = getCachedScene(sceneKey1)
+  if (cached) {
+    cached.animationId = animationId1
+  }
+  
   const now = Date.now()
   const delta = now - lastFrameTime1
   
@@ -605,6 +670,35 @@ const init3DScene = () => {
     return
   }
 
+  const sceneKey2 = 'product-series-scene2'
+  
+  // 检查是否有缓存的场景
+  if (hasCachedScene(sceneKey2)) {
+    console.log('发现缓存的第二个产品场景，正在恢复...')
+    if (restoreScene(sceneKey2, modelContainer.value)) {
+      // 恢复场景变量引用
+      const cached = getCachedScene(sceneKey2)!
+      scene = cached.scene as THREE.Scene
+      camera = cached.camera as THREE.PerspectiveCamera
+      renderer = cached.renderer as THREE.WebGLRenderer
+      controls = cached.controls as OrbitControls
+      content = cached.content
+      
+      // 重置动画状态
+      isAnimating2 = false
+      
+      // 重新启动动画
+      startAnimation2()
+      
+      // 重新绑定窗口大小变化事件
+      window.addEventListener('resize', onWindowResize)
+      
+      isSecondModelLoaded.value = true
+      console.log('第二个产品场景已从缓存恢复，无需重新加载模型')
+      return
+    }
+  }
+
   const width = modelContainer.value.clientWidth
   const height = modelContainer.value.clientHeight
   
@@ -620,7 +714,7 @@ const init3DScene = () => {
     return
   }
 
-  console.log('初始化Three.js场景，容器尺寸:', width, height)
+  console.log('初始化新的第二个产品Three.js场景，容器尺寸:', width, height)
 
   // 创建场景
   scene = new THREE.Scene()
@@ -674,15 +768,28 @@ const init3DScene = () => {
   hemiLight.position.set(0, 200, 0)
   scene.add(hemiLight)
 
+  const modelPath = '/models/zbhdraco.glb'
+  
+  // 检查全局缓存
+  const cachedModel = getCachedModel(modelPath)
+  if (cachedModel) {
+    setContent(cachedModel.clone())
+    isSecondModelLoaded.value = true
+    console.log('使用预加载的第二个产品模型缓存')
+    return
+  }
+  
   // 加载3D模型
   const dracoLoader = new DRACOLoader()
   dracoLoader.setDecoderPath('/draco/')
+  dracoLoader.preload()
   
   const loader = new GLTFLoader()
   loader.setDRACOLoader(dracoLoader)
+  loader.setRequestHeader({ 'Accept': 'application/octet-stream' })
   
   loader.load(
-    '/models/zbhdraco.glb',
+    modelPath,
     (gltf) => {
       const object = gltf.scene || gltf.scenes[0]
       
@@ -730,6 +837,17 @@ const init3DScene = () => {
       isSecondModelLoaded.value = false
     }
   )
+
+  // 缓存场景
+  cacheScene(sceneKey2, {
+    scene,
+    camera,
+    renderer,
+    controls,
+    content,
+    container: modelContainer.value,
+    animationId: null // 动画ID会在startAnimation2中设置
+  })
 
   // 开始动画循环
   startAnimation2()
@@ -826,6 +944,13 @@ const animate = () => {
   if (!isAnimating2) return // 如果动画已停止，不继续请求帧
   
   animationId = requestAnimationFrame(animate)
+  
+  // 更新缓存的动画ID
+  const sceneKey2 = 'product-series-scene2'
+  const cached = getCachedScene(sceneKey2)
+  if (cached) {
+    cached.animationId = animationId
+  }
   
   const now = Date.now()
   const delta = now - lastFrameTime2
@@ -1489,8 +1614,38 @@ onMounted(() => {
 
 // 组件卸载时清理3D场景
 onUnmounted(() => {
-  cleanup3DScene1() // 清理第一个产品的3D场景
-  cleanup3DScene()  // 清理第二个产品的3D场景
+  // 停止动画循环，但保留场景资源
+  stopAnimation1()
+  stopAnimation2()
+  
+  // 更新缓存的动画ID
+  const sceneKey1 = 'product-series-scene1'
+  const sceneKey2 = 'product-series-scene2'
+  const cached1 = getCachedScene(sceneKey1)
+  const cached2 = getCachedScene(sceneKey2)
+  if (cached1) {
+    cached1.animationId = null
+  }
+  if (cached2) {
+    cached2.animationId = null
+  }
+  
+  // 从DOM中移除渲染器，但不销毁它（保留在缓存中）
+  if (renderer1 && modelContainer1.value && modelContainer1.value.contains(renderer1.domElement)) {
+    modelContainer1.value.removeChild(renderer1.domElement)
+  }
+  if (renderer && modelContainer.value && modelContainer.value.contains(renderer.domElement)) {
+    modelContainer.value.removeChild(renderer.domElement)
+  }
+  
+  // 清理事件监听器
+  window.removeEventListener('resize', onWindowResize1)
+  window.removeEventListener('resize', onWindowResize)
+  window.removeEventListener('wheel', handleWheel)
+  
+  console.log('组件卸载，场景已保存到缓存，下次进入将直接恢复')
+  
+  // 注意：不再调用cleanup3DScene1和cleanup3DScene，保留场景资源在缓存中
   
   // 移除事件监听器
   window.removeEventListener('wheel', handleWheel)

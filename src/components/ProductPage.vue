@@ -148,6 +148,11 @@ import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import { getCachedModel } from '../utils/modelPreloader'
+import { getCachedScene, cacheScene, restoreScene, hasCachedScene } from '../utils/sceneCache'
+
+// 场景缓存键
+const sceneKey = 'product-page-scene'
 
 // 导航栏可见性
 const isNavbarVisible = ref(true)
@@ -255,10 +260,44 @@ const switchView2 = (view: 'front' | 'side' | 'top') => {
 }
 
 // 初始化Three.js场景
+// 性能优化措施：
+// 1. 动态像素比调整（移动设备/低端设备降低到1，桌面设备最高1.5）
+// 2. 完全禁用抗锯齿以提升性能
+// 3. 优化渲染器设置（禁用不必要的缓冲和特性）
+// 4. 减少灯光数量（移动设备禁用半球光）
+// 5. 深度优化材质和几何体
+// 6. 帧率限制和智能渲染（只在有变化时渲染）
+// 7. 视锥剔除和阴影禁用
 const init3DScene = () => {
   if (!modelContainer.value) {
     console.error('模型容器未找到')
     return
+  }
+
+  // 检查是否有缓存的场景
+  if (hasCachedScene(sceneKey)) {
+    console.log('发现缓存的场景，正在恢复...')
+    if (restoreScene(sceneKey, modelContainer.value)) {
+      // 恢复场景变量引用
+      const cached = getCachedScene(sceneKey)!
+      scene = cached.scene
+      camera = cached.camera
+      renderer = cached.renderer
+      controls = cached.controls
+      content = cached.content
+      
+      // 重置渲染标志
+      needsRender = true
+      
+      // 重新启动动画
+      animate()
+      
+      // 重新绑定窗口大小变化事件
+      window.addEventListener('resize', onWindowResize)
+      
+      console.log('场景已从缓存恢复，无需重新加载模型')
+      return
+    }
   }
 
   const width = modelContainer.value.clientWidth
@@ -276,7 +315,7 @@ const init3DScene = () => {
     return
   }
 
-  console.log('初始化Three.js场景，容器尺寸:', width, height)
+  console.log('初始化新的Three.js场景，容器尺寸:', width, height)
 
   // 创建场景
   scene = new THREE.Scene()
@@ -287,18 +326,34 @@ const init3DScene = () => {
   camera.position.set(0, 0, 5)
   scene.add(camera)
 
-  // 创建渲染器
+  // 创建渲染器（性能优化）
+  // 检测设备性能，动态调整像素比
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+  const isLowEndDevice = navigator.hardwareConcurrency <= 4 || (navigator.deviceMemory && navigator.deviceMemory <= 4)
+  const maxPixelRatio = isMobile || isLowEndDevice ? 1 : 1.5 // 降低最大像素比
+  
   renderer = new THREE.WebGLRenderer({ 
     alpha: true, 
-    antialias: window.devicePixelRatio === 1,
-    powerPreference: 'high-performance',
-    stencil: false,
-    depth: true
+    antialias: false, // 完全禁用抗锯齿以提升性能
+    powerPreference: 'high-performance', // 优先使用高性能GPU
+    stencil: false, // 禁用模板缓冲以节省内存
+    depth: true, // 启用深度缓冲
+    preserveDrawingBuffer: false, // 不保留绘制缓冲区以节省内存
+    logarithmicDepthBuffer: false, // 禁用对数深度缓冲以提升性能
+    precision: 'mediump' // 使用中等精度
   })
   renderer.setSize(width, height)
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+  // 限制像素比，根据设备性能动态调整
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, maxPixelRatio))
   renderer.setClearColor(0x000000, 0)
   renderer.outputColorSpace = THREE.SRGBColorSpace
+  // 禁用阴影映射以提升性能
+  renderer.shadowMap.enabled = false
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap
+  // 启用自动清理以释放内存
+  renderer.autoClear = true
+  // 优化渲染信息
+  renderer.info.autoReset = false
   modelContainer.value.appendChild(renderer.domElement)
 
   // 创建OrbitControls
@@ -307,30 +362,50 @@ const init3DScene = () => {
   controls.enableDamping = true
   controls.dampingFactor = 0.05
   controls.autoRotate = true
-  controls.autoRotateSpeed = 1.0
+  controls.autoRotateSpeed = isMobile ? 0.5 : 1.0 // 移动设备降低旋转速度
   controls.enableZoom = false
+  // 优化控制更新频率
+  controls.update()
 
-  // 添加灯光
-  const ambientLight = new THREE.AmbientLight(0xffffff, 0.3)
+  // 添加灯光（优化：减少灯光数量以提升性能）
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.4) // 提高环境光强度，减少其他灯光
   camera.add(ambientLight)
 
-  const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8 * Math.PI)
+  const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6 * Math.PI) // 降低强度
   directionalLight.position.set(0.866, 0.5, 0.5)
+  directionalLight.castShadow = false // 禁用阴影投射
   camera.add(directionalLight)
 
-  const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 1)
-  hemiLight.position.set(0, 200, 0)
-  scene.add(hemiLight)
+  // 在移动设备上禁用半球光以提升性能
+  if (!isMobile) {
+    const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 0.8) // 降低强度
+    hemiLight.position.set(0, 200, 0)
+    scene.add(hemiLight)
+  }
 
-  // 加载3D模型
+  // 加载3D模型（使用Draco压缩版本）
+  const modelPath = '/models/loomydraco.glb'
+  
+  // 检查全局缓存
+  const cachedModel = getCachedModel(modelPath)
+  if (cachedModel) {
+    setContent(cachedModel.clone())
+    console.log('使用预加载的模型缓存')
+    return
+  }
+  
   const dracoLoader = new DRACOLoader()
   dracoLoader.setDecoderPath('/draco/')
+  dracoLoader.preload()
   
   const loader = new GLTFLoader()
   loader.setDRACOLoader(dracoLoader)
   
+  // 设置加载优先级
+  loader.setRequestHeader({ 'Accept': 'application/octet-stream' })
+  
   loader.load(
-    '/models/loomy.glb',
+    modelPath,
     (gltf) => {
       const object = gltf.scene || gltf.scenes[0]
       
@@ -339,36 +414,81 @@ const init3DScene = () => {
         return
       }
 
-      // 性能优化
+      // 性能优化：深度优化模型
       object.traverse((child) => {
         if (child instanceof THREE.Mesh) {
+          // 启用视锥剔除
           child.frustumCulled = true
+          // 禁用不必要的渲染特性
+          child.castShadow = false
+          child.receiveShadow = false
           
+          // 优化材质
           if (child.material) {
             const materials = Array.isArray(child.material) ? child.material : [child.material]
             materials.forEach(material => {
+              // 使用中等精度
               material.precision = 'mediump'
+              // 禁用不必要的材质特性
+              if (material instanceof THREE.MeshStandardMaterial || material instanceof THREE.MeshPhysicalMaterial) {
+                material.roughness = Math.max(material.roughness || 0.5, 0.3) // 优化粗糙度计算
+                material.metalness = material.metalness || 0
+              }
+              // 禁用环境贴图以提升性能
+              if (material.envMap) {
+                material.envMapIntensity = 0.5 // 降低强度
+              }
+              // 禁用不必要的纹理更新
               material.needsUpdate = true
+              // 优化纹理采样
+              if (material.map) {
+                material.map.generateMipmaps = true
+                material.map.minFilter = THREE.LinearMipmapLinearFilter
+              }
             })
           }
           
+          // 优化几何体
           if (child.geometry) {
+            // 计算边界框和边界球用于视锥剔除
             child.geometry.computeBoundingBox()
             child.geometry.computeBoundingSphere()
+            // 合并顶点以提高性能（如果几何体支持）
+            if (!child.geometry.attributes.position) {
+              child.geometry.computeVertexNormals()
+            }
+            // 优化索引
+            if (child.geometry.index) {
+              child.geometry.index.needsUpdate = false
+            }
           }
         }
       })
 
       setContent(object)
-      console.log('模型加载成功并已优化')
+      console.log('模型（Draco压缩版）加载成功并已优化')
     },
     (progress) => {
-      console.log('加载进度:', (progress.loaded / progress.total * 100).toFixed(2) + '%')
+      const percent = progress.total > 0 
+        ? (progress.loaded / progress.total * 100).toFixed(2) 
+        : '0.00'
+      console.log('加载进度:', percent + '%')
     },
     (error) => {
       console.error('加载模型失败:', error)
     }
   )
+
+  // 缓存场景
+  cacheScene(sceneKey, {
+    scene,
+    camera,
+    renderer,
+    controls,
+    content,
+    container: modelContainer.value,
+    animationId: null // 动画ID会在animate中设置
+  })
 
   // 开始动画循环
   animate()
@@ -418,7 +538,7 @@ const setContent = (object: THREE.Object3D) => {
   console.log('模型已居中，相机位置:', camera.position)
 }
 
-// 窗口大小变化处理
+// 窗口大小变化处理（优化：防抖和性能优化）
 const onWindowResize = () => {
   if (!modelContainer.value) return
   
@@ -430,29 +550,61 @@ const onWindowResize = () => {
     const width = modelContainer.value!.clientWidth
     const height = modelContainer.value!.clientHeight
     
-    camera.aspect = width / height
-    camera.updateProjectionMatrix()
-    renderer.setSize(width, height)
+    // 只在尺寸真正改变时更新
+    if (camera.aspect !== width / height || renderer.domElement.width !== width || renderer.domElement.height !== height) {
+      camera.aspect = width / height
+      camera.updateProjectionMatrix()
+      renderer.setSize(width, height)
+      needsRender = true // 标记需要重新渲染
+    }
     resizeTimeout = null
-  }, 100)
+  }, 150) // 稍微增加防抖延迟以减少频繁更新
 }
 
-// 动画循环
+// 动画循环（性能优化）
+let needsRender = true
+let lastFrameTime = 0
+const targetFPS = 60
+const frameInterval = 1000 / targetFPS
+
 const animate = () => {
   animationId = requestAnimationFrame(animate)
-  controls.update()
-  renderer.render(scene, camera)
+  
+  // 更新缓存的动画ID
+  const cached = getCachedScene(sceneKey)
+  if (cached) {
+    cached.animationId = animationId
+  }
+  
+  // 帧率限制：只在达到目标帧率时渲染
+  const currentTime = performance.now()
+  const elapsed = currentTime - lastFrameTime
+  
+  if (elapsed >= frameInterval) {
+    if (controls) {
+      const hasChanged = controls.update()
+      // 只在有变化或需要渲染时渲染
+      if (hasChanged || needsRender) {
+        renderer.render(scene, camera)
+        needsRender = false
+        lastFrameTime = currentTime - (elapsed % frameInterval) // 保持帧率稳定
+      }
+    } else {
+      renderer.render(scene, camera)
+      lastFrameTime = currentTime
+    }
+  }
 }
 
-// 相机位置动画
+// 相机位置动画（优化：减少不必要的更新）
 const animateCameraToPosition = (targetPosition: THREE.Vector3, targetLookAt: THREE.Vector3) => {
   const startPosition = camera.position.clone()
   const startLookAt = controls.target.clone()
-  const duration = 1000
-  const startTime = Date.now()
+  const duration = 800 // 稍微缩短动画时间以提升响应性
+  const startTime = performance.now() // 使用performance.now()获得更高精度
   
   const animateCamera = () => {
-    const elapsed = Date.now() - startTime
+    const elapsed = performance.now() - startTime
     const progress = Math.min(elapsed / duration, 1)
     const eased = 1 - Math.pow(1 - progress, 3)
     
@@ -461,8 +613,17 @@ const animateCameraToPosition = (targetPosition: THREE.Vector3, targetLookAt: TH
     controls.target.copy(newTarget)
     controls.update()
     
+    // 标记需要渲染
+    needsRender = true
+    
     if (progress < 1) {
       requestAnimationFrame(animateCamera)
+    } else {
+      // 动画结束后确保最终位置准确
+      camera.position.copy(targetPosition)
+      controls.target.copy(targetLookAt)
+      controls.update()
+      needsRender = true
     }
   }
   
@@ -631,15 +792,21 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-  // 清理3D场景
+  // 停止动画循环，但保留场景资源
   if (animationId) {
     cancelAnimationFrame(animationId)
+    animationId = 0
   }
-  if (renderer) {
-    renderer.dispose()
+  
+  // 更新缓存的动画ID
+  const cached = getCachedScene(sceneKey)
+  if (cached) {
+    cached.animationId = null
   }
-  if (content) {
-    scene.remove(content)
+  
+  // 从DOM中移除渲染器，但不销毁它（保留在缓存中）
+  if (renderer && modelContainer.value && modelContainer.value.contains(renderer.domElement)) {
+    modelContainer.value.removeChild(renderer.domElement)
   }
   
   // 清理事件监听器
@@ -647,6 +814,8 @@ onUnmounted(() => {
   window.removeEventListener('wheel', handleWheel)
   window.removeEventListener('resize', onWindowResize)
   window.removeEventListener('keydown', () => {})
+  
+  console.log('组件卸载，场景已保存到缓存，下次进入将直接恢复')
 })
 </script>
 
