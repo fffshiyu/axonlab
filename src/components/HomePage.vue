@@ -943,6 +943,7 @@ onUnmounted(() => {
 .intro-text {
   max-width: 650px; /* 减小宽度以匹配段落宽度 */
   transition: transform 400ms ease-out;
+  text-align: left; /* 确保文字左对齐 */
 }
 
 .intro-text.expanded {
@@ -1702,25 +1703,47 @@ onUnmounted(() => {
   
   .section-content {
     left: 20px; /* 与logo左对齐 */
-    bottom: 140px; /* 280px * 0.5 */
+    bottom: auto; /* 改为自动定位 */
+    top: 50px; /* 从顶部开始，确保标题可见 */
     max-width: calc(100% - 40px); /* 调整最大宽度 */
+    position: relative; /* 改为相对定位，避免被遮挡 */
   }
   
   .section-content.lang-en {
-    bottom: 120px; /* 往下移动20px */
+    top: 50px; /* 英文版本也从顶部开始 */
   }
   
   .section-content.lang-en.expanded {
-    bottom: 115px;
+    top: 50px; /* 展开后也保持顶部位置 */
+  }
+  
+  /* 移动端品牌介绍区域容器调整 */
+  .introduction-section .section-container {
+    height: auto; /* 改为自动高度 */
+    min-height: 100vh; /* 最小高度为一屏 */
+    align-items: flex-start; /* 顶部对齐 */
+    padding-top: 20px; /* 添加顶部内边距 */
   }
   
   /* 品牌介绍文字移动端适配 */
-  .intro-text { max-width: 92vw; }
+  .intro-text { max-width: 92vw; text-align: left; }
   .intro-title-en { font-size: 26px; white-space: normal; }
   .intro-title-cn { font-size: 18px; }
-  .intro-paragraph { font-size: 12px; line-height: 1.7; max-width: 92vw; margin-bottom: 0.9rem !important; }
-  .intro-paragraph-en { max-width: 95vw; }
-  .intro-paragraph-last { margin-bottom: 0.9rem !important; }
+  .intro-paragraph { font-size: 12px; line-height: 1.7; max-width: 92vw; margin-bottom: 0.9rem !important; text-align: left; }
+  .intro-paragraph br { display: none; } /* 移动端隐藏br标签，让文字自然换行 */
+  .intro-paragraph-en { max-width: 95vw; text-align: left; }
+  .intro-paragraph-en br { display: none; } /* 移动端隐藏br标签 */
+  .intro-paragraph-last { margin-bottom: 0.9rem !important; text-align: left; }
+  .intro-paragraph-last br { display: none; } /* 移动端隐藏br标签 */
+  
+  /* 移动端展开后优化布局 */
+  .intro-text.expanded {
+    transform: none; /* 移除向上移动，保持原位 */
+  }
+  
+  .section-content.expanded {
+    transform: none; /* 移除向上移动，保持原位 */
+  }
   
   /* Learn More按钮移动端样式 */
   .learn-more-btn {
@@ -2039,25 +2062,47 @@ onUnmounted(() => {
   
   .section-content {
     left: 15px; /* 与logo左对齐 */
-    bottom: 100px; /* 进一步调整底部位置 */
+    bottom: auto; /* 改为自动定位 */
+    top: 40px; /* 从顶部开始，确保标题可见 */
     max-width: calc(100% - 30px); /* 限制最大宽度 */
+    position: relative; /* 改为相对定位，避免被遮挡 */
   }
   
   .section-content.lang-en {
-    bottom: 70px; /* 往下移动30px */
+    top: 40px; /* 英文版本也从顶部开始 */
   }
   
   .section-content.lang-en.expanded {
-    bottom: 65px;
+    top: 40px; /* 展开后也保持顶部位置 */
+  }
+  
+  /* 小屏幕品牌介绍区域容器调整 */
+  .introduction-section .section-container {
+    height: auto; /* 改为自动高度 */
+    min-height: 100vh; /* 最小高度为一屏 */
+    align-items: flex-start; /* 顶部对齐 */
+    padding-top: 15px; /* 添加顶部内边距 */
   }
   
   /* 品牌介绍文字小屏适配 */
-  .intro-text { max-width: 94vw; }
+  .intro-text { max-width: 94vw; text-align: left; }
   .intro-title-en { font-size: 24px; }
   .intro-title-cn { font-size: 16px; }
-  .intro-paragraph { font-size: 11px; line-height: 1.65; max-width: 94vw; margin-bottom: 0.8rem !important; }
-  .intro-paragraph-en { max-width: 96vw; }
-  .intro-paragraph-last { margin-bottom: 0.8rem !important; }
+  .intro-paragraph { font-size: 11px; line-height: 1.65; max-width: 94vw; margin-bottom: 0.8rem !important; text-align: left; }
+  .intro-paragraph br { display: none; } /* 小屏幕隐藏br标签，让文字自然换行 */
+  .intro-paragraph-en { max-width: 96vw; text-align: left; }
+  .intro-paragraph-en br { display: none; } /* 小屏幕隐藏br标签 */
+  .intro-paragraph-last { margin-bottom: 0.8rem !important; text-align: left; }
+  .intro-paragraph-last br { display: none; } /* 小屏幕隐藏br标签 */
+  
+  /* 小屏幕展开后优化布局 */
+  .intro-text.expanded {
+    transform: none; /* 移除向上移动，保持原位 */
+  }
+  
+  .section-content.expanded {
+    transform: none; /* 移除向上移动，保持原位 */
+  }
   
   /* Learn More按钮小屏幕样式 */
   .learn-more-btn {
