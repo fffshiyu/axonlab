@@ -1718,11 +1718,18 @@ onUnmounted(() => {
   }
   
   /* 移动端品牌介绍区域容器调整 */
+  .introduction-section {
+    height: auto; /* 改为自动高度，允许内容撑开 */
+    min-height: 100vh; /* 最小高度为一屏 */
+    overflow-y: auto; /* 允许垂直滚动 */
+  }
+  
   .introduction-section .section-container {
     height: auto; /* 改为自动高度 */
     min-height: 100vh; /* 最小高度为一屏 */
     align-items: flex-start; /* 顶部对齐 */
     padding-top: 20px; /* 添加顶部内边距 */
+    padding-bottom: 40px; /* 添加底部内边距，确保内容完整显示 */
   }
   
   /* 品牌介绍文字移动端适配 */
@@ -2077,11 +2084,18 @@ onUnmounted(() => {
   }
   
   /* 小屏幕品牌介绍区域容器调整 */
+  .introduction-section {
+    height: auto; /* 改为自动高度，允许内容撑开 */
+    min-height: 100vh; /* 最小高度为一屏 */
+    overflow-y: auto; /* 允许垂直滚动 */
+  }
+  
   .introduction-section .section-container {
     height: auto; /* 改为自动高度 */
     min-height: 100vh; /* 最小高度为一屏 */
     align-items: flex-start; /* 顶部对齐 */
     padding-top: 15px; /* 添加顶部内边距 */
+    padding-bottom: 40px; /* 添加底部内边距，确保内容完整显示 */
   }
   
   /* 品牌介绍文字小屏适配 */
