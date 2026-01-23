@@ -15,8 +15,8 @@
               <h3 class="job-category">{{ job.category }} <span class="job-title">{{ job.title }}</span></h3>
               <p class="job-description">{{ job.description }}</p>
               <div class="job-contact">
-                <p class="contact-item">联系人：{{ job.contact }}</p>
-                <p class="contact-item">联系邮箱：{{ job.email }}</p>
+                <p class="contact-item">{{ currentLanguage === 'zh' ? '联系人：' : 'Contact: ' }}{{ job.contact }}</p>
+                <p class="contact-item">{{ currentLanguage === 'zh' ? '联系邮箱：' : 'Email: ' }}{{ job.email }}</p>
               </div>
             </div>
           </div>
@@ -58,19 +58,19 @@
           
           <div class="footer-text-area">
             <div class="footer-links">
-              <a href="#" class="footer-link">知识产权保护</a>
+              <a href="#" class="footer-link">{{ currentLanguage === 'zh' ? '知识产权保护' : 'Intellectual Property Protection' }}</a>
               <span class="separator">|</span>
-              <a href="#" class="footer-link">隐私声明</a>
+              <a href="#" class="footer-link">{{ currentLanguage === 'zh' ? '隐私声明' : 'Privacy Statement' }}</a>
               <span class="separator">|</span>
-              <a href="#" class="footer-link">ISO27001信息安全管理体系认证</a>
+              <a href="#" class="footer-link">ISO27001</a>
             </div>
             
             <div class="footer-contact">
-              <p>互联网违法和不良信息举报邮箱   LD@axonlabs.com</p>
+              <p>{{ currentLanguage === 'zh' ? '互联网违法和不良信息举报邮箱' : 'Report illegal and harmful information' }}   LD@axonlabs.com</p>
             </div>
             
             <div class="footer-copyright">
-              <p>COPYRIGHT © AXON LABS 羽山 ALL RIGHTS RESERVED    |    京公网安备 XXXXXX号    |    京ICP备XXXXX    |    营业执照</p>
+              <p>COPYRIGHT © AXON LABS {{ currentLanguage === 'zh' ? '羽山' : 'Yushan' }} ALL RIGHTS RESERVED    |    {{ currentLanguage === 'zh' ? '京公网安备 XXXXXX号    |    京ICP备XXXXX    |    营业执照' : 'Beijing Public Network Security No. XXXXXX    |    ICP No. XXXXXX    |    Business License' }}</p>
             </div>
           </div>
         </div>
@@ -80,8 +80,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
 import Navbar from './Navbar.vue'
+import { useLanguage } from '../composables/useLanguage'
+
+const { currentLanguage } = useLanguage()
 
 // 导航栏控制
 const isNavbarVisible = ref(true) // 始终显示
@@ -124,22 +127,43 @@ const handleClickOutside = (event: Event) => {
 }
 
 // 职位数据（只保留2个，让页面内容适中）
-const jobs = ref([
-  {
-    category: '职能类型',
-    title: '职位名称',
-    description: '职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求',
-    contact: 'XXX',
-    email: 'BD@axonlabs.com'
-  },
-  {
-    category: '职能类型',
-    title: '职位名称',
-    description: '职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求',
-    contact: 'XXX',
-    email: 'BD@axonlabs.com'
+const jobs = computed(() => {
+  if (currentLanguage.value === 'zh') {
+    return [
+      {
+        category: '职能类型',
+        title: '职位名称',
+        description: '职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求',
+        contact: 'XXX',
+        email: 'BD@axonlabs.com'
+      },
+      {
+        category: '职能类型',
+        title: '职位名称',
+        description: '职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求职位要求',
+        contact: 'XXX',
+        email: 'BD@axonlabs.com'
+      }
+    ]
+  } else {
+    return [
+      {
+        category: 'Function Type',
+        title: 'Job Title',
+        description: 'Job requirements job requirements job requirements job requirements job requirements job requirements job requirements job requirements job requirements job requirements job requirements job requirements job requirements job requirements job requirements job requirements job requirements job requirements job requirements job requirements job requirements job requirements job requirements job requirements job requirements job requirements job requirements job requirements job requirements job requirements job requirements job requirements',
+        contact: 'XXX',
+        email: 'BD@axonlabs.com'
+      },
+      {
+        category: 'Function Type',
+        title: 'Job Title',
+        description: 'Job requirements job requirements job requirements job requirements job requirements job requirements job requirements job requirements job requirements job requirements job requirements job requirements job requirements job requirements job requirements job requirements job requirements job requirements job requirements job requirements job requirements job requirements job requirements job requirements job requirements job requirements job requirements job requirements job requirements job requirements job requirements',
+        contact: 'XXX',
+        email: 'BD@axonlabs.com'
+      }
+    ]
   }
-])
+})
 
 // 背景图片加载状态
 const isBackgroundLoaded = ref(false)
@@ -651,8 +675,8 @@ onUnmounted(() => {
 .footer-contact p { color: #9E9E9E; font-size: 16px; margin: 0; text-align: left; }
 
 /* 版权信息 */
-.footer-copyright { border-top: 1px solid rgba(255, 255, 255, 0.1); height: 24px; display: flex; align-items: center; }
-.footer-copyright p { color: #9E9E9E; font-size: 16px; margin: 0; line-height: 1.4; text-align: left; white-space: nowrap; }
+.footer-copyright { border-top: 1px solid rgba(255, 255, 255, 0.1); min-height: 24px; display: flex; align-items: center; }
+.footer-copyright p { color: #9E9E9E; font-size: 16px; margin: 0; line-height: 1.4; text-align: left; }
 
 /* 响应式 - 与首页保持一致的导航适配 */
 @media (max-width: 1440px) {

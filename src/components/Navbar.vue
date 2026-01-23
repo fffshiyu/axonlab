@@ -9,37 +9,37 @@
           v-if="activePage === 'home'" 
           to="/home" 
           class="nav-link active"
-        >首页</router-link>
+        >{{ currentLanguage === 'zh' ? '首页' : 'Home' }}</router-link>
         <router-link 
           v-else 
           to="/home" 
           class="nav-link"
-        >首页</router-link>
+        >{{ currentLanguage === 'zh' ? '首页' : 'Home' }}</router-link>
         
         <router-link 
           to="/news" 
           class="nav-link" 
           :class="{ 'active': activePage === 'news' }"
-        >新闻</router-link>
+        >{{ currentLanguage === 'zh' ? '新闻' : 'News' }}</router-link>
         
         <router-link 
           to="/product-series" 
           class="nav-link" 
           :class="{ 'active': activePage === 'product-series' }"
-        >产品系列</router-link>
+        >{{ currentLanguage === 'zh' ? '产品系列' : 'Products' }}</router-link>
         
         <div class="nav-dropdown" @mouseenter="showDropdown" @mouseleave="hideDropdown">
-          <a href="#" class="nav-link" :class="{ 'active': isDropdownVisible }">线上商城</a>
+          <a href="#" class="nav-link" :class="{ 'active': isDropdownVisible }">{{ currentLanguage === 'zh' ? '线上商城' : 'Shop' }}</a>
           <div class="dropdown-menu" :class="{ 'show': isDropdownVisible }">
-            <div class="dropdown-item" @click="showQRCode('tmall')">天猫商城</div>
-            <div class="dropdown-item" @click="showQRCode('douyin')">抖音商城</div>
-            <div class="dropdown-item" @click="showQRCode('jd')">京东商城</div>
-            <div class="dropdown-item" @click="showQRCode('xiaochengxu')">小程序官方商城</div>
+            <div class="dropdown-item" @click="showQRCode('tmall')">{{ currentLanguage === 'zh' ? '天猫商城' : 'Tmall' }}</div>
+            <div class="dropdown-item" @click="showQRCode('douyin')">{{ currentLanguage === 'zh' ? '抖音商城' : 'Douyin' }}</div>
+            <div class="dropdown-item" @click="showQRCode('jd')">{{ currentLanguage === 'zh' ? '京东商城' : 'JD.com' }}</div>
+            <div class="dropdown-item" @click="showQRCode('xiaochengxu')">{{ currentLanguage === 'zh' ? '小程序官方商城' : 'Mini Program' }}</div>
             <!-- 二维码显示区域 -->
-            <div class="qr-code-container" :class="{ 'show': isQRCodeVisible }">
+              <div class="qr-code-container" :class="{ 'show': isQRCodeVisible }">
               <img v-if="currentQRImage" :src="currentQRImage" :alt="currentQRTitle" class="qr-code-image" />
               <div class="qr-code-title">{{ currentQRTitle }}</div>
-              <a v-if="currentQRLink" :href="currentQRLink" target="_blank" rel="noopener noreferrer" class="qr-code-link">点击进入</a>
+              <a v-if="currentQRLink" :href="currentQRLink" target="_blank" rel="noopener noreferrer" class="qr-code-link">{{ currentLanguage === 'zh' ? '点击进入' : 'Enter' }}</a>
             </div>
           </div>
         </div>
@@ -48,13 +48,13 @@
           to="/cooperation" 
           class="nav-link" 
           :class="{ 'active': activePage === 'cooperation' }"
-        >合作</router-link>
+        >{{ currentLanguage === 'zh' ? '合作' : 'Cooperation' }}</router-link>
         
         <router-link 
           to="/join" 
           class="nav-link" 
           :class="{ 'active': activePage === 'join' }"
-        >加入我们</router-link>
+        >{{ currentLanguage === 'zh' ? '加入我们' : 'Join Us' }}</router-link>
       </div>
       
       <!-- 移动端菜单按钮 -->
@@ -65,7 +65,10 @@
       </div>
       
       <div class="nav-right">
-        <span class="nav-language"><span class="active-lang">CN</span> | EN</span>
+        <span class="nav-language" @click="toggleLanguage" style="cursor: pointer;">
+          <span :class="{ 'active-lang': currentLanguage === 'zh' }">CN</span> | 
+          <span :class="{ 'active-lang': currentLanguage === 'en' }">EN</span>
+        </span>
       </div>
     </div>
     
@@ -77,53 +80,53 @@
           class="mobile-nav-link" 
           :class="{ 'active': activePage === 'home' }"
           @click="closeMobileMenu"
-        >首页</router-link>
+        >{{ currentLanguage === 'zh' ? '首页' : 'Home' }}</router-link>
         
         <router-link 
           to="/news" 
           class="mobile-nav-link" 
           :class="{ 'active': activePage === 'news' }"
           @click="closeMobileMenu"
-        >新闻</router-link>
+        >{{ currentLanguage === 'zh' ? '新闻' : 'News' }}</router-link>
         
         <router-link 
           to="/product-series" 
           class="mobile-nav-link" 
           :class="{ 'active': activePage === 'product-series' }"
           @click="closeMobileMenu"
-        >产品系列</router-link>
+        >{{ currentLanguage === 'zh' ? '产品系列' : 'Products' }}</router-link>
         
         <div class="mobile-dropdown">
-          <div class="mobile-nav-link" @click="toggleMobileDropdown">线上商城</div>
+          <div class="mobile-nav-link" @click="toggleMobileDropdown">{{ currentLanguage === 'zh' ? '线上商城' : 'Shop' }}</div>
           <div class="mobile-dropdown-menu" :class="{ 'active': isMobileDropdownOpen }">
             <div class="mobile-dropdown-item" @click="toggleMobileQRCode('tmall')">
-              <span>天猫商城</span>
+              <span>{{ currentLanguage === 'zh' ? '天猫商城' : 'Tmall' }}</span>
               <div class="mobile-qr-code" :class="{ 'show': mobileQRCode === 'tmall' }">
-                <img src="/天猫qr.png" alt="天猫商城" class="mobile-qr-image" />
-                <div class="mobile-qr-title">天猫商城</div>
-                <a href="https://yushanznjj.world.tmall.com/shop/view_shop.html" target="_blank" rel="noopener noreferrer" class="mobile-qr-link" @click.stop>点击进入</a>
+                <img src="/天猫qr.png" :alt="currentLanguage === 'zh' ? '天猫商城' : 'Tmall'" class="mobile-qr-image" />
+                <div class="mobile-qr-title">{{ currentLanguage === 'zh' ? '天猫商城' : 'Tmall' }}</div>
+                <a href="https://yushanznjj.world.tmall.com/shop/view_shop.html" target="_blank" rel="noopener noreferrer" class="mobile-qr-link" @click.stop>{{ currentLanguage === 'zh' ? '点击进入' : 'Enter' }}</a>
               </div>
             </div>
             <div class="mobile-dropdown-item" @click="toggleMobileQRCode('douyin')">
-              <span>抖音商城</span>
+              <span>{{ currentLanguage === 'zh' ? '抖音商城' : 'Douyin' }}</span>
               <div class="mobile-qr-code" :class="{ 'show': mobileQRCode === 'douyin' }">
-                <img src="/抖音qr.jpg" alt="抖音商城" class="mobile-qr-image" />
-                <div class="mobile-qr-title">抖音商城</div>
+                <img src="/抖音qr.jpg" :alt="currentLanguage === 'zh' ? '抖音商城' : 'Douyin'" class="mobile-qr-image" />
+                <div class="mobile-qr-title">{{ currentLanguage === 'zh' ? '抖音商城' : 'Douyin' }}</div>
               </div>
             </div>
             <div class="mobile-dropdown-item" @click="toggleMobileQRCode('jd')">
-              <span>京东商城</span>
+              <span>{{ currentLanguage === 'zh' ? '京东商城' : 'JD.com' }}</span>
               <div class="mobile-qr-code" :class="{ 'show': mobileQRCode === 'jd' }">
-                <img src="/京东qr.jpg" alt="京东商城" class="mobile-qr-image" />
-                <div class="mobile-qr-title">京东商城</div>
-                <a href="https://mall.jd.com/index-157316165.html?from=pc" target="_blank" rel="noopener noreferrer" class="mobile-qr-link" @click.stop>点击进入</a>
+                <img src="/京东qr.jpg" :alt="currentLanguage === 'zh' ? '京东商城' : 'JD.com'" class="mobile-qr-image" />
+                <div class="mobile-qr-title">{{ currentLanguage === 'zh' ? '京东商城' : 'JD.com' }}</div>
+                <a href="https://mall.jd.com/index-157316165.html?from=pc" target="_blank" rel="noopener noreferrer" class="mobile-qr-link" @click.stop>{{ currentLanguage === 'zh' ? '点击进入' : 'Enter' }}</a>
               </div>
             </div>
             <div class="mobile-dropdown-item" @click="toggleMobileQRCode('xiaochengxu')">
-              <span>小程序官方商城</span>
+              <span>{{ currentLanguage === 'zh' ? '小程序官方商城' : 'Mini Program' }}</span>
               <div class="mobile-qr-code" :class="{ 'show': mobileQRCode === 'xiaochengxu' }">
-                <div class="mobile-qr-placeholder">二维码</div>
-                <div class="mobile-qr-title">小程序官方商城</div>
+                <div class="mobile-qr-placeholder">{{ currentLanguage === 'zh' ? '二维码' : 'QR Code' }}</div>
+                <div class="mobile-qr-title">{{ currentLanguage === 'zh' ? '小程序官方商城' : 'Mini Program' }}</div>
               </div>
             </div>
           </div>
@@ -134,21 +137,24 @@
           class="mobile-nav-link" 
           :class="{ 'active': activePage === 'cooperation' }"
           @click="closeMobileMenu"
-        >合作</router-link>
+        >{{ currentLanguage === 'zh' ? '合作' : 'Cooperation' }}</router-link>
         
         <router-link 
           to="/join" 
           class="mobile-nav-link" 
           :class="{ 'active': activePage === 'join' }"
           @click="closeMobileMenu"
-        >加入我们</router-link>
+        >{{ currentLanguage === 'zh' ? '加入我们' : 'Join Us' }}</router-link>
       </div>
     </div>
   </nav>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { useLanguage } from '../composables/useLanguage'
+
+const { currentLanguage, toggleLanguage } = useLanguage()
 
 // 定义 props
 interface Props {
@@ -180,11 +186,16 @@ const hideDropdown = () => {
 }
 
 const showQRCode = (platform: string) => {
-  const titles = {
+  const titles = currentLanguage.value === 'zh' ? {
     tmall: '天猫商城',
     douyin: '抖音商城',
     jd: '京东商城',
     xiaochengxu: '小程序官方商城'
+  } : {
+    tmall: 'Tmall',
+    douyin: 'Douyin',
+    jd: 'JD.com',
+    xiaochengxu: 'Mini Program'
   }
   
   const images = {

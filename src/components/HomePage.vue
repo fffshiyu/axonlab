@@ -8,17 +8,54 @@
       <!-- 产品介绍区域 -->
       <section class="introduction-section" id="introduction">
         <div class="section-container">
-          <div class="section-content">
-            <!-- 使用图片替代标题和文字 -->
-            <img src="/index-text.webp" alt="品牌介绍" class="intro-text-img" />
+          <div class="section-content" :class="{ expanded: isIntroExpanded, 'lang-en': !isZh }">
+            <!-- 品牌介绍：用文字还原图片UI（替代 index-text.webp / axonrob_text_open.webp） -->
+            <div class="intro-text" :class="{ expanded: isIntroExpanded }">
+              <h2 class="intro-title-en">BRAND INTRODUCTION</h2>
+              <h3 class="intro-title-cn">品牌介绍</h3>
+              <p class="intro-paragraph" v-if="isZh">
+        AXON LABS 羽山，是成立于2024年的新锐科技公司，正在打造面向年轻消费市场<br>的“潮流科技品牌”。设计至上、体验为王，结合人工智能技术，打造“实用好物、科<br>技潮玩”的潮流单品，以设计驱动情绪价值，
+        让科技产品更有温度。
+      </p>
+      <p class="intro-paragraph intro-paragraph-en" v-else>
+        AXON LABS Yushan is a cutting-edge technology company founded in 2024, building a<br>"trendy tech brand" targeting the young consumer market. Design-first and experience-<br>driven, we combine AI technology to create trendy products that are "practical goods,<br>tech toys", driving emotional value through design, making tech products more warm.
+      </p>
+        <div v-show="isIntroExpanded" class="intro-more">
+                <p class="intro-paragraph" v-if="isZh">
+                 「羽山」，是《山海经》中的上古神山，象征着华夏先民对宇宙万物的求索。但我<br>们要做的，是利用 AI 与硬件技术的深度融合，重塑科技产品的“生命逻辑”。
+                </p>
+                <p class="intro-paragraph intro-paragraph-en" v-else>
+                 "Yushan" is an ancient sacred mountain in the Classic of Mountains and Seas,<br>symbolizing the Chinese ancestors' quest for the universe. But what we aim to do is<br>deeply integrate AI with hardware technology to reshape the "life logic" of tech products.
+                </p>
+                <p class="intro-paragraph" v-if="isZh">
+                  我们的团队来自于潮玩、游戏、互联网大厂，带着热爱和生命力，探索如何「连接<br>文化、科技与生活」。
+                </p>
+                <p class="intro-paragraph intro-paragraph-en" v-else>
+                  Our team comes from trendy toys, gaming, and internet giants, bringing passion<br>and vitality to explore how to "connect culture, technology, and life".
+                </p>
+                   <p class="intro-paragraph" v-if="isZh">
+                在「陪伴产品」层出不穷的今天，我们认为陪伴不应是额外负担，而应是基于「高<br>频场景」的「润物无声」。
+                </p>
+                <p class="intro-paragraph intro-paragraph-en" v-else>
+                 In an era where "companion products" are emerging endlessly, we believe<br>companionship should not be an extra burden, but rather "silent nurturing" based on<br>"high-frequency scenarios".
+                </p>
+                <p class="intro-paragraph intro-paragraph-last" v-if="isZh">
+             品牌旗下首个系列 LOOMI 鹿米，AI 智能充电宝产品于 2025 年开始研发。以「时<br>尚美观，情感陪伴」为核心定位的潮流数码单品。
+             在满足用户日常充电需求的基<br>础上，它更像是一位默默守护的伙伴——通过细腻的问候传递温暖，借助定制化<br>的智能语音、触控等交互功能，把用户理想中的他她，甚至它，融入到产品中，<br>让用户看得见、摸得着，使每一次充电都成为一次内心的充电。
+              </p>
+                <p class="intro-paragraph intro-paragraph-last intro-paragraph-en" v-else>
+              The brand's first series LOOMI, an AI smart power bank product, began development<br>in 2025. A trendy digital product positioned as "fashionable, beautiful, emotional<br>companionship". Beyond meeting daily charging needs, it's more like a silently<br>guarding companion—conveying warmth through thoughtful greetings, integrating<br>customized smart voice, touch interactions, and bringing users' ideal companions<br>into the product, making every charge a recharge of the heart.
+              </p>
+              </div>
+            </div>
             <div class="intro-button">
-              <button class="learn-more-btn">Learn More</button>
+              <button v-if="!isIntroExpanded" class="learn-more-btn" @click="handleLearnMore">Learn More</button>
             </div>
           </div>
     
         </div>
         <div class="scroll-indicator" @click="scrollToHistory">
-          <img src="/arrow.webp" alt="向下箭头" class="scroll-arrow-img" />
+          <img src="/arrow.webp" :alt="currentLanguage === 'zh' ? '向下箭头' : 'Scroll Down'" class="scroll-arrow-img" />
         </div>
       </section>
 
@@ -103,21 +140,21 @@
           <div class="footer-text-area">
             <!-- 页脚链接 -->
             <div class="footer-links">
-              <a href="#" class="footer-link">知识产权保护</a>
+              <a href="#" class="footer-link">{{ currentLanguage === 'zh' ? '知识产权保护' : 'Intellectual Property Protection' }}</a>
               <span class="separator">|</span>
-              <a href="#" class="footer-link">隐私声明</a>
+              <a href="#" class="footer-link">{{ currentLanguage === 'zh' ? '隐私声明' : 'Privacy Statement' }}</a>
               <span class="separator">|</span>
-              <a href="#" class="footer-link">ISO27001信息安全管理体系认证</a>
+              <a href="#" class="footer-link">ISO27001</a>
             </div>
             
             <!-- 联系信息 -->
             <div class="footer-contact">
-              <p>互联网违法和不良信息举报邮箱   LD@axonlabs.com</p>
+              <p>{{ currentLanguage === 'zh' ? '互联网违法和不良信息举报邮箱' : 'Report illegal and harmful information' }}   LD@axonlabs.com</p>
             </div>
             
             <!-- 版权信息 -->
             <div class="footer-copyright">
-              <p>COPYRIGHT © AXON LABS 羽山 ALL RIGHTS RESERVED    |    京公网安备 XXXXXX号    |    京ICP备XXXXX    |    营业执照</p>
+              <p>COPYRIGHT © AXON LABS {{ currentLanguage === 'zh' ? '羽山' : 'Yushan' }} ALL RIGHTS RESERVED    |    {{ currentLanguage === 'zh' ? '京公网安备 XXXXXX号    |    京ICP备XXXXX    |    营业执照' : 'Beijing Public Network Security No. XXXXXX    |    ICP No. XXXXXX    |    Business License' }}</p>
             </div>
           </div>
         </div>
@@ -129,6 +166,9 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import Navbar from './Navbar.vue'
+import { useLanguage } from '../composables/useLanguage'
+
+const { currentLanguage, isZh } = useLanguage()
 
 // 时间线数据
 const timelineData = ref([
@@ -166,6 +206,12 @@ const timelineData = ref([
 
 // 时间线悬停状态管理 - 简化为只需要展开索引
 const expandedCardIndex = ref(-1)
+
+// 品牌介绍“Learn More”展开
+const isIntroExpanded = ref(false)
+const handleLearnMore = () => {
+  isIntroExpanded.value = true
+}
 
 // 获取覆盖层位置类名
 const getOverlayPositionClass = (index: number) => {
@@ -877,16 +923,87 @@ onUnmounted(() => {
   padding: 0; /* 移除padding */
   margin: 0; /* 移除margin */
   z-index: 10; /* 确保在其他内容之上 */
+  transition: transform 400ms ease-out;
 }
 
-/* 品牌介绍图片 */
-.intro-text-img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-  margin: 0; /* 移除所有margin，完全左对齐 */
-  padding: 0; /* 移除padding */
-  margin-bottom: 2rem; /* 只保留底部间距 */
+.section-content.expanded {
+  transform: translateY(-10px);
+}
+
+/* 英文版本往下移动 */
+.section-content.lang-en {
+  bottom: 240px; /* 从280px减少到240px，往下移动40px */
+}
+
+.section-content.lang-en.expanded {
+  bottom: 230px; /* 展开状态下也往下移动 */
+}
+
+/* 品牌介绍文字块（还原 index-text.webp 视觉样式） */
+.intro-text {
+  max-width: 650px; /* 减小宽度以匹配段落宽度 */
+  transition: transform 400ms ease-out;
+}
+
+.intro-text.expanded {
+  transform: translateY(-5px);
+}
+
+.intro-title-en {
+  font-family: 'MiSans-Demibold', 'MiSans', 'Noto Sans SC', sans-serif;
+  font-weight: 600;
+  font-size: 44px;
+  line-height: 1.05;
+  letter-spacing: 0.02em;
+  margin: 0 0 6px 0;
+  background: linear-gradient(to right, #01CE7E, #016840);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  white-space: nowrap;
+}
+
+.intro-title-cn {
+  font-family: 'MiSans', 'Noto Sans SC', sans-serif;
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 1.1;
+  margin: 0 0 12px 0;
+  color: #ffffff;
+}
+
+.intro-paragraph {
+  font-family: 'MiSans-Regular', 'MiSans', 'Noto Sans SC', sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.78);
+  margin: 0 0 1rem 0;
+  max-width: 600px;
+}
+
+/* 英文版本段落更宽的行宽 */
+.intro-paragraph-en {
+  max-width: 750px;
+}
+
+.intro-more {
+  animation: intro-expand 400ms ease-out;
+}
+
+.intro-paragraph-last {
+  margin-bottom: 1rem;
+}
+
+@keyframes intro-expand {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* 品牌介绍按钮容器 */
@@ -1349,7 +1466,7 @@ onUnmounted(() => {
 /* 版权信息 */
 .footer-copyright {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  height: 20px; /* 从24px缩小到20px */
+  min-height: 20px; /* 从固定高度改为最小高度，允许内容换行 */
   display: flex;
   align-items: center;
 }
@@ -1360,7 +1477,6 @@ onUnmounted(() => {
   margin: 0;
   line-height: 1.4;
   text-align: left;
-  white-space: nowrap;
 }
 
 /* 响应式设计 - 以1920*1080为基准 */
@@ -1382,6 +1498,14 @@ onUnmounted(() => {
     left: 150px; /* 200px * 0.75，与logo左对齐 */
     bottom: 210px; /* 280px * 0.75 */
     max-width: 700px; /* 增加最大宽度，确保英文标题完整显示 */
+  }
+  
+  .section-content.lang-en {
+    bottom: 180px; /* 往下移动30px */
+  }
+  
+  .section-content.lang-en.expanded {
+    bottom: 173px;
   }
   
   .logo {
@@ -1428,6 +1552,14 @@ onUnmounted(() => {
     left: 120px; /* 200px * 0.6，与logo左对齐 */
     bottom: 168px; /* 280px * 0.6 */
     max-width: 600px; /* 增加最大宽度，确保英文标题完整显示 */
+  }
+  
+  .section-content.lang-en {
+    bottom: 144px; /* 往下移动24px */
+  }
+  
+  .section-content.lang-en.expanded {
+    bottom: 138px;
   }
   
   .logo {
@@ -1574,11 +1706,21 @@ onUnmounted(() => {
     max-width: calc(100% - 40px); /* 调整最大宽度 */
   }
   
-  /* 品牌介绍图片移动端样式 */
-  .intro-text-img {
-    max-width: 85%; /* 限制宽度为屏幕的85% */
-    margin-bottom: 1.5rem !important; /* 减少底部间距 */
+  .section-content.lang-en {
+    bottom: 120px; /* 往下移动20px */
   }
+  
+  .section-content.lang-en.expanded {
+    bottom: 115px;
+  }
+  
+  /* 品牌介绍文字移动端适配 */
+  .intro-text { max-width: 92vw; }
+  .intro-title-en { font-size: 26px; white-space: normal; }
+  .intro-title-cn { font-size: 18px; }
+  .intro-paragraph { font-size: 12px; line-height: 1.7; max-width: 92vw; margin-bottom: 0.9rem !important; }
+  .intro-paragraph-en { max-width: 95vw; }
+  .intro-paragraph-last { margin-bottom: 0.9rem !important; }
   
   /* Learn More按钮移动端样式 */
   .learn-more-btn {
@@ -1901,11 +2043,21 @@ onUnmounted(() => {
     max-width: calc(100% - 30px); /* 限制最大宽度 */
   }
   
-  /* 品牌介绍图片小屏幕样式 */
-  .intro-text-img {
-    max-width: 90%; /* 限制宽度为屏幕的90% */
-    margin-bottom: 1rem !important; /* 减少底部间距 */
+  .section-content.lang-en {
+    bottom: 70px; /* 往下移动30px */
   }
+  
+  .section-content.lang-en.expanded {
+    bottom: 65px;
+  }
+  
+  /* 品牌介绍文字小屏适配 */
+  .intro-text { max-width: 94vw; }
+  .intro-title-en { font-size: 24px; }
+  .intro-title-cn { font-size: 16px; }
+  .intro-paragraph { font-size: 11px; line-height: 1.65; max-width: 94vw; margin-bottom: 0.8rem !important; }
+  .intro-paragraph-en { max-width: 96vw; }
+  .intro-paragraph-last { margin-bottom: 0.8rem !important; }
   
   /* Learn More按钮小屏幕样式 */
   .learn-more-btn {

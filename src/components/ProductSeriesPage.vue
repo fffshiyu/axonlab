@@ -23,7 +23,7 @@
               <!-- 3D模型加载状态 -->
               <div v-if="!isFirstModelLoaded" class="model-loading">
                 <div class="model-loading-spinner"></div>
-                <p class="model-loading-text">3D模型加载中...</p>
+                <p class="model-loading-text">{{ currentLanguage === 'zh' ? '3D模型加载中...' : 'Loading 3D Model...' }}</p>
               </div>
             </div>
             
@@ -131,7 +131,7 @@
               <!-- 3D模型加载状态 -->
               <div v-if="!isSecondModelLoaded" class="model-loading">
                 <div class="model-loading-spinner"></div>
-                <p class="model-loading-text">3D模型加载中...</p>
+                <p class="model-loading-text">{{ currentLanguage === 'zh' ? '3D模型加载中...' : 'Loading 3D Model...' }}</p>
               </div>
             </div>
             
@@ -253,21 +253,21 @@
           <div class="footer-text-area">
             <!-- 页脚链接 -->
             <div class="footer-links">
-              <a href="#" class="footer-link">知识产权保护</a>
+              <a href="#" class="footer-link">{{ currentLanguage === 'zh' ? '知识产权保护' : 'Intellectual Property Protection' }}</a>
               <span class="separator">|</span>
-              <a href="#" class="footer-link">隐私声明</a>
+              <a href="#" class="footer-link">{{ currentLanguage === 'zh' ? '隐私声明' : 'Privacy Statement' }}</a>
               <span class="separator">|</span>
-              <a href="#" class="footer-link">ISO27001信息安全管理体系认证</a>
+              <a href="#" class="footer-link">ISO27001</a>
             </div>
             
             <!-- 联系信息 -->
             <div class="footer-contact">
-              <p>互联网违法和不良信息举报邮箱   LD@axonlabs.com</p>
+              <p>{{ currentLanguage === 'zh' ? '互联网违法和不良信息举报邮箱' : 'Report illegal and harmful information' }}   LD@axonlabs.com</p>
             </div>
             
             <!-- 版权信息 -->
             <div class="footer-copyright">
-              <p>COPYRIGHT © AXON LABS 羽山 ALL RIGHTS RESERVED    |    京公网安备 XXXXXX号    |    京ICP备XXXXX    |    营业执照</p>
+              <p>COPYRIGHT © AXON LABS {{ currentLanguage === 'zh' ? '羽山' : 'Yushan' }} ALL RIGHTS RESERVED    |    {{ currentLanguage === 'zh' ? '京公网安备 XXXXXX号    |    京ICP备XXXXX    |    营业执照' : 'Beijing Public Network Security No. XXXXXX    |    ICP No. XXXXXX    |    Business License' }}</p>
             </div>
           </div>
         </div>
@@ -279,6 +279,9 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import Navbar from './Navbar.vue'
+import { useLanguage } from '../composables/useLanguage'
+
+const { currentLanguage } = useLanguage()
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
@@ -2189,7 +2192,7 @@ onUnmounted(() => {
 /* 版权信息 */
 .footer-copyright {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  height: 24px; /* 第三行高度24px */
+  min-height: 24px; /* 从固定高度改为最小高度，允许内容换行 */
   display: flex;
   align-items: center;
 }
@@ -2200,7 +2203,6 @@ onUnmounted(() => {
   margin: 0;
   line-height: 1.4;
   text-align: left; /* 左对齐 */
-  white-space: nowrap; /* 营业执照不换行 */
 }
 
 /* 响应式设计 */

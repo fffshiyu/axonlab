@@ -10,7 +10,7 @@
           <!-- 左侧主图与日期 -->
           <div class="hero-left">
             <button class="hero-arrow hero-arrow-left" @click="prevNews">
-              <img src="/arrow_right.webp" alt="上一张" class="arrow-icon arrow-icon-left" />
+              <img src="/arrow_right.webp" :alt="currentLanguage === 'zh' ? '上一张' : 'Previous'" class="arrow-icon arrow-icon-left" />
             </button>
             <div class="hero-image">
               <img :src="newsData[currentNewsIndex].image" alt="news" class="hero-img" />
@@ -26,7 +26,7 @@
               </div>
             </div>
             <button class="hero-arrow hero-arrow-right" @click="nextNews">
-              <img src="/arrow_right.webp" alt="下一张" class="arrow-icon" />
+              <img src="/arrow_right.webp" :alt="currentLanguage === 'zh' ? '下一张' : 'Next'" class="arrow-icon" />
             </button>
           </div>
 
@@ -40,8 +40,8 @@
 
         <!-- 底部标题与按钮 -->
         <div class="news-bottom">
-          <h3 class="news-bottom-title">LOOMI x 邱贻可产品即将发布</h3>
-          <button class="learn-more-btn">Learn More</button>
+          <h3 class="news-bottom-title">{{ currentLanguage === 'zh' ? 'LOOMI x 邱贻可产品即将发布' : 'LOOMI x Qiu Yike Product Launching Soon' }}</h3>
+          <button class="learn-more-btn">{{ currentLanguage === 'zh' ? '了解更多' : 'Learn More' }}</button>
         </div>
       </div>
     </section>
@@ -85,21 +85,21 @@
           <div class="footer-text-area">
             <!-- 页脚链接 -->
             <div class="footer-links">
-              <a href="#" class="footer-link">知识产权保护</a>
+              <a href="#" class="footer-link">{{ currentLanguage === 'zh' ? '知识产权保护' : 'Intellectual Property Protection' }}</a>
               <span class="separator">|</span>
-              <a href="#" class="footer-link">隐私声明</a>
+              <a href="#" class="footer-link">{{ currentLanguage === 'zh' ? '隐私声明' : 'Privacy Statement' }}</a>
               <span class="separator">|</span>
-              <a href="#" class="footer-link">ISO27001信息安全管理体系认证</a>
+              <a href="#" class="footer-link">ISO27001</a>
             </div>
             
             <!-- 联系信息 -->
             <div class="footer-contact">
-              <p>互联网违法和不良信息举报邮箱   LD@axonlabs.com</p>
+              <p>{{ currentLanguage === 'zh' ? '互联网违法和不良信息举报邮箱' : 'Report illegal and harmful information' }}   LD@axonlabs.com</p>
             </div>
             
             <!-- 版权信息 -->
             <div class="footer-copyright">
-              <p>COPYRIGHT © AXON LABS 羽山 ALL RIGHTS RESERVED    |    京公网安备 XXXXXX号    |    京ICP备XXXXX    |    营业执照</p>
+              <p>COPYRIGHT © AXON LABS {{ currentLanguage === 'zh' ? '羽山' : 'Yushan' }} ALL RIGHTS RESERVED    |    {{ currentLanguage === 'zh' ? '京公网安备 XXXXXX号    |    京ICP备XXXXX    |    营业执照' : 'Beijing Public Network Security No. XXXXXX    |    ICP No. XXXXXX    |    Business License' }}</p>
             </div>
           </div>
         </div>
@@ -111,6 +111,9 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import Navbar from './Navbar.vue'
+import { useLanguage } from '../composables/useLanguage'
+
+const { currentLanguage } = useLanguage()
 
 // 新闻数据
 const newsData = ref([
@@ -1422,14 +1425,13 @@ onUnmounted(() => {
   }
   
   .footer-copyright {
-    height: auto !important;
+    min-height: auto !important;
     justify-content: center;
   }
   
   .footer-copyright p {
     font-size: 12px !important;
     text-align: center !important;
-    white-space: normal !important;
   }
 }
 
@@ -1682,7 +1684,6 @@ onUnmounted(() => {
   margin: 0;
   line-height: 1.4;
   text-align: left; /* 左对齐 */
-  white-space: nowrap; /* 营业执照不换行 */
 }
 
 /* 页脚响应式设计 */

@@ -17,18 +17,17 @@
             <div class="contact-card">
               <div class="contact-info">
                 <h3 class="contact-title">BUSINESS COOPERATION <span class="contact-title-cn">| 商业合作</span></h3>
-                <p class="contact-desc">欢迎国内外知名IP及渠道方与我们联系，展开交流与探讨。</p>
+                <p class="contact-desc">{{ currentLanguage === 'zh' ? '欢迎国内外知名IP及渠道方与我们联系，展开交流与探讨。' : 'We welcome renowned IPs and channel partners from home and abroad to contact us for communication and discussion.' }}</p>
                 
                 <div class="contact-details">
-                  <p class="contact-item"><span class="label">联系人：</span>芮先生</p>
-                  <p class="contact-item"><span class="label">企业邮箱：</span>bd@axonlabs.com</p>
-                  <p class="contact-item"><span class="label">联系电话：</span>18301200484</p>
+                  <p class="contact-item"><span class="label">{{ currentLanguage === 'zh' ? '联系人：' : 'Contact: ' }}</span>{{ currentLanguage === 'zh' ? '芮先生' : 'Mr. Rui' }}</p>
+                  <p class="contact-item"><span class="label">{{ currentLanguage === 'zh' ? '企业邮箱：' : 'Email: ' }}</span>bd@axonlabs.com</p>
+                  <p class="contact-item"><span class="label">{{ currentLanguage === 'zh' ? '联系电话：' : 'Phone: ' }}</span>18301200484</p>
                 </div>
               </div>
               
               <div class="qr-code-box">
-                <img src="/qr.webp" alt="商务合作二维码" class="qr-image" />
-                <p class="qr-label">二维码</p>
+                <img src="/BizQR1.png" alt="商务合作二维码" class="qr-image" />
               </div>
             </div>
             
@@ -36,18 +35,17 @@
             <div class="contact-card">
               <div class="contact-info">
                 <h3 class="contact-title">BRAND COOPERATION <span class="contact-title-cn">| 媒体联系</span></h3>
-                <p class="contact-desc">欢迎国内外各类媒体与我们联系，展开交流与探讨。</p>
+                <p class="contact-desc">{{ currentLanguage === 'zh' ? '欢迎国内外各类媒体与我们联系，展开交流与探讨。' : 'We welcome media partners from home and abroad to contact us for communication and discussion.' }}</p>
                 
                 <div class="contact-details">
-                  <p class="contact-item"><span class="label">联系人：</span>陈小姐</p>
-                  <p class="contact-item"><span class="label">企业邮箱：</span>mrkt@axonlabs.com</p>
-                  <p class="contact-item"><span class="label">联系电话：</span>13986329545</p>
+                  <p class="contact-item"><span class="label">{{ currentLanguage === 'zh' ? '联系人：' : 'Contact: ' }}</span>{{ currentLanguage === 'zh' ? '陈小姐' : 'Ms. Chen' }}</p>
+                  <p class="contact-item"><span class="label">{{ currentLanguage === 'zh' ? '企业邮箱：' : 'Email: ' }}</span>mrkt@axonlabs.com</p>
+                  <p class="contact-item"><span class="label">{{ currentLanguage === 'zh' ? '联系电话：' : 'Phone: ' }}</span>13986329545</p>
                 </div>
               </div>
               
               <div class="qr-code-box">
-                <img src="/qr.webp" alt="品牌合作二维码" class="qr-image" />
-                <p class="qr-label">二维码</p>
+                <img src="/BizQR2.png" alt="品牌合作二维码" class="qr-image" />
               </div>
             </div>
             </div>
@@ -56,7 +54,7 @@
         
         <!-- 滚动指示器 -->
         <div class="scroll-indicator" @click="scrollToCobranding">
-          <img src="/arrow.webp" alt="向下箭头" class="scroll-arrow-img" />
+          <img src="/arrow.webp" :alt="currentLanguage === 'zh' ? '向下箭头' : 'Scroll Down'" class="scroll-arrow-img" />
         </div>
       </section>
 
@@ -111,7 +109,7 @@
             </div>
             </div>
 
-            <button class="learn-more-btn">Learn More</button>
+            <button class="learn-more-btn">{{ currentLanguage === 'zh' ? '了解更多' : 'Learn More' }}</button>
           </div>
         </div>
         
@@ -158,21 +156,21 @@
           <div class="footer-text-area">
             <!-- 页脚链接 -->
             <div class="footer-links">
-              <a href="#" class="footer-link">知识产权保护</a>
+              <a href="#" class="footer-link">{{ currentLanguage === 'zh' ? '知识产权保护' : 'Intellectual Property Protection' }}</a>
               <span class="separator">|</span>
-              <a href="#" class="footer-link">隐私声明</a>
+              <a href="#" class="footer-link">{{ currentLanguage === 'zh' ? '隐私声明' : 'Privacy Statement' }}</a>
               <span class="separator">|</span>
-              <a href="#" class="footer-link">ISO27001信息安全管理体系认证</a>
+              <a href="#" class="footer-link">ISO27001</a>
             </div>
             
             <!-- 联系信息 -->
             <div class="footer-contact">
-              <p>互联网违法和不良信息举报邮箱   LD@axonlabs.com</p>
+              <p>{{ currentLanguage === 'zh' ? '互联网违法和不良信息举报邮箱' : 'Report illegal and harmful information' }}   LD@axonlabs.com</p>
             </div>
             
             <!-- 版权信息 -->
             <div class="footer-copyright">
-              <p>COPYRIGHT © AXON LABS 羽山 ALL RIGHTS RESERVED    |    京公网安备 XXXXXX号    |    京ICP备XXXXX    |    营业执照</p>
+              <p>COPYRIGHT © AXON LABS {{ currentLanguage === 'zh' ? '羽山' : 'Yushan' }} ALL RIGHTS RESERVED    |    {{ currentLanguage === 'zh' ? '京公网安备 XXXXXX号    |    京ICP备XXXXX    |    营业执照' : 'Beijing Public Network Security No. XXXXXX    |    ICP No. XXXXXX    |    Business License' }}</p>
             </div>
           </div>
         </div>
@@ -184,6 +182,9 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import Navbar from './Navbar.vue'
+import { useLanguage } from '../composables/useLanguage'
+
+const { currentLanguage } = useLanguage()
 
 // 下拉菜单控制
 const isDropdownVisible = ref(false)
@@ -1025,7 +1026,7 @@ onUnmounted(() => {
 
 .footer-copyright {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  height: 24px;
+  min-height: 24px; /* 从固定高度改为最小高度，允许内容换行 */
   display: flex;
   align-items: center;
 }
@@ -1036,7 +1037,6 @@ onUnmounted(() => {
   margin: 0;
   line-height: 1.4;
   text-align: left;
-  white-space: nowrap;
 }
 
 /* 响应式设计 */

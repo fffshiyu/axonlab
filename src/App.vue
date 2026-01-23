@@ -7,6 +7,12 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import { preloadAllModels } from './utils/modelPreloader'
+import { useLanguage } from './composables/useLanguage'
+
+const { initLanguage } = useLanguage()
+
+// 初始化语言设置
+initLanguage()
 
 // 在应用启动时预加载3D模型
 onMounted(() => {

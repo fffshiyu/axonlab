@@ -24,27 +24,27 @@
             :class="{ active: currentView === 'front' }"
             @click="switchView('front')"
           >
-            <img src="/front-view-btn.webp" alt="正视图" class="view-btn-img" />
+            <img src="/front-view-btn.webp" :alt="currentLanguage === 'zh' ? '正视图' : 'Front View'" class="view-btn-img" />
           </button>
           <button 
             class="view-btn" 
             :class="{ active: currentView === 'side' }"
             @click="switchView('side')"
           >
-            <img src="/side-view-btn.webp" alt="侧视图" class="view-btn-img" />
+            <img src="/side-view-btn.webp" :alt="currentLanguage === 'zh' ? '侧视图' : 'Side View'" class="view-btn-img" />
           </button>
           <button 
             class="view-btn" 
             :class="{ active: currentView === 'top' }"
             @click="switchView('top')"
           >
-            <img src="/top-view-btn.webp" alt="俯视图" class="view-btn-img" />
+            <img src="/top-view-btn.webp" :alt="currentLanguage === 'zh' ? '俯视图' : 'Top View'" class="view-btn-img" />
           </button>
         </div>
 
         <!-- 向下箭头 -->
         <div class="scroll-indicator" @click="scrollToSecondProduct">
-          <img src="/arrow.webp" alt="向下箭头" class="scroll-arrow-img" />
+          <img src="/arrow.webp" :alt="currentLanguage === 'zh' ? '向下箭头' : 'Scroll Down'" class="scroll-arrow-img" />
         </div>
       </div>
     </section>
@@ -70,27 +70,27 @@
             :class="{ active: currentView2 === 'front' }"
             @click="switchView2('front')"
           >
-            <img src="/front-view-btn.webp" alt="正视图" class="view-btn-img" />
+            <img src="/front-view-btn.webp" :alt="currentLanguage === 'zh' ? '正视图' : 'Front View'" class="view-btn-img" />
           </button>
           <button 
             class="view-btn" 
             :class="{ active: currentView2 === 'side' }"
             @click="switchView2('side')"
           >
-            <img src="/side-view-btn.webp" alt="侧视图" class="view-btn-img" />
+            <img src="/side-view-btn.webp" :alt="currentLanguage === 'zh' ? '侧视图' : 'Side View'" class="view-btn-img" />
           </button>
           <button 
             class="view-btn" 
             :class="{ active: currentView2 === 'top' }"
             @click="switchView2('top')"
           >
-            <img src="/top-view-btn.webp" alt="俯视图" class="view-btn-img" />
+            <img src="/top-view-btn.webp" :alt="currentLanguage === 'zh' ? '俯视图' : 'Top View'" class="view-btn-img" />
           </button>
         </div>
 
         <!-- 向上箭头 -->
         <div class="scroll-indicator" @click="scrollToFirstProduct">
-          <img src="/arrow.webp" alt="向上箭头" class="scroll-arrow-img scroll-arrow-up" />
+          <img src="/arrow.webp" :alt="currentLanguage === 'zh' ? '向上箭头' : 'Scroll Up'" class="scroll-arrow-img scroll-arrow-up" />
         </div>
       </div>
     </section>
@@ -118,21 +118,21 @@
           <div class="footer-text-area">
             <!-- 链接行 -->
             <div class="footer-links">
-              <a href="#" class="footer-link">隐私政策</a>
+              <a href="#" class="footer-link">{{ currentLanguage === 'zh' ? '隐私政策' : 'Privacy Policy' }}</a>
               <span class="footer-divider">|</span>
-              <a href="#" class="footer-link">服务条款</a>
+              <a href="#" class="footer-link">{{ currentLanguage === 'zh' ? '服务条款' : 'Terms of Service' }}</a>
               <span class="footer-divider">|</span>
-              <a href="#" class="footer-link">联系我们</a>
+              <a href="#" class="footer-link">{{ currentLanguage === 'zh' ? '联系我们' : 'Contact Us' }}</a>
             </div>
             
             <!-- 联系信息行 -->
             <div class="footer-contact">
-              <span>客服热线：400-123-4567 | 邮箱：info@axonlabs.com</span>
+              <span>{{ currentLanguage === 'zh' ? '客服热线：400-123-4567 | 邮箱：' : 'Customer Service: 400-123-4567 | Email: ' }}info@axonlabs.com</span>
             </div>
             
             <!-- 版权信息行 -->
             <div class="footer-copyright">
-              <span>© 2024 北京玄圃科技有限公司 版权所有 | 京ICP备2024000000号</span>
+              <span>© 2024 {{ currentLanguage === 'zh' ? '北京玄圃科技有限公司 版权所有 | 京ICP备2024000000号' : 'Beijing Xuanpu Technology Co., Ltd. All Rights Reserved | ICP No. 2024000000' }}</span>
             </div>
           </div>
         </div>
@@ -144,6 +144,9 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import Navbar from './Navbar.vue'
+import { useLanguage } from '../composables/useLanguage'
+
+const { currentLanguage } = useLanguage()
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
