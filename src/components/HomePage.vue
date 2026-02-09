@@ -1179,16 +1179,17 @@ onUnmounted(() => {
   margin-bottom: 40px; /* 从76px减少到40px */
 }
 
-/* 时间线 */
+/* 时间线 - 任意尺寸下保持悬停/点击展开、覆盖层、变暗交互一致 */
 .timeline {
   display: flex;
-  justify-content: center; /* 居中对齐 */
+  justify-content: center;
   gap: 0;
-  margin-top: 0; /* 移除额外间距，使用subtitle的margin-bottom控制 */
-  max-width: 1464px; /* 6个位置 * 244px = 1464px，但只有5个色块（4个事件+1个固定），右侧留白一个位置 */
+  margin-top: 0;
+  max-width: 1464px;
   margin-left: auto;
   margin-right: auto;
-  overflow: visible; /* 展开覆盖层可伸出 */
+  overflow: visible;
+  touch-action: manipulation; /* 触屏与桌面一致，减少点击延迟 */
 }
 
 
@@ -1459,19 +1460,22 @@ onUnmounted(() => {
   }
 }
 
-/* 1220 宽下大事件时间线收窄为 1090 */
+/* 1220 宽下大事件时间线收窄为 1090，交互与桌面一致 */
 @media (max-width: 1220px) {
   .timeline {
     max-width: 1090px;
+    overflow: visible;
   }
   
   .timeline-item.card {
-    flex: 0 0 182px; /* 1090/6≈182 */
+    flex: 0 0 182px;
+    overflow: visible;
+    cursor: pointer;
   }
   
   .timeline-bar {
     width: 182px;
-    height: 298px; /* 400*1090/1464 等比 */
+    height: 298px;
   }
   
   .timeline-item-fixed {
@@ -1544,6 +1548,7 @@ onUnmounted(() => {
   
   .timeline {
     max-width: 732px; /* 1220px * 0.6 */
+    overflow: visible;
   }
   
   .timeline-bar {
@@ -1551,7 +1556,18 @@ onUnmounted(() => {
     width: 146px; /* 244px * 0.6 */
   }
   
-  /* 移除交互样式，只保留基础时间线样式 */
+  .timeline-item {
+    overflow: visible;
+    cursor: pointer;
+  }
+  
+  .timeline-expanded-overlay {
+    height: 240px;
+  }
+  
+  .expanded-image {
+    height: 240px;
+  }
   
   .history-content {
     padding-top: 60px; /* 100px * 0.6 */
@@ -1716,30 +1732,34 @@ onUnmounted(() => {
   }
 
   .timeline {
-    flex-direction: row; /* 横向排列 */
-    gap: 0; /* 无间距，紧密相连 */
-    max-width: 100%; /* 使用全宽 */
-    padding: 0 1rem; /* 左右内边距 */
-    justify-content: center; /* 居中对齐 */
-    flex-wrap: nowrap; /* 不换行 */
+    flex-direction: row;
+    gap: 0;
+    max-width: 100%;
+    padding: 0 1rem;
+    justify-content: center;
+    flex-wrap: nowrap;
+    overflow: visible;
+    touch-action: manipulation; /* 减少触屏点击延迟，保持交互一致 */
   }
   
   .timeline-bar {
-    height: 100px; /* 紧凑高度 */
-    width: 58px; /* 紧凑宽度，5个色块约290px */
-    flex-shrink: 0; /* 防止压缩 */
+    height: 100px;
+    width: 58px;
+    flex-shrink: 0;
   }
   
   .timeline-item {
     display: flex;
-    flex-direction: column; /* 垂直排列：色块+日期 */
+    flex-direction: column;
     align-items: center;
-    flex-shrink: 0; /* 防止压缩 */
+    flex-shrink: 0;
     position: relative;
+    overflow: visible;
+    cursor: pointer;
   }
   
   .timeline-item-fixed {
-    flex: 0 0 58px; /* 固定宽度，与timeline-bar宽度一致 */
+    flex: 0 0 58px;
   }
   
   .constantly-updating-text {
@@ -1762,15 +1782,15 @@ onUnmounted(() => {
     white-space: nowrap; /* 不换行 */
   }
   
-  /* 移动端覆盖层 - 完全复刻桌面端，覆盖3个格子 */
+  /* 移动端覆盖层 - 与桌面端一致：覆盖3格、隐藏/变暗逻辑不变 */
   .timeline-expanded-overlay {
     position: absolute;
     top: 0;
-    width: 300%; /* 覆盖3个格子的宽度 */
-    height: 100px; /* 与色块高度一致 */
+    width: 300%;
+    height: 100px;
     z-index: 10;
     animation: expandAnimation 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    pointer-events: none; /* 不阻挡下面元素的点击 */
+    pointer-events: none;
     transform-origin: center center;
   }
   
@@ -1856,25 +1876,30 @@ onUnmounted(() => {
   /* 页脚响应式 */
   
   .timeline {
-    max-width: 915px; /* 1220px * 0.75 */
+    max-width: 915px;
+    overflow: visible;
   }
   
   .timeline-bar {
-    height: 300px; /* 400px * 0.75 */
-    width: 183px; /* 244px * 0.75 */
+    height: 300px;
+    width: 183px;
   }
   
-  /* 移除交互样式，只保留基础时间线样式 */
+  .timeline-expanded-overlay {
+    height: 300px;
+  }
+  
+  .expanded-image {
+    height: 300px;
+  }
   
   .history-content {
-    padding-top: 75px; /* 100px * 0.75 */
+    padding-top: 75px;
   }
   
   .history-content .section-subtitle {
-    margin-bottom: 46px; /* 76px * 0.6 */
+    margin-bottom: 46px;
   }
-  
-
 }
 
 @media (max-width: 480px) {
@@ -1994,30 +2019,34 @@ onUnmounted(() => {
   }
   
   .timeline {
-    flex-direction: row; /* 横向排列 */
-    gap: 0; /* 无间距，紧密相连 */
-    max-width: 100%; /* 使用全宽 */
-    padding: 0 0.5rem; /* 减小左右内边距 */
-    justify-content: center; /* 居中对齐 */
-    flex-wrap: nowrap; /* 不换行 */
+    flex-direction: row;
+    gap: 0;
+    max-width: 100%;
+    padding: 0 0.5rem;
+    justify-content: center;
+    flex-wrap: nowrap;
+    overflow: visible;
+    touch-action: manipulation;
   }
   
   .timeline-bar {
-    height: 80px; /* 更紧凑高度 */
-    width: 50px; /* 更紧凑宽度，5个色块约250px */
-    flex-shrink: 0; /* 防止压缩 */
+    height: 80px;
+    width: 50px;
+    flex-shrink: 0;
   }
   
   .timeline-item {
     display: flex;
-    flex-direction: column; /* 垂直排列：色块+日期 */
+    flex-direction: column;
     align-items: center;
-    flex-shrink: 0; /* 防止压缩 */
+    flex-shrink: 0;
     position: relative;
+    overflow: visible;
+    cursor: pointer;
   }
   
   .timeline-item-fixed {
-    flex: 0 0 50px; /* 固定宽度，与timeline-bar宽度一致 */
+    flex: 0 0 50px;
   }
   
   .constantly-updating-text {

@@ -43,7 +43,7 @@
           
           <!-- 版权信息 -->
           <div class="footer-copyright">
-            <p>COPYRIGHT © AXON LABS {{ currentLanguage === 'zh' ? '羽山' : 'Yushan' }} ALL RIGHTS RESERVED    |    <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer" class="footer-link">{{ currentLanguage === 'zh' ? '京ICP备2025105570号' : 'ICP No. 2025105570' }}</a>    |    <a href="/business-license.pdf" target="_blank" class="footer-link">{{ currentLanguage === 'zh' ? '营业执照' : 'Business License' }}</a></p>
+            <p>COPYRIGHT © AXON LABS {{ currentLanguage === 'zh' ? '羽山' : 'Yushan' }} ALL RIGHTS RESERVED    |    <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer" class="footer-link">{{ currentLanguage === 'zh' ? '京ICP备2025105570号' : 'ICP No. 2025105570' }}</a>    |    <a href="/北京玄圃执照-盖章版.pdf" target="_blank" rel="noopener noreferrer" class="footer-link">{{ currentLanguage === 'zh' ? '营业执照' : 'Business License' }}</a></p>
           </div>
         </div>
       </div>
