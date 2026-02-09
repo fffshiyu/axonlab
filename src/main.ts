@@ -25,6 +25,15 @@ const router = createRouter({
   routes
 })
 
+// 加入我们暂时锁掉，待3月招募后开放；直接访问 /join 重定向到首页
+router.beforeEach((to, _from, next) => {
+  if (to.path === '/join') {
+    next('/home')
+    return
+  }
+  next()
+})
+
 const app = createApp(App)
 app.use(router)
 app.mount('#app')

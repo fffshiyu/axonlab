@@ -25,63 +25,14 @@
     </main>
 
     <!-- 页脚 -->
-    <footer class="footer">
-      <div class="footer-container">
-        <div class="footer-logo">
-          <img src="/logo.svg" alt="AXON LABS" class="footer-logo-img" />
-        </div>
-        
-        <div class="footer-content">
-          <div class="social-icons">
-            <a href="#" class="social-icon">
-              <img src="/logo/weibo.webp" alt="微博" />
-            </a>
-            <a href="#" class="social-icon">
-              <img src="/bilibil.png" alt="哔哩哔哩" />
-            </a>
-            <a href="#" class="social-icon">
-              <img src="/wechat.png" alt="微信" />
-            </a>
-            <a href="#" class="social-icon">
-              <img src="/redbook.png" alt="小红书" />
-            </a>
-            <a href="#" class="social-icon">
-              <img src="/ins.png" alt="Instagram" />
-            </a>
-            <a href="#" class="social-icon">
-              <img src="/facebook.png" alt="Facebook" />
-            </a>
-            <a href="#" class="social-icon">
-              <img src="/youtube.png" alt="YouTube" />
-            </a>
-          </div>
-          
-          <div class="footer-text-area">
-            <div class="footer-links">
-              <a href="#" class="footer-link">{{ currentLanguage === 'zh' ? '知识产权保护' : 'Intellectual Property Protection' }}</a>
-              <span class="separator">|</span>
-              <a href="#" class="footer-link">{{ currentLanguage === 'zh' ? '隐私声明' : 'Privacy Statement' }}</a>
-              <span class="separator">|</span>
-              <a href="#" class="footer-link">ISO27001</a>
-            </div>
-            
-            <div class="footer-contact">
-              <p>{{ currentLanguage === 'zh' ? '互联网违法和不良信息举报邮箱' : 'Report illegal and harmful information' }}   LD@axonlabs.com</p>
-            </div>
-            
-            <div class="footer-copyright">
-              <p>COPYRIGHT © AXON LABS {{ currentLanguage === 'zh' ? '羽山' : 'Yushan' }} ALL RIGHTS RESERVED    |    {{ currentLanguage === 'zh' ? '京公网安备 XXXXXX号    |    京ICP备XXXXX    |    营业执照' : 'Beijing Public Network Security No. XXXXXX    |    ICP No. XXXXXX    |    Business License' }}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </footer>
+    <Footer />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import Navbar from './Navbar.vue'
+import Footer from './Footer.vue'
 import { useLanguage } from '../composables/useLanguage'
 
 const { currentLanguage } = useLanguage()
@@ -580,8 +531,8 @@ onUnmounted(() => {
 /* 页脚样式 */
 .footer {
   background: #000000;
-  height: 200px;
-  padding: 40px 0;
+  height: 160px; /* 从200px缩小到160px (80%) */
+  padding: 30px 0; /* 从40px缩小到30px */
   color: #ffffff;
   box-sizing: border-box;
 }
@@ -597,12 +548,13 @@ onUnmounted(() => {
 .footer-logo {
   position: absolute;
   left: 200px;
-  top: 40px;
+  top: 30px; /* 从40px缩小到30px */
 }
 
 .footer-logo-img {
-  width: 250px;
+  width: 200px; /* 从250px缩小到200px (80%) */
   height: auto;
+  filter: brightness(0) invert(1);
 }
 
 /* 页脚主要内容区域 - 居中左对齐 */
@@ -611,17 +563,22 @@ onUnmounted(() => {
   margin: 0 auto;
   text-align: left;
   padding-left: 2rem;
-  margin-left: 550px;
+  margin-left: 480px; /* logo位置200px + logo宽度200px + 间距80px = 480px */
   display: flex;
   flex-direction: column;
+  position: relative;
+  overflow: visible; /* 确保二维码不会被裁剪 */
+  z-index: 1;
 }
 
 /* 社交媒体图标 */
 .social-icons {
   display: flex;
   justify-content: flex-start;
-  gap: 1rem;
-  margin-bottom: 15px;
+  gap: 0.8rem; /* 从1rem缩小到0.8rem */
+  margin-bottom: 12px; /* 从15px缩小到12px */
+  position: relative; /* 为二维码定位提供参考 */
+  z-index: 1;
 }
 
 .social-icon {

@@ -10,16 +10,18 @@ export const useLanguage = () => {
     localStorage.setItem('language', lang)
   }
 
+  // 暂时锁掉 EN，待文案优化后开放
   const toggleLanguage = () => {
-    currentLanguage.value = currentLanguage.value === 'zh' ? 'en' : 'zh'
-    localStorage.setItem('language', currentLanguage.value)
+    // 仅允许 CN，不切换到 EN
+    if (currentLanguage.value === 'zh') return
+    currentLanguage.value = 'zh'
+    localStorage.setItem('language', 'zh')
   }
 
   const initLanguage = () => {
-    const savedLang = localStorage.getItem('language') as Language | null
-    if (savedLang && (savedLang === 'zh' || savedLang === 'en')) {
-      currentLanguage.value = savedLang
-    }
+    // 暂时强制中文，待 EN 开放后恢复：localStorage 读取
+    currentLanguage.value = 'zh'
+    localStorage.setItem('language', 'zh')
   }
 
   return {

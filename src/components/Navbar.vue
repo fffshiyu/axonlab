@@ -29,15 +29,17 @@
         >{{ currentLanguage === 'zh' ? '产品系列' : 'Products' }}</router-link>
         
         <div class="nav-dropdown" @mouseenter="showDropdown" @mouseleave="hideDropdown">
-          <a href="#" class="nav-link" :class="{ 'active': isDropdownVisible }">{{ currentLanguage === 'zh' ? '线上商城' : 'Shop' }}</a>
+          <a href="#" class="nav-link shop-link" :class="{ 'active': isDropdownVisible }">{{ currentLanguage === 'zh' ? '线上商城' : 'Shop' }}</a>
           <div class="dropdown-menu" :class="{ 'show': isDropdownVisible }">
             <div class="dropdown-item" @click="showQRCode('tmall')">{{ currentLanguage === 'zh' ? '天猫商城' : 'Tmall' }}</div>
             <div class="dropdown-item" @click="showQRCode('douyin')">{{ currentLanguage === 'zh' ? '抖音商城' : 'Douyin' }}</div>
             <div class="dropdown-item" @click="showQRCode('jd')">{{ currentLanguage === 'zh' ? '京东商城' : 'JD.com' }}</div>
             <div class="dropdown-item" @click="showQRCode('xiaochengxu')">{{ currentLanguage === 'zh' ? '小程序官方商城' : 'Mini Program' }}</div>
+            <div class="dropdown-item" @click="showQRCode('xiaohongshu')">{{ currentLanguage === 'zh' ? '小红书周边店' : 'Xiaohongshu' }}</div>
             <!-- 二维码显示区域 -->
               <div class="qr-code-container" :class="{ 'show': isQRCodeVisible }">
               <img v-if="currentQRImage" :src="currentQRImage" :alt="currentQRTitle" class="qr-code-image" />
+              <div v-else class="qr-code-placeholder">{{ currentLanguage === 'zh' ? (currentQRTitle.includes('天猫') ? '二维码待核实' : currentQRTitle.includes('小程序') || currentQRTitle.includes('小红书') ? '二维码待给' : '二维码') : 'QR Code' }}</div>
               <div class="qr-code-title">{{ currentQRTitle }}</div>
               <a v-if="currentQRLink" :href="currentQRLink" target="_blank" rel="noopener noreferrer" class="qr-code-link">{{ currentLanguage === 'zh' ? '点击进入' : 'Enter' }}</a>
             </div>
@@ -50,11 +52,11 @@
           :class="{ 'active': activePage === 'cooperation' }"
         >{{ currentLanguage === 'zh' ? '合作' : 'Cooperation' }}</router-link>
         
-        <router-link 
-          to="/join" 
-          class="nav-link" 
-          :class="{ 'active': activePage === 'join' }"
-        >{{ currentLanguage === 'zh' ? '加入我们' : 'Join Us' }}</router-link>
+        <!-- 加入我们暂时锁掉，待3月招募后开放 -->
+        <span 
+          class="nav-link nav-link-locked" 
+          title="敬请期待，3月开放"
+        >加入我们</span>
       </div>
       
       <!-- 移动端菜单按钮 -->
@@ -65,9 +67,10 @@
       </div>
       
       <div class="nav-right">
-        <span class="nav-language" @click="toggleLanguage" style="cursor: pointer;">
-          <span :class="{ 'active-lang': currentLanguage === 'zh' }">CN</span> | 
-          <span :class="{ 'active-lang': currentLanguage === 'en' }">EN</span>
+        <!-- EN 暂时锁掉，待文案优化后开放 -->
+        <span class="nav-language nav-language-locked">
+          <span class="active-lang">CN</span><span class="lang-sep"> | </span>
+          <span class="lang-disabled">EN</span>
         </span>
       </div>
     </div>
@@ -102,7 +105,7 @@
             <div class="mobile-dropdown-item" @click="toggleMobileQRCode('tmall')">
               <span>{{ currentLanguage === 'zh' ? '天猫商城' : 'Tmall' }}</span>
               <div class="mobile-qr-code" :class="{ 'show': mobileQRCode === 'tmall' }">
-                <img src="/天猫qr.png" :alt="currentLanguage === 'zh' ? '天猫商城' : 'Tmall'" class="mobile-qr-image" />
+                <div class="mobile-qr-placeholder">{{ currentLanguage === 'zh' ? '二维码待核实' : 'QR Code Pending' }}</div>
                 <div class="mobile-qr-title">{{ currentLanguage === 'zh' ? '天猫商城' : 'Tmall' }}</div>
                 <a href="https://yushanznjj.world.tmall.com/shop/view_shop.html" target="_blank" rel="noopener noreferrer" class="mobile-qr-link" @click.stop>{{ currentLanguage === 'zh' ? '点击进入' : 'Enter' }}</a>
               </div>
@@ -125,8 +128,15 @@
             <div class="mobile-dropdown-item" @click="toggleMobileQRCode('xiaochengxu')">
               <span>{{ currentLanguage === 'zh' ? '小程序官方商城' : 'Mini Program' }}</span>
               <div class="mobile-qr-code" :class="{ 'show': mobileQRCode === 'xiaochengxu' }">
-                <div class="mobile-qr-placeholder">{{ currentLanguage === 'zh' ? '二维码' : 'QR Code' }}</div>
+                <div class="mobile-qr-placeholder">{{ currentLanguage === 'zh' ? '二维码待给' : 'QR Code Pending' }}</div>
                 <div class="mobile-qr-title">{{ currentLanguage === 'zh' ? '小程序官方商城' : 'Mini Program' }}</div>
+              </div>
+            </div>
+            <div class="mobile-dropdown-item" @click="toggleMobileQRCode('xiaohongshu')">
+              <span>{{ currentLanguage === 'zh' ? '小红书周边店' : 'Xiaohongshu' }}</span>
+              <div class="mobile-qr-code" :class="{ 'show': mobileQRCode === 'xiaohongshu' }">
+                <div class="mobile-qr-placeholder">{{ currentLanguage === 'zh' ? '二维码待给' : 'QR Code Pending' }}</div>
+                <div class="mobile-qr-title">{{ currentLanguage === 'zh' ? '小红书周边店' : 'Xiaohongshu' }}</div>
               </div>
             </div>
           </div>
@@ -139,12 +149,11 @@
           @click="closeMobileMenu"
         >{{ currentLanguage === 'zh' ? '合作' : 'Cooperation' }}</router-link>
         
-        <router-link 
-          to="/join" 
-          class="mobile-nav-link" 
-          :class="{ 'active': activePage === 'join' }"
-          @click="closeMobileMenu"
-        >{{ currentLanguage === 'zh' ? '加入我们' : 'Join Us' }}</router-link>
+        <!-- 加入我们暂时锁掉，待3月招募后开放 -->
+        <span 
+          class="mobile-nav-link mobile-nav-link-locked"
+          title="敬请期待，3月开放"
+        >加入我们</span>
       </div>
     </div>
   </nav>
@@ -190,26 +199,30 @@ const showQRCode = (platform: string) => {
     tmall: '天猫商城',
     douyin: '抖音商城',
     jd: '京东商城',
-    xiaochengxu: '小程序官方商城'
+    xiaochengxu: '小程序官方商城',
+    xiaohongshu: '小红书周边店'
   } : {
     tmall: 'Tmall',
     douyin: 'Douyin',
     jd: 'JD.com',
-    xiaochengxu: 'Mini Program'
+    xiaochengxu: 'Mini Program',
+    xiaohongshu: 'Xiaohongshu'
   }
   
   const images = {
-    tmall: '/天猫qr.png',
+    tmall: '', // 待核实
     douyin: '/抖音qr.jpg',
     jd: '/京东qr.jpg',
-    xiaochengxu: ''
+    xiaochengxu: '', // 待给
+    xiaohongshu: '' // 待给
   }
   
   const links = {
     tmall: 'https://yushanznjj.world.tmall.com/shop/view_shop.html',
     douyin: '',
     jd: 'https://mall.jd.com/index-157316165.html?from=pc',
-    xiaochengxu: ''
+    xiaochengxu: '', // 待给
+    xiaohongshu: '' // 待给
   }
   
   currentQRTitle.value = titles[platform as keyof typeof titles] || ''
@@ -360,8 +373,9 @@ onUnmounted(() => {
 
 .logo {
   position: fixed; /* 改为fixed，相对于视口定位 */
-  left: 200px;
-  top: 25px; /* 调整垂直位置使其在导航栏中居中 */
+  left: 142px; /* 与右侧CN|EN按钮边距一致 */
+  top: 50%; /* 垂直居中 */
+  transform: translateY(-50%); /* 垂直居中 */
   z-index: 1001; /* 确保在导航栏之上 */
 }
 
@@ -405,6 +419,41 @@ onUnmounted(() => {
   width: 100%;
   height: 2px;
   background-color: #01CE7E;
+}
+
+/* 移除"线上商城"标签的下划线 */
+.nav-dropdown .nav-link.active::after {
+  display: none;
+}
+
+/* 加入我们暂时锁掉 */
+.nav-link-locked {
+  cursor: default;
+  color: #666666 !important;
+  pointer-events: none;
+}
+.nav-link-locked:hover {
+  color: #666666 !important;
+}
+
+.mobile-nav-link-locked {
+  cursor: default;
+  color: #666666 !important;
+  pointer-events: none;
+}
+.mobile-nav-link-locked:hover {
+  color: #666666 !important;
+}
+
+/* EN 暂时锁掉，仅展示 CN */
+.nav-language-locked {
+  cursor: default;
+}
+.lang-disabled {
+  color: #666666;
+}
+.lang-sep {
+  color: #666666;
 }
 
 /* 下拉菜单样式 */
@@ -490,6 +539,23 @@ onUnmounted(() => {
   border-radius: 6px;
   object-fit: contain;
   margin-bottom: 0.5rem;
+}
+
+.qr-code-placeholder {
+  width: 100px;
+  height: 100px;
+  background: #666666;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-family: 'MiSans', 'Noto Sans SC', sans-serif;
+  font-size: 10px;
+  margin-bottom: 0.5rem;
+  text-align: center;
+  padding: 0.5rem;
+  line-height: 1.2;
 }
 
 .qr-code-title {
@@ -683,6 +749,23 @@ onUnmounted(() => {
   margin-bottom: 0.5rem;
 }
 
+.mobile-qr-placeholder {
+  width: 120px;
+  height: 120px;
+  background: #666666;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-family: 'MiSans', 'Noto Sans SC', sans-serif;
+  font-size: 11px;
+  margin-bottom: 0.5rem;
+  text-align: center;
+  padding: 0.5rem;
+  line-height: 1.2;
+}
+
 .mobile-qr-title {
   color: #ffffff;
   font-family: 'MiSans', 'Noto Sans SC', sans-serif;
@@ -716,8 +799,9 @@ onUnmounted(() => {
   }
   
   .logo {
-    left: 150px;
-    top: 18.75px; /* 75px导航栏高度的中心 */
+    left: 107px; /* 与右侧CN|EN按钮边距一致 */
+    top: 50%; /* 垂直居中 */
+    transform: translateY(-50%); /* 垂直居中 */
   }
   
   .logo-img {
@@ -735,6 +819,10 @@ onUnmounted(() => {
 
 /* 添加中间断点避免重叠 */
 @media (max-width: 1200px) {
+  .logo {
+    left: 80px; /* 与右侧CN|EN按钮边距一致 */
+  }
+  
   .nav-links {
     left: 380px;
     gap: 1.5rem;
@@ -755,8 +843,9 @@ onUnmounted(() => {
   }
   
   .logo {
-    left: 120px;
-    top: 15px; /* 60px导航栏高度的中心 */
+    left: 70px; /* 与右侧CN|EN按钮边距一致 */
+    top: 50%; /* 垂直居中 */
+    transform: translateY(-50%); /* 垂直居中 */
   }
   
   .logo-img {
@@ -795,9 +884,11 @@ onUnmounted(() => {
   }
   
   .logo {
-    left: 20px;
+    left: 20px; /* 与右侧CN|EN按钮边距一致 */
+    top: 50%; /* 垂直居中 */
+    transform: translateY(-50%); /* 垂直居中 */
     display: flex;
-    align-items: flex-end; /* 底部对齐 */
+    align-items: center; /* 垂直居中 */
   }
   
   .logo-img {
@@ -834,9 +925,11 @@ onUnmounted(() => {
   }
   
   .logo {
-    left: 15px;
+    left: 15px; /* 与右侧CN|EN按钮边距一致 */
+    top: 50%; /* 垂直居中 */
+    transform: translateY(-50%); /* 垂直居中 */
     display: flex;
-    align-items: flex-end; /* 底部对齐 */
+    align-items: center; /* 垂直居中 */
   }
   
   .logo-img {

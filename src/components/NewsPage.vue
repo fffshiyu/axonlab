@@ -47,70 +47,14 @@
     </section>
 
     <!-- 页脚 -->
-    <footer class="footer">
-      <div class="footer-container">
-        <!-- AXON LABS Logo - 左侧200px -->
-        <div class="footer-logo">
-          <img src="/logo.svg" alt="AXON LABS" class="footer-logo-img" />
-        </div>
-        
-        <!-- 页脚主要内容 - 居中左对齐 -->
-        <div class="footer-content">
-          <!-- 社交媒体图标 -->
-          <div class="social-icons">
-            <a href="#" class="social-icon">
-              <img src="/logo/weibo.webp" alt="微博" />
-            </a>
-            <a href="#" class="social-icon">
-              <img src="/bilibil.png" alt="哔哩哔哩" />
-            </a>
-            <a href="#" class="social-icon">
-              <img src="/wechat.png" alt="微信" />
-            </a>
-            <a href="#" class="social-icon">
-              <img src="/redbook.png" alt="小红书" />
-            </a>
-            <a href="#" class="social-icon">
-              <img src="/ins.png" alt="Instagram" />
-            </a>
-            <a href="#" class="social-icon">
-              <img src="/facebook.png" alt="Facebook" />
-            </a>
-            <a href="#" class="social-icon">
-              <img src="/youtube.png" alt="YouTube" />
-            </a>
-          </div>
-          
-          <!-- 页脚文字区域 -->
-          <div class="footer-text-area">
-            <!-- 页脚链接 -->
-            <div class="footer-links">
-              <a href="#" class="footer-link">{{ currentLanguage === 'zh' ? '知识产权保护' : 'Intellectual Property Protection' }}</a>
-              <span class="separator">|</span>
-              <a href="#" class="footer-link">{{ currentLanguage === 'zh' ? '隐私声明' : 'Privacy Statement' }}</a>
-              <span class="separator">|</span>
-              <a href="#" class="footer-link">ISO27001</a>
-            </div>
-            
-            <!-- 联系信息 -->
-            <div class="footer-contact">
-              <p>{{ currentLanguage === 'zh' ? '互联网违法和不良信息举报邮箱' : 'Report illegal and harmful information' }}   LD@axonlabs.com</p>
-            </div>
-            
-            <!-- 版权信息 -->
-            <div class="footer-copyright">
-              <p>COPYRIGHT © AXON LABS {{ currentLanguage === 'zh' ? '羽山' : 'Yushan' }} ALL RIGHTS RESERVED    |    {{ currentLanguage === 'zh' ? '京公网安备 XXXXXX号    |    京ICP备XXXXX    |    营业执照' : 'Beijing Public Network Security No. XXXXXX    |    ICP No. XXXXXX    |    Business License' }}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </footer>
+    <Footer />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import Navbar from './Navbar.vue'
+import Footer from './Footer.vue'
 import { useLanguage } from '../composables/useLanguage'
 
 const { currentLanguage } = useLanguage()
@@ -1559,14 +1503,14 @@ onUnmounted(() => {
 /* 页脚样式 */
 .footer {
   background: #000000;
-  height: 200px; /* 1920*1080基准高度200px */
-  padding: 40px 0; /* 上下各40px内边距 */
+  height: 160px; /* 从200px缩小到160px (80%) */
+  padding: 30px 0; /* 从40px缩小到30px */
   color: #ffffff;
   box-sizing: border-box;
 }
 
 .footer-container {
-  max-width: 1920px; /* 使用1920px基准宽度 */
+  max-width: 1920px;
   margin: 0 auto;
   padding: 0;
   position: relative;
@@ -1575,12 +1519,12 @@ onUnmounted(() => {
 /* AXON LABS Logo - 左侧200px */
 .footer-logo {
   position: absolute;
-  left: 200px; /* 距离左侧200px，1920*1080基准 */
-  top: 40px; /* 距离顶部40px */
+  left: 200px;
+  top: 30px; /* 从40px缩小到30px */
 }
 
 .footer-logo-img {
-  width: 250px; /* 1920*1080基准宽度 */
+  width: 200px; /* 从250px缩小到200px (80%) */
   height: auto;
   filter: brightness(0) invert(1);
 }
@@ -1589,19 +1533,24 @@ onUnmounted(() => {
 .footer-content {
   max-width: 800px;
   margin: 0 auto;
-  text-align: left; /* 左对齐 */
+  text-align: left;
   padding-left: 2rem;
-  margin-left: 550px; /* logo位置200px + logo宽度250px + 间距100px = 550px */
+  margin-left: 480px; /* logo位置200px + logo宽度200px + 间距80px = 480px */
   display: flex;
   flex-direction: column;
+  position: relative;
+  overflow: visible; /* 确保二维码不会被裁剪 */
+  z-index: 1;
 }
 
 /* 社交媒体图标 */
 .social-icons {
   display: flex;
-  justify-content: flex-start; /* 左对齐 */
-  gap: 1rem;
-  margin-bottom: 15px; /* 图标距离下面文字15px，1920*1080基准 */
+  justify-content: flex-start;
+  gap: 0.8rem; /* 从1rem缩小到0.8rem */
+  margin-bottom: 12px; /* 从15px缩小到12px */
+  position: relative; /* 为二维码定位提供参考 */
+  z-index: 1;
 }
 
 .social-icon {

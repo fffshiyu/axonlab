@@ -118,70 +118,14 @@
     </main>
 
     <!-- 页脚 -->
-    <footer class="footer" id="footer">
-      <div class="footer-container">
-        <!-- AXON LABS Logo -->
-        <div class="footer-logo">
-          <img src="/logo.svg" alt="AXON LABS" class="footer-logo-img" />
-        </div>
-        
-        <!-- 页脚主要内容 -->
-        <div class="footer-content">
-          <!-- 社交媒体图标 -->
-          <div class="social-icons">
-            <a href="#" class="social-icon">
-              <img src="/logo/weibo.webp" alt="微博" />
-            </a>
-            <a href="#" class="social-icon">
-              <img src="/bilibil.png" alt="哔哩哔哩" />
-            </a>
-            <a href="#" class="social-icon">
-              <img src="/wechat.png" alt="微信" />
-            </a>
-            <a href="#" class="social-icon">
-              <img src="/redbook.png" alt="小红书" />
-            </a>
-            <a href="#" class="social-icon">
-              <img src="/ins.png" alt="Instagram" />
-            </a>
-            <a href="#" class="social-icon">
-              <img src="/facebook.png" alt="Facebook" />
-            </a>
-            <a href="#" class="social-icon">
-              <img src="/youtube.png" alt="YouTube" />
-            </a>
-          </div>
-          
-          <!-- 页脚文字区域 -->
-          <div class="footer-text-area">
-            <!-- 页脚链接 -->
-            <div class="footer-links">
-              <a href="#" class="footer-link">{{ currentLanguage === 'zh' ? '知识产权保护' : 'Intellectual Property Protection' }}</a>
-              <span class="separator">|</span>
-              <a href="#" class="footer-link">{{ currentLanguage === 'zh' ? '隐私声明' : 'Privacy Statement' }}</a>
-              <span class="separator">|</span>
-              <a href="#" class="footer-link">ISO27001</a>
-            </div>
-            
-            <!-- 联系信息 -->
-            <div class="footer-contact">
-              <p>{{ currentLanguage === 'zh' ? '互联网违法和不良信息举报邮箱' : 'Report illegal and harmful information' }}   LD@axonlabs.com</p>
-            </div>
-            
-            <!-- 版权信息 -->
-            <div class="footer-copyright">
-              <p>COPYRIGHT © AXON LABS {{ currentLanguage === 'zh' ? '羽山' : 'Yushan' }} ALL RIGHTS RESERVED    |    {{ currentLanguage === 'zh' ? '京公网安备 XXXXXX号    |    京ICP备XXXXX    |    营业执照' : 'Beijing Public Network Security No. XXXXXX    |    ICP No. XXXXXX    |    Business License' }}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </footer>
+    <Footer />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import Navbar from './Navbar.vue'
+import Footer from './Footer.vue'
 import { useLanguage } from '../composables/useLanguage'
 
 const { currentLanguage } = useLanguage()
@@ -698,8 +642,8 @@ onUnmounted(() => {
 .contacts-grid {
   display: grid;
   grid-template-columns: 1fr;
-  /* 进一步收紧两个块之间的间距 */
-  gap: clamp(6px, 1vw, 12px);
+  /* 增加两个块之间的间距 */
+  gap: clamp(32px, 4vw, 64px);
   max-width: 820px; /* 向中间靠拢 */
   margin: 0 auto;
 }
@@ -917,127 +861,6 @@ onUnmounted(() => {
   }
 }
 
-/* 页脚 */
-.footer {
-  background: #000000;
-  height: 200px;
-  padding: 40px 0;
-  color: #ffffff;
-  box-sizing: border-box;
-}
-
-.footer-container {
-  max-width: 1920px;
-  margin: 0 auto;
-  padding: 0;
-  position: relative;
-}
-
-.footer-logo {
-  position: absolute;
-  left: 200px;
-  top: 40px;
-}
-
-.footer-logo-img {
-  width: 250px;
-  height: auto;
-}
-
-.footer-content {
-  max-width: 800px;
-  margin: 0 auto;
-  text-align: left;
-  padding-left: 2rem;
-  margin-left: 550px;
-  display: flex;
-  flex-direction: column;
-}
-
-.social-icons {
-  display: flex;
-  justify-content: flex-start;
-  gap: 1rem;
-  margin-bottom: 15px;
-}
-
-.social-icon {
-  display: inline-block;
-  width: 24px;
-  height: 24px;
-  transition: transform 0.3s ease, opacity 0.3s ease;
-}
-
-.social-icon img {
-  width: 100%;
-  height: 100%;
-  object-fit: fill;
-}
-
-.social-icon:hover {
-  transform: scale(1.1);
-  opacity: 0.8;
-}
-
-.footer-text-area {
-  height: 90px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.footer-links {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  font-size: 16px;
-  height: 24px;
-}
-
-.footer-link {
-  color: #ffffff;
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-.footer-link:hover {
-  color: #01CE7E;
-}
-
-.separator {
-  color: #ffffff;
-  margin: 0 0.25rem;
-}
-
-.footer-contact {
-  height: 24px;
-  display: flex;
-  align-items: center;
-}
-
-.footer-contact p {
-  color: #9E9E9E;
-  font-size: 16px;
-  margin: 0;
-  text-align: left;
-}
-
-.footer-copyright {
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  min-height: 24px; /* 从固定高度改为最小高度，允许内容换行 */
-  display: flex;
-  align-items: center;
-}
-
-.footer-copyright p {
-  color: #9E9E9E;
-  font-size: 16px;
-  margin: 0;
-  line-height: 1.4;
-  text-align: left;
-}
 
 /* 响应式设计 */
 @media (max-width: 1440px) {
@@ -1089,33 +912,6 @@ onUnmounted(() => {
     gap: 30px;
   }
   
-  .footer {
-    height: 150px;
-    padding: 30px 0;
-  }
-  
-  .footer-logo {
-    left: 150px;
-    top: 30px;
-  }
-  
-  .footer-logo-img {
-    width: 188px;
-  }
-  
-  .footer-content {
-    margin-left: 413px;
-  }
-  
-  .footer-text-area {
-    height: 67.5px;
-  }
-  
-  .footer-links,
-  .footer-contact,
-  .footer-copyright {
-    height: 18px;
-  }
 }
 
 @media (max-width: 1024px) {
@@ -1170,38 +966,6 @@ onUnmounted(() => {
     gap: 24px;
   }
   
-  .footer {
-    height: 120px;
-    padding: 24px 0;
-  }
-  
-  .footer-logo {
-    left: 120px;
-    top: 24px;
-  }
-  
-  .footer-logo-img {
-    width: 150px;
-  }
-  
-  .footer-content {
-    margin-left: 330px;
-    max-width: 500px;
-  }
-  
-  .social-icons {
-    margin-bottom: 9px;
-  }
-  
-  .footer-text-area {
-    height: 54px;
-  }
-  
-  .footer-links,
-  .footer-contact,
-  .footer-copyright {
-    height: 14.4px;
-  }
 }
 
 @media (max-width: 768px) {
@@ -1244,7 +1008,7 @@ onUnmounted(() => {
   }
   
   .contacts-grid {
-    gap: 1.5rem;
+    gap: 2.5rem;
     max-width: 100%;
   }
   
@@ -1348,75 +1112,6 @@ onUnmounted(() => {
     height: 22px;
   }
   
-  /* 页脚响应式 */
-  .footer {
-    height: auto !important;
-    min-height: 150px;
-    padding: 20px 0 !important;
-  }
-  
-  .footer-logo {
-    position: relative !important;
-    left: 0 !important;
-    top: 0 !important;
-    text-align: center;
-    margin-bottom: 1rem;
-  }
-  
-  .footer-logo-img {
-    width: 150px !important;
-  }
-  
-  .footer-content {
-    max-width: none !important;
-    padding-left: 1rem !important;
-    padding-right: 1rem !important;
-    text-align: center !important;
-    margin-left: 0 !important;
-  }
-  
-  .social-icons {
-    margin-bottom: 10px !important;
-    justify-content: center !important;
-    gap: 0.8rem;
-  }
-  
-  .social-icon {
-    width: 20px !important;
-    height: 20px !important;
-  }
-  
-  .footer-text-area {
-    height: auto !important;
-  }
-  
-  .footer-links {
-    height: auto !important;
-    justify-content: center !important;
-    font-size: 12px !important;
-    gap: 0.4rem;
-  }
-  
-  .footer-contact {
-    height: auto !important;
-    justify-content: center;
-  }
-  
-  .footer-contact p {
-    font-size: 12px !important;
-    text-align: center !important;
-  }
-  
-  .footer-copyright {
-    height: auto !important;
-    justify-content: center;
-  }
-  
-  .footer-copyright p {
-    font-size: 12px !important;
-    text-align: center !important;
-    white-space: normal !important;
-  }
 }
 
 @media (max-width: 480px) {
@@ -1456,7 +1151,7 @@ onUnmounted(() => {
   }
   
   .contacts-grid {
-    gap: 1.2rem;
+    gap: 2rem;
   }
   
   .contact-card {
@@ -1532,39 +1227,6 @@ onUnmounted(() => {
     height: 18px;
   }
   
-  /* 页脚响应式 */
-  .footer {
-    height: auto !important;
-    min-height: 120px;
-    padding: 15px 0 !important;
-  }
-  
-  .footer-logo-img {
-    width: 120px !important;
-  }
-  
-  .social-icon {
-    width: 18px !important;
-    height: 18px !important;
-  }
-  
-  .footer-links {
-    font-size: 10px !important;
-    gap: 0.3rem;
-    flex-wrap: wrap;
-  }
-  
-  .footer-contact p {
-    font-size: 10px !important;
-    text-align: center !important;
-    word-break: break-word;
-  }
-  
-  .footer-copyright p {
-    font-size: 10px !important;
-    text-align: center !important;
-    word-break: break-word;
-  }
 }
 </style>
 

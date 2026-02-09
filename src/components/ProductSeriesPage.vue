@@ -215,70 +215,14 @@
     </div>
     
     <!-- 页脚 -->
-    <footer class="footer" id="footer">
-      <div class="footer-container">
-        <!-- AXON LABS Logo - 左侧200px -->
-        <div class="footer-logo">
-          <img src="/logo.svg" alt="AXON LABS" class="footer-logo-img" />
-        </div>
-        
-        <!-- 页脚主要内容 - 居中左对齐 -->
-        <div class="footer-content">
-          <!-- 社交媒体图标 -->
-          <div class="social-icons">
-            <a href="#" class="social-icon">
-              <img src="/logo/weibo.webp" alt="微博" />
-            </a>
-            <a href="#" class="social-icon">
-              <img src="/bilibil.png" alt="哔哩哔哩" />
-            </a>
-            <a href="#" class="social-icon">
-              <img src="/wechat.png" alt="微信" />
-            </a>
-            <a href="#" class="social-icon">
-              <img src="/redbook.png" alt="小红书" />
-            </a>
-            <a href="#" class="social-icon">
-              <img src="/ins.png" alt="Instagram" />
-            </a>
-            <a href="#" class="social-icon">
-              <img src="/facebook.png" alt="Facebook" />
-            </a>
-            <a href="#" class="social-icon">
-              <img src="/youtube.png" alt="YouTube" />
-            </a>
-          </div>
-          
-          <!-- 页脚文字区域 -->
-          <div class="footer-text-area">
-            <!-- 页脚链接 -->
-            <div class="footer-links">
-              <a href="#" class="footer-link">{{ currentLanguage === 'zh' ? '知识产权保护' : 'Intellectual Property Protection' }}</a>
-              <span class="separator">|</span>
-              <a href="#" class="footer-link">{{ currentLanguage === 'zh' ? '隐私声明' : 'Privacy Statement' }}</a>
-              <span class="separator">|</span>
-              <a href="#" class="footer-link">ISO27001</a>
-            </div>
-            
-            <!-- 联系信息 -->
-            <div class="footer-contact">
-              <p>{{ currentLanguage === 'zh' ? '互联网违法和不良信息举报邮箱' : 'Report illegal and harmful information' }}   LD@axonlabs.com</p>
-            </div>
-            
-            <!-- 版权信息 -->
-            <div class="footer-copyright">
-              <p>COPYRIGHT © AXON LABS {{ currentLanguage === 'zh' ? '羽山' : 'Yushan' }} ALL RIGHTS RESERVED    |    {{ currentLanguage === 'zh' ? '京公网安备 XXXXXX号    |    京ICP备XXXXX    |    营业执照' : 'Beijing Public Network Security No. XXXXXX    |    ICP No. XXXXXX    |    Business License' }}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </footer>
+    <Footer />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import Navbar from './Navbar.vue'
+import Footer from './Footer.vue'
 import { useLanguage } from '../composables/useLanguage'
 
 const { currentLanguage } = useLanguage()
@@ -294,12 +238,14 @@ const activeButton = ref<string | null>(null)
 const sideImage = ref<string | null>(null)
 const overlayPosition = ref<string>('')
 const showParamsImage = ref(false)
+let autoRotateTimer1: number | null = null // 第一个产品旋转恢复定时器
 
 // 第二个产品的状态
 const activeButton2 = ref<string | null>(null)
 const sideImage2 = ref<string | null>(null)
 const overlayPosition2 = ref<string>('')
 const showParamsImage2 = ref(false)
+let autoRotateTimer2: number | null = null // 第二个产品旋转恢复定时器
 
 // 第一个产品的3D模型相关（LOOMI - loomy.glb）
 const modelContainer1 = ref<HTMLDivElement | null>(null)
@@ -350,6 +296,21 @@ const init3DScene1 = () => {
       // 重置动画状态
       isAnimating1 = false
       
+      // 重新配置controls
+      controls1.enableZoom = false // 禁用缩放，固定大小
+      controls1.autoRotate = true // 启用默认左右旋转
+      controls1.autoRotateSpeed = 1.0
+      
+      // 重新绑定拖拽事件监听器
+      controls1.removeEventListener('start', () => {})
+      controls1.addEventListener('start', () => {
+        controls1.autoRotate = false
+        if (autoRotateTimer1) {
+          clearTimeout(autoRotateTimer1)
+          autoRotateTimer1 = null
+        }
+      })
+      
       // 重新启动动画
       startAnimation1()
       
@@ -390,13 +351,14 @@ const init3DScene1 = () => {
   // 创建渲染器
   renderer1 = new THREE.WebGLRenderer({ 
     alpha: true, 
-    antialias: true, // 启用抗锯齿以更好显示玻璃材质
+    antialias: window.devicePixelRatio === 1, // 高分辨率屏幕禁用抗锯齿以提升性能
     powerPreference: 'high-performance',
     stencil: false,
     depth: true
   })
   renderer1.setSize(width, height)
-  renderer1.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+  // 限制像素比，避免在高分辨率设备上渲染过多像素
+  renderer1.setPixelRatio(Math.min(window.devicePixelRatio, 1.5))
   renderer1.setClearColor(0x000000, 0)
   renderer1.outputColorSpace = THREE.SRGBColorSpace
   // 启用物理正确的光照模式，对玻璃材质很重要
@@ -409,12 +371,22 @@ const init3DScene1 = () => {
   controls1.screenSpacePanning = false // 禁用平移
   controls1.enableDamping = true
   controls1.dampingFactor = 0.1
-  controls1.autoRotate = false // 关闭自动旋转
+  controls1.autoRotate = true // 启用默认左右旋转
+  controls1.autoRotateSpeed = 1.0 // 旋转速度
   controls1.enableRotate = true // 允许旋转查看各个方向
-  controls1.enableZoom = true // 允许轻微缩放
-  controls1.zoomSpeed = 0.3 // 更低的缩放速度，配合距离限制，实现微微放大
+  controls1.enableZoom = false // 禁用缩放，固定大小
   controls1.rotateSpeed = 0.8 // 旋转速度
   controls1.enablePan = false // 禁用平移，保持模型居中
+  
+  // 监听拖拽开始事件，取消旋转
+  controls1.addEventListener('start', () => {
+    controls1.autoRotate = false
+    // 清除旋转恢复定时器
+    if (autoRotateTimer1) {
+      clearTimeout(autoRotateTimer1)
+      autoRotateTimer1 = null
+    }
+  })
 
   // 添加灯光 - 为玻璃材质优化
   // 增强环境光，让玻璃更明亮
@@ -565,27 +537,37 @@ const setContent1 = (object: THREE.Object3D) => {
   object.position.x -= center.x
   object.position.y -= center.y
   object.position.z -= center.z
+  
+  // 向下移动模型
+  object.position.y -= size / 20
 
-  // 设置缩放范围，只允许轻微缩放
+  // 设置固定距离，不允许缩放
   const distance = Math.sqrt(
-    Math.pow(size / 1.8, 2) + 
-    Math.pow(size / 3.5, 2) + 
-    Math.pow(size / 1.8, 2)
+    Math.pow(size / 1.5, 2) + 
+    Math.pow(size / 2.5, 2) + 
+    Math.pow(size / 1.5, 2)
   )
-  controls1.minDistance = distance * 0.9 // 限制放大，只能微微放大到90%
-  controls1.maxDistance = distance * 1.3 // 最多缩小到130%
+  controls1.minDistance = distance // 固定距离，不允许缩放
+  controls1.maxDistance = distance // 固定距离，不允许缩放
 
   camera1.near = size / 100
   camera1.far = size * 100
   camera1.updateProjectionMatrix()
 
+  // 放大模型本身（1.2倍）
+  object.scale.set(1.2, 1.2, 1.2)
+
   camera1.position.copy(center)
-  camera1.position.x += size / 1.8  // 从2.6改为1.8，相机更远
-  camera1.position.y += size / 3.5  // 从4.8改为3.5，相机更远
-  camera1.position.z += size / 1.8  // 从2.6改为1.8，相机更远
+  camera1.position.x += size / 1.5  // 放大产品，相机更近
+  camera1.position.y += size / 2.5  // 放大产品，相机更近
+  camera1.position.z += size / 1.5  // 放大产品，相机更近
   camera1.lookAt(center)
 
   controls1.saveState()
+  
+  // 确保启用自动旋转
+  controls1.autoRotate = true
+  controls1.autoRotateSpeed = 1.0
 
   scene1.add(object)
   content1 = object
@@ -618,7 +600,7 @@ const onWindowResize1 = () => {
 
 // 动画循环 - 第一个产品（优化帧率，只在可见时渲染）
 let lastFrameTime1 = 0
-const targetFrameRate1 = 1000 / 30 // 30 FPS，降低渲染频率节省性能
+const targetFrameRate1 = 1000 / 24 // 24 FPS，进一步降低渲染频率节省性能
 let isAnimating1 = false
 
 const animate1 = () => {
@@ -636,7 +618,7 @@ const animate1 = () => {
   const now = Date.now()
   const delta = now - lastFrameTime1
   
-  // 限制帧率到30fps，减少GPU负载
+  // 限制帧率到24fps，减少GPU负载
   if (delta < targetFrameRate1) {
     return
   }
@@ -645,6 +627,7 @@ const animate1 = () => {
   
   // 只在第一个区域可见时才渲染
   if (isSection1Visible.value && controls1 && renderer1 && scene1 && camera1) {
+    // 更新controls（包括自动旋转）- 必须调用才能让自动旋转生效
     controls1.update()
     renderer1.render(scene1, camera1)
   }
@@ -689,6 +672,21 @@ const init3DScene = () => {
       
       // 重置动画状态
       isAnimating2 = false
+      
+      // 重新配置controls
+      controls.enableZoom = false // 禁用缩放，固定大小
+      controls.autoRotate = true // 启用默认左右旋转
+      controls.autoRotateSpeed = 1.0
+      
+      // 重新绑定拖拽事件监听器
+      controls.removeEventListener('start', () => {})
+      controls.addEventListener('start', () => {
+        controls.autoRotate = false
+        if (autoRotateTimer2) {
+          clearTimeout(autoRotateTimer2)
+          autoRotateTimer2 = null
+        }
+      })
       
       // 重新启动动画
       startAnimation2()
@@ -739,7 +737,7 @@ const init3DScene = () => {
   })
   renderer.setSize(width, height)
   // 限制像素比，避免在高分辨率设备上渲染过多像素
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5))
   renderer.setClearColor(0x000000, 0)
   // 启用输出编码以获得更好的颜色
   renderer.outputColorSpace = THREE.SRGBColorSpace
@@ -750,12 +748,22 @@ const init3DScene = () => {
   controls.screenSpacePanning = false // 禁用平移
   controls.enableDamping = true
   controls.dampingFactor = 0.1
-  controls.autoRotate = false // 关闭自动旋转
+  controls.autoRotate = true // 启用默认左右旋转
+  controls.autoRotateSpeed = 1.0 // 旋转速度
   controls.enableRotate = true // 允许旋转查看各个方向
-  controls.enableZoom = true // 允许轻微缩放
-  controls.zoomSpeed = 0.3 // 更低的缩放速度，配合距离限制，实现微微放大
+  controls.enableZoom = false // 禁用缩放，固定大小
   controls.rotateSpeed = 0.8 // 旋转速度
   controls.enablePan = false // 禁用平移，保持模型居中
+  
+  // 监听拖拽开始事件，取消旋转
+  controls.addEventListener('start', () => {
+    controls.autoRotate = false
+    // 清除旋转恢复定时器
+    if (autoRotateTimer2) {
+      clearTimeout(autoRotateTimer2)
+      autoRotateTimer2 = null
+    }
+  })
 
   // 添加灯光（优化方向以减少正面反光）
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.3) // 恢复原始强度
@@ -887,29 +895,33 @@ const setContent = (object: THREE.Object3D) => {
   // 将模型稍微往下移动（减少偏移量，让模型显示更高）
   object.position.y -= size * 0.05  // 向下移动模型高度的5%（从15%减少到5%）
 
-  // 设置缩放范围，只允许轻微缩放
+  // 设置固定距离，不允许缩放
   const distance = Math.sqrt(
-    Math.pow(size / 1.8, 2) + 
-    Math.pow(size / 3.5, 2) + 
-    Math.pow(size / 1.8, 2)
+    Math.pow(size / 1.5, 2) + 
+    Math.pow(size / 2.5, 2) + 
+    Math.pow(size / 1.5, 2)
   )
-  controls.minDistance = distance * 0.9 // 限制放大，只能微微放大到90%
-  controls.maxDistance = distance * 1.3 // 最多缩小到130%
+  controls.minDistance = distance // 固定距离，不允许缩放
+  controls.maxDistance = distance // 固定距离，不允许缩放
 
   // 设置相机的近远裁剪面
   camera.near = size / 100
   camera.far = size * 100
   camera.updateProjectionMatrix()
 
-  // 设置相机位置（调整相机距离让模型缩小）
+  // 设置相机位置（放大产品）
   camera.position.copy(center)
-  camera.position.x += size / 1.8  // 从2.6改为1.8，相机更远
-  camera.position.y += size / 3.5  // 从4.8改为3.5，相机更远
-  camera.position.z += size / 1.8  // 从2.6改为1.8，相机更远
+  camera.position.x += size / 1.5  // 放大产品，相机更近
+  camera.position.y += size / 2.5  // 放大产品，相机更近
+  camera.position.z += size / 1.5  // 放大产品，相机更近
   camera.lookAt(center)
 
   // 保存controls状态
   controls.saveState()
+  
+  // 确保启用自动旋转
+  controls.autoRotate = true
+  controls.autoRotateSpeed = 1.0
 
   // 将模型添加到场景
   scene.add(object)
@@ -940,7 +952,7 @@ const onWindowResize = () => {
 
 // 动画循环 - 第二个产品（优化帧率，只在可见时渲染）
 let lastFrameTime2 = 0
-const targetFrameRate2 = 1000 / 30 // 30 FPS，降低渲染频率节省性能
+const targetFrameRate2 = 1000 / 24 // 24 FPS，进一步降低渲染频率节省性能
 let isAnimating2 = false
 
 const animate = () => {
@@ -958,7 +970,7 @@ const animate = () => {
   const now = Date.now()
   const delta = now - lastFrameTime2
   
-  // 限制帧率到30fps，减少GPU负载
+  // 限制帧率到24fps，减少GPU负载
   if (delta < targetFrameRate2) {
     return
   }
@@ -967,6 +979,7 @@ const animate = () => {
   
   // 只在第二个区域可见时才渲染
   if (isSection2Visible.value && controls && renderer && scene && camera) {
+    // 更新controls（包括自动旋转）- 必须调用才能让自动旋转生效
     controls.update()
     renderer.render(scene, camera)
   }
@@ -1165,43 +1178,87 @@ const handleIconClick = (type: string) => {
   if (type === '参数') {
     showParamsImage.value = !showParamsImage.value
   } else if (type === '正面' || type === '侧面' || type === '背面') {
-    // 旋转相机到对应视角
+    // 旋转相机到对应视角（旋转逻辑在rotateCameraToView1内部处理）
     rotateCameraToView1(type)
   }
 }
 
 // 第一个产品 - 旋转相机到指定视角
 const rotateCameraToView1 = (view: string) => {
-  if (!content1 || !controls1) return
+  if (!content1 || !controls1 || !camera1) {
+    console.warn('rotateCameraToView1: 场景未初始化', { content1: !!content1, controls1: !!controls1, camera1: !!camera1 })
+    return
+  }
   
-  // 获取当前相机到目标点的距离
-  const currentDistance = camera1.position.distanceTo(controls1.target)
-  const center = controls1.target.clone() // 使用当前的观察目标点
+  // 模型已居中到原点，所以中心点是原点
+  const center = new THREE.Vector3(0, 0, 0)
+  
+  // 获取当前相机到原点的距离
+  const currentDistance = camera1.position.distanceTo(center)
   
   // 根据视角设置相机目标位置，保持当前的距离
   let targetPosition = new THREE.Vector3()
   
+  // 计算模型尺寸以确定合适的相机距离
+  const box = new THREE.Box3().setFromObject(content1)
+  const size = box.getSize(new THREE.Vector3()).length()
+  const distance = Math.sqrt(
+    Math.pow(size / 1.5, 2) + 
+    Math.pow(size / 2.5, 2) + 
+    Math.pow(size / 1.5, 2)
+  )
+  
   switch (view) {
     case '正面':
-      // 正面视角 - 相机在Z轴正方向
-      targetPosition.set(center.x, center.y, center.z + currentDistance)
+      // 正面视角 - 相机在Z轴正方向，稍微向上偏移
+      targetPosition.set(0, size / 2.5, distance)
       break
     case '侧面':
-      // 侧面视角 - 相机在X轴正方向
-      targetPosition.set(center.x + currentDistance, center.y, center.z)
+      // 侧面视角 - 相机在X轴正方向，稍微向上偏移
+      targetPosition.set(distance, size / 2.5, 0)
       break
     case '背面':
-      // 背面视角 - 相机在Z轴负方向
-      targetPosition.set(center.x, center.y, center.z - currentDistance)
+      // 背面视角 - 相机在Z轴负方向，稍微向上偏移
+      targetPosition.set(0, size / 2.5, -distance)
       break
+    default:
+      console.warn('rotateCameraToView1: 未知视角', view)
+      return
+  }
+  
+  // 禁用旋转，准备动画
+  controls1.autoRotate = false
+  
+  // 清除之前的定时器
+  if (autoRotateTimer1) {
+    clearTimeout(autoRotateTimer1)
+    autoRotateTimer1 = null
   }
   
   // 使用动画平滑过渡到目标位置
-  animateCameraToPosition1(targetPosition, center)
+  animateCameraToPosition1(targetPosition, center, () => {
+    // 动画完成后，根据view类型决定是否恢复旋转
+    if (view === '侧面' || view === '背面') {
+      // 侧面和背面不恢复旋转
+      controls1.autoRotate = false
+    } else if (view === '正面') {
+      // 正面3秒后恢复旋转
+      autoRotateTimer1 = window.setTimeout(() => {
+        if (controls1) {
+          controls1.autoRotate = true
+        }
+      }, 3000)
+    }
+  })
 }
 
 // 第一个产品 - 相机位置动画
-const animateCameraToPosition1 = (targetPosition: THREE.Vector3, targetLookAt: THREE.Vector3) => {
+const animateCameraToPosition1 = (targetPosition: THREE.Vector3, targetLookAt: THREE.Vector3, onComplete?: () => void) => {
+  if (!camera1 || !controls1 || !renderer1 || !scene1) {
+    console.warn('animateCameraToPosition1: 场景未初始化')
+    return
+  }
+  
   const startPosition = camera1.position.clone()
   const startLookAt = controls1.target.clone()
   const duration = 1000 // 1秒动画
@@ -1226,10 +1283,16 @@ const animateCameraToPosition1 = (targetPosition: THREE.Vector3, targetLookAt: T
     
     controls1.update()
     
+    // 确保在动画过程中也渲染场景
+    if (renderer1 && scene1 && camera1) {
+      renderer1.render(scene1, camera1)
+    }
+    
     if (progress < 1) {
       requestAnimationFrame(animate)
+    } else if (onComplete) {
+      onComplete()
     }
-    // 不再恢复自动旋转，保持静止
   }
   
   animate()
@@ -1246,11 +1309,21 @@ const resetCameraToFront1 = () => {
   // 正面视角 - 相机在Z轴正方向
   const targetPosition = new THREE.Vector3(center.x, center.y, center.z + currentDistance)
   
-  // 保持静止，不自动旋转
+  // 暂时禁用旋转，动画完成后恢复
   controls1.autoRotate = false
   
   // 平滑过渡到正面视角
-  animateCameraToPosition1(targetPosition, center)
+  animateCameraToPosition1(targetPosition, center, () => {
+    // 动画完成后，3秒后恢复旋转
+    if (autoRotateTimer1) {
+      clearTimeout(autoRotateTimer1)
+    }
+    autoRotateTimer1 = window.setTimeout(() => {
+      if (controls1) {
+        controls1.autoRotate = true
+      }
+    }, 3000)
+  })
 }
 
 // 第一个产品 - 关闭参数图片
@@ -1292,43 +1365,84 @@ const handleIconClick2 = (type: string) => {
   if (type === '参数') {
     showParamsImage2.value = !showParamsImage2.value
   } else if (type === '正面' || type === '侧面' || type === '背面') {
-    // 旋转相机到对应视角
+    // 旋转相机到对应视角（旋转逻辑在rotateCameraToView内部处理）
     rotateCameraToView(type)
   }
 }
 
 // 旋转相机到指定视角
 const rotateCameraToView = (view: string) => {
-  if (!content || !controls) return
+  if (!content || !controls || !camera) {
+    console.warn('rotateCameraToView: 场景未初始化', { content: !!content, controls: !!controls, camera: !!camera })
+    return
+  }
   
-  // 获取当前相机到目标点的距离
-  const currentDistance = camera.position.distanceTo(controls.target)
-  const center = controls.target.clone() // 使用当前的观察目标点
+  // 模型已居中到原点，所以中心点是原点
+  const center = new THREE.Vector3(0, 0, 0)
   
-  // 根据视角设置相机目标位置，保持当前的距离
+  // 计算模型尺寸以确定合适的相机距离
+  const box = new THREE.Box3().setFromObject(content)
+  const size = box.getSize(new THREE.Vector3()).length()
+  const distance = Math.sqrt(
+    Math.pow(size / 1.5, 2) + 
+    Math.pow(size / 2.5, 2) + 
+    Math.pow(size / 1.5, 2)
+  )
+  
+  // 根据视角设置相机目标位置
   let targetPosition = new THREE.Vector3()
   
   switch (view) {
     case '正面':
-      // 正面视角 - 相机在Z轴正方向
-      targetPosition.set(center.x, center.y, center.z + currentDistance)
+      // 正面视角 - 相机在Z轴正方向，稍微向上偏移
+      targetPosition.set(0, size / 2.5, distance)
       break
     case '侧面':
-      // 侧面视角 - 相机在X轴正方向
-      targetPosition.set(center.x + currentDistance, center.y, center.z)
+      // 侧面视角 - 相机在X轴正方向，稍微向上偏移
+      targetPosition.set(distance, size / 2.5, 0)
       break
     case '背面':
-      // 背面视角 - 相机在Z轴负方向
-      targetPosition.set(center.x, center.y, center.z - currentDistance)
+      // 背面视角 - 相机在Z轴负方向，稍微向上偏移
+      targetPosition.set(0, size / 2.5, -distance)
       break
+    default:
+      console.warn('rotateCameraToView: 未知视角', view)
+      return
+  }
+  
+  // 禁用旋转，准备动画
+  controls.autoRotate = false
+  
+  // 清除之前的定时器
+  if (autoRotateTimer2) {
+    clearTimeout(autoRotateTimer2)
+    autoRotateTimer2 = null
   }
   
   // 使用动画平滑过渡到目标位置
-  animateCameraToPosition(targetPosition, center)
+  animateCameraToPosition(targetPosition, center, () => {
+    // 动画完成后，根据view类型决定是否恢复旋转
+    if (view === '侧面' || view === '背面') {
+      // 侧面和背面不恢复旋转
+      controls.autoRotate = false
+    } else if (view === '正面') {
+      // 正面3秒后恢复旋转
+      autoRotateTimer2 = window.setTimeout(() => {
+        if (controls) {
+          controls.autoRotate = true
+        }
+      }, 3000)
+    }
+  })
 }
 
 // 相机位置动画
-const animateCameraToPosition = (targetPosition: THREE.Vector3, targetLookAt: THREE.Vector3) => {
+const animateCameraToPosition = (targetPosition: THREE.Vector3, targetLookAt: THREE.Vector3, onComplete?: () => void) => {
+  if (!camera || !controls || !renderer || !scene) {
+    console.warn('animateCameraToPosition: 场景未初始化')
+    return
+  }
+  
   const startPosition = camera.position.clone()
   const startLookAt = controls.target.clone()
   const duration = 1000 // 1秒动画
@@ -1353,11 +1467,15 @@ const animateCameraToPosition = (targetPosition: THREE.Vector3, targetLookAt: TH
     
     controls.update()
     
+    // 确保在动画过程中也渲染场景
+    if (renderer && scene && camera) {
+      renderer.render(scene, camera)
+    }
+    
     if (progress < 1) {
       requestAnimationFrame(animate)
-    } else {
-      // 动画完成后，可以选择重新启用自动旋转
-      // controls.autoRotate = true
+    } else if (onComplete) {
+      onComplete()
     }
   }
   
@@ -1375,11 +1493,21 @@ const resetCameraToFront2 = () => {
   // 正面视角 - 相机在Z轴正方向
   const targetPosition = new THREE.Vector3(center.x, center.y, center.z + currentDistance)
   
-  // 保持静止，不自动旋转
+  // 暂时禁用旋转，动画完成后恢复
   controls.autoRotate = false
   
   // 平滑过渡到正面视角
-  animateCameraToPosition(targetPosition, center)
+  animateCameraToPosition(targetPosition, center, () => {
+    // 动画完成后，3秒后恢复旋转
+    if (autoRotateTimer2) {
+      clearTimeout(autoRotateTimer2)
+    }
+    autoRotateTimer2 = window.setTimeout(() => {
+      if (controls) {
+        controls.autoRotate = true
+      }
+    }, 3000)
+  })
 }
 
 // 第二个产品 - 关闭参数图片
@@ -1617,6 +1745,16 @@ onMounted(() => {
 
 // 组件卸载时清理3D场景
 onUnmounted(() => {
+  // 清理旋转恢复定时器
+  if (autoRotateTimer1) {
+    clearTimeout(autoRotateTimer1)
+    autoRotateTimer1 = null
+  }
+  if (autoRotateTimer2) {
+    clearTimeout(autoRotateTimer2)
+    autoRotateTimer2 = null
+  }
+  
   // 停止动画循环，但保留场景资源
   stopAnimation1()
   stopAnimation2()
@@ -2078,14 +2216,14 @@ onUnmounted(() => {
 /* 页脚 */
 .footer {
   background: #000000;
-  height: 200px; /* 1920*1080基准高度200px */
-  padding: 40px 0; /* 上下各40px内边距 */
+  height: 160px; /* 从200px缩小到160px (80%) */
+  padding: 30px 0; /* 从40px缩小到30px */
   color: #ffffff;
   box-sizing: border-box;
 }
 
 .footer-container {
-  max-width: 1920px; /* 使用1920px基准宽度 */
+  max-width: 1920px;
   margin: 0 auto;
   padding: 0;
   position: relative;
@@ -2094,33 +2232,38 @@ onUnmounted(() => {
 /* AXON LABS Logo - 左侧200px */
 .footer-logo {
   position: absolute;
-  left: 200px; /* 距离左侧200px，1920*1080基准 */
-  top: 40px; /* 距离顶部40px */
+  left: 200px;
+  top: 30px; /* 从40px缩小到30px */
 }
 
 .footer-logo-img {
-  width: 250px; /* 1920*1080基准宽度 */
+  width: 200px; /* 从250px缩小到200px (80%) */
   height: auto;
+  filter: brightness(0) invert(1);
 }
 
 /* 页脚主要内容区域 - 居中左对齐 */
 .footer-content {
   max-width: 800px;
   margin: 0 auto;
-  text-align: left; /* 左对齐 */
+  text-align: left;
   padding-left: 2rem;
-  margin-left: 550px; /* logo位置200px + logo宽度250px + 间距100px = 550px */
-  /* 移除固定高度，使用自然布局 */
+  margin-left: 480px; /* logo位置200px + logo宽度200px + 间距80px = 480px */
   display: flex;
   flex-direction: column;
+  position: relative;
+  overflow: visible; /* 确保二维码不会被裁剪 */
+  z-index: 1;
 }
 
 /* 社交媒体图标 */
 .social-icons {
   display: flex;
-  justify-content: flex-start; /* 左对齐 */
-  gap: 1rem;
-  margin-bottom: 15px; /* 图标距离下面文字15px，1920*1080基准 */
+  justify-content: flex-start;
+  gap: 0.8rem; /* 从1rem缩小到0.8rem */
+  margin-bottom: 12px; /* 从15px缩小到12px */
+  position: relative; /* 为二维码定位提供参考 */
+  z-index: 1;
 }
 
 .social-icon {

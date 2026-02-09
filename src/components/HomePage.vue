@@ -14,45 +14,42 @@
               <h2 class="intro-title-en">BRAND INTRODUCTION</h2>
               <h3 class="intro-title-cn">品牌介绍</h3>
               <p class="intro-paragraph" v-if="isZh">
-        AXON LABS 羽山，是成立于2024年的新锐科技公司，正在打造面向年轻消费市场<br>的“潮流科技品牌”。设计至上、体验为王，结合人工智能技术，打造“实用好物、科<br>技潮玩”的潮流单品，以设计驱动情绪价值，
-        让科技产品更有温度。
+        AXON LABS羽山成立于2024年，我们是一家新锐科技公司，正在打造面向年轻消费市场的"潮流科技"品牌。设计至上、体验为王，结合AI技术，打造"实用好物，科技潮玩"，以设计驱动情绪价值，让科技更有温度。
       </p>
       <p class="intro-paragraph intro-paragraph-en" v-else>
-        AXON LABS Yushan is a cutting-edge technology company founded in 2024, building a<br>"trendy tech brand" targeting the young consumer market. Design-first and experience-<br>driven, we combine AI technology to create trendy products that are "practical goods,<br>tech toys", driving emotional value through design, making tech products more warm.
+        AXON LABS Yushan was founded in 2024. We are a cutting-edge technology company building a "trendy tech" brand targeting the young consumer market. Design-first and experience-driven, we combine AI technology to create "practical goods, tech toys", driving emotional value through design, making technology more warm.
       </p>
         <div v-show="isIntroExpanded" class="intro-more">
                 <p class="intro-paragraph" v-if="isZh">
-                 「羽山」，是《山海经》中的上古神山，象征着华夏先民对宇宙万物的求索。但我<br>们要做的，是利用 AI 与硬件技术的深度融合，重塑科技产品的“生命逻辑”。
+                 "羽山"是《山海经》中的上古神山，象征着华夏先民对宇宙万物的求索。我们要做的，是利用AI与硬件技术的深度融合，重塑科技产品的"生命逻辑"。
                 </p>
                 <p class="intro-paragraph intro-paragraph-en" v-else>
-                 "Yushan" is an ancient sacred mountain in the Classic of Mountains and Seas,<br>symbolizing the Chinese ancestors' quest for the universe. But what we aim to do is<br>deeply integrate AI with hardware technology to reshape the "life logic" of tech products.
+                 "Yushan" is an ancient sacred mountain in the Classic of Mountains and Seas, symbolizing the Chinese ancestors' quest for the universe. What we aim to do is deeply integrate AI with hardware technology to reshape the "life logic" of tech products.
                 </p>
                 <p class="intro-paragraph" v-if="isZh">
-                  我们的团队来自于潮玩、游戏、互联网大厂，带着热爱和生命力，探索如何「连接<br>文化、科技与生活」。
+                 AXON LABS追求的产品，即是实用好物也是潮流玩具，融入现实生活场景，好看好玩又好用。我们有自研IP——Loomi噜咪、同时与全球顶级科幻、二次元游戏、文体明星等知名IP联名，辐射多领域需求。2026年，随着LOOMI系列的上市，AXON LABS将逐步搭建并完善AI智能陪伴软硬件生态，全面渗透居家、办公、出行等生活场景。
                 </p>
                 <p class="intro-paragraph intro-paragraph-en" v-else>
-                  Our team comes from trendy toys, gaming, and internet giants, bringing passion<br>and vitality to explore how to "connect culture, technology, and life".
+                 AXON LABS pursues products that are both practical goods and trendy toys, integrating into real-life scenarios—beautiful, fun, and useful. We have our own IP—Loomi, and collaborate with top global sci-fi, anime game, and celebrity IPs, meeting diverse needs. In 2026, with the launch of the LOOMI series, AXON LABS will gradually build and perfect an AI intelligent companion software and hardware ecosystem, fully penetrating home, office, and travel scenarios.
                 </p>
-                   <p class="intro-paragraph" v-if="isZh">
-                在「陪伴产品」层出不穷的今天，我们认为陪伴不应是额外负担，而应是基于「高<br>频场景」的「润物无声」。
+                <p class="intro-paragraph" v-if="isZh">
+                 AXON LABS聚集海内外顶尖人才，团队成员覆盖人工智能、具身机器人、潮玩设计、游戏开发等多个领域。其中，人工智能领域人才深耕机器学习、自然语言处理与计算机视觉技术；具身机器人团队由机械工程、感知控制、人机交互专家组成；潮玩设计曾打造多款现象级IP，平台累计销量破亿。
                 </p>
                 <p class="intro-paragraph intro-paragraph-en" v-else>
-                 In an era where "companion products" are emerging endlessly, we believe<br>companionship should not be an extra burden, but rather "silent nurturing" based on<br>"high-frequency scenarios".
+                 AXON LABS gathers top talent from home and abroad, with team members covering AI, embodied robotics, trendy toy design, game development, and more. AI talent focuses on machine learning, natural language processing, and computer vision; the embodied robotics team consists of mechanical engineering, perception control, and human-computer interaction experts; trendy toy design has created multiple phenomenal IPs with cumulative platform sales exceeding 100 million.
                 </p>
                 <p class="intro-paragraph intro-paragraph-last" v-if="isZh">
-             品牌旗下首个系列 LOOMI 鹿米，AI 智能充电宝产品于 2025 年开始研发。以「时<br>尚美观，情感陪伴」为核心定位的潮流数码单品。
-             在满足用户日常充电需求的基<br>础上，它更像是一位默默守护的伙伴——通过细腻的问候传递温暖，借助定制化<br>的智能语音、触控等交互功能，把用户理想中的他她，甚至它，融入到产品中，<br>让用户看得见、摸得着，使每一次充电都成为一次内心的充电。
-              </p>
+                 2026年，当科技与潮玩的边界彻底模糊，我们或许不再需要定义"什么是玩具，什么是工具"。希望在我们的手中，每一个硬件都将拥有自己的名字，每一段电力交互，都将是一次有温度的重逢。
+                </p>
                 <p class="intro-paragraph intro-paragraph-last intro-paragraph-en" v-else>
-              The brand's first series LOOMI, an AI smart power bank product, began development<br>in 2025. A trendy digital product positioned as "fashionable, beautiful, emotional<br>companionship". Beyond meeting daily charging needs, it's more like a silently<br>guarding companion—conveying warmth through thoughtful greetings, integrating<br>customized smart voice, touch interactions, and bringing users' ideal companions<br>into the product, making every charge a recharge of the heart.
-              </p>
-              </div>
+                 In 2026, when the boundary between technology and trendy toys completely blurs, we may no longer need to define "what is a toy, what is a tool." We hope that in our hands, every hardware will have its own name, and every power interaction will be a warm reunion.
+                </p>
             </div>
             <div class="intro-button">
               <button v-if="!isIntroExpanded" class="learn-more-btn" @click="handleLearnMore">Learn More</button>
             </div>
           </div>
-    
+        </div>
         </div>
         <div class="scroll-indicator" @click="scrollToHistory">
           <img src="/arrow.webp" :alt="currentLanguage === 'zh' ? '向下箭头' : 'Scroll Down'" class="scroll-arrow-img" />
@@ -88,11 +85,26 @@
                 <div v-if="expandedCardIndex === index" 
                      class="timeline-expanded-overlay"
                      :class="getOverlayPositionClass(index)">
-                  <img src="/Group%203.webp" alt="历史事件" class="expanded-image" />
+                  <img src="/Group 3.webp" alt="历史事件" class="expanded-image" />
+                  <div class="timeline-expanded-content">
+                    <h3 class="timeline-expanded-title">{{ item.title }}</h3>
+                    <p class="timeline-expanded-description">{{ item.description }}</p>
+                  </div>
                 </div>
                 <div class="timeline-date" 
                      :class="{ 'dimmed-date': expandedCardIndex !== -1 && expandedCardIndex !== index }">
                   {{ item.date }}
+                </div>
+              </div>
+              <!-- 固定的"CONSTANLY UPDATING"色块 -->
+              <div class="timeline-item timeline-item-fixed" 
+                   :class="{ 'dimmed-card': expandedCardIndex !== -1 }">
+                <div class="timeline-bar timeline-bar-fixed" 
+                     :style="{ backgroundColor: '#01CE7E' }">
+                  <div class="constantly-updating-text">
+                    <span>CONSTANLY</span>
+                    <span>UPDATING</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -102,70 +114,14 @@
     </main>
 
     <!-- 页脚 -->
-    <footer class="footer">
-      <div class="footer-container">
-        <!-- AXON LABS Logo - 左侧200px -->
-        <div class="footer-logo">
-          <img src="/logo.svg" alt="AXON LABS" class="footer-logo-img" />
-        </div>
-        
-        <!-- 页脚主要内容 - 居中左对齐 -->
-        <div class="footer-content">
-          <!-- 社交媒体图标 -->
-          <div class="social-icons">
-            <a href="#" class="social-icon">
-              <img src="/logo/weibo.webp" alt="微博" />
-            </a>
-            <a href="#" class="social-icon">
-              <img src="/bilibil.png" alt="哔哩哔哩" />
-            </a>
-            <a href="#" class="social-icon">
-              <img src="/wechat.png" alt="微信" />
-            </a>
-            <a href="#" class="social-icon">
-              <img src="/redbook.png" alt="小红书" />
-            </a>
-            <a href="#" class="social-icon">
-              <img src="/ins.png" alt="Instagram" />
-            </a>
-            <a href="#" class="social-icon">
-              <img src="/facebook.png" alt="Facebook" />
-            </a>
-            <a href="#" class="social-icon">
-              <img src="/youtube.png" alt="YouTube" />
-            </a>
-          </div>
-          
-          <!-- 页脚文字区域 -->
-          <div class="footer-text-area">
-            <!-- 页脚链接 -->
-            <div class="footer-links">
-              <a href="#" class="footer-link">{{ currentLanguage === 'zh' ? '知识产权保护' : 'Intellectual Property Protection' }}</a>
-              <span class="separator">|</span>
-              <a href="#" class="footer-link">{{ currentLanguage === 'zh' ? '隐私声明' : 'Privacy Statement' }}</a>
-              <span class="separator">|</span>
-              <a href="#" class="footer-link">ISO27001</a>
-            </div>
-            
-            <!-- 联系信息 -->
-            <div class="footer-contact">
-              <p>{{ currentLanguage === 'zh' ? '互联网违法和不良信息举报邮箱' : 'Report illegal and harmful information' }}   LD@axonlabs.com</p>
-            </div>
-            
-            <!-- 版权信息 -->
-            <div class="footer-copyright">
-              <p>COPYRIGHT © AXON LABS {{ currentLanguage === 'zh' ? '羽山' : 'Yushan' }} ALL RIGHTS RESERVED    |    {{ currentLanguage === 'zh' ? '京公网安备 XXXXXX号    |    京ICP备XXXXX    |    营业执照' : 'Beijing Public Network Security No. XXXXXX    |    ICP No. XXXXXX    |    Business License' }}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </footer>
+    <Footer />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { ref, onMounted, onUnmounted, computed, watch, nextTick } from 'vue'
 import Navbar from './Navbar.vue'
+import Footer from './Footer.vue'
 import { useLanguage } from '../composables/useLanguage'
 
 const { currentLanguage, isZh } = useLanguage()
@@ -175,32 +131,26 @@ const timelineData = ref([
   { 
     date: '2024.09', 
     color: '#B0D0C3',
-    title: '标题标题',
-    description: '北京玄圃科技有限公司成立于2024年，为国内领先的AI技术与智能硬件开发公司。AXON LABS羽山作为公司旗下最重要的品牌，以"AI为爱，智趣未来，AI for Love, Smart Fun Future"为品牌理念，以用户情感需求为导向，推动智能产品从功能工具向 "有温度的伙伴" 进化。'
+    title: 'AXON LABS成立',
+    description: '北京玄圃科技有限公司成立于2024年，为国内新锐的AI技术与智能硬件开发公司。AXON LABS羽山作为公司旗下最重要的品牌，利用AI与硬件技术的深度融合，重塑科技产品的"生命逻辑"。以用户情感需求为导向，推动智能产品从功能工具向"有温度的伙伴"进化。'
   },
   { 
-    date: '2024.09', 
+    date: '2025.06', 
     color: '#83D5B5',
-    title: '标题标题',
-    description: '北京玄圃科技有限公司成立于2024年，为国内领先的AI技术与智能硬件开发公司。'
+    title: '"三体"机器人项目启动',
+    description: '2024年9月，AXON LABS羽山品牌旗下系列AXON ROBO与"三体宇宙"旗下《三体》IP联名项目启动，以"章北海"为原型开发的第一款"具身智能机器人"进入研发阶段。'
   },
   { 
-    date: '2024.09', 
+    date: '2025.07', 
     color: '#6AD9A1',
-    title: '标题标题',
-    description: '北京玄圃科技有限公司成立于2024年，为国内领先的AI技术与智能硬件开发公司。'
+    title: '自研IP"Loomi噜咪"项目启动',
+    description: 'AXON LABS羽山旗下首个智能潮玩系列"LOOMI鹿米"立项，它的首款产品为自研IP"Loomi噜咪"AI 智能玩具，这是一款以 "时尚美观，情感陪伴" 为核心定位的潮流数码单品，同年9月正式进入IP创作及产品研发阶段。'
   },
   { 
-    date: '2024.09', 
+    date: '2026.02', 
     color: '#40CF97',
-    title: '标题标题',
-    description: '北京玄圃科技有限公司成立于2024年，为国内领先的AI技术与智能硬件开发公司。'
-  },
-  { 
-    date: '2024.09', 
-    color: '#01CE7E',
-    title: '标题标题',
-    description: '北京玄圃科技有限公司成立于2024年，为国内领先的AI技术与智能硬件开发公司。'
+    title: 'Loomi噜咪AI智能充电宝上市',
+    description: '作为LOOMI鹿米系列的开山作，Loomi噜咪AI智能充电宝在2026年2月春节期间上市，动作即语境、感知即回应、可进化的"生命体"为这款产品的特点。'
   }
 ])
 
@@ -209,8 +159,31 @@ const expandedCardIndex = ref(-1)
 
 // 品牌介绍“Learn More”展开
 const isIntroExpanded = ref(false)
-const handleLearnMore = () => {
+const handleLearnMore = (event: Event) => {
+  event.stopPropagation() // 阻止事件冒泡，防止触发 handlePageClick
   isIntroExpanded.value = true
+}
+
+// 点击页面任意位置后还原品牌介绍
+const handlePageClick = (event: Event) => {
+  const target = event.target as HTMLElement
+  
+  // 如果品牌介绍已展开
+  if (isIntroExpanded.value) {
+    // 检查点击的元素是否在品牌介绍文字区域内（intro-text 或 intro-more）
+    const introText = document.querySelector('.intro-text')
+    const introMore = document.querySelector('.intro-more')
+    const introButton = document.querySelector('.intro-button')
+    
+    // 如果点击的不是品牌介绍文字区域内的元素，则还原
+    const isInIntroText = introText && introText.contains(target)
+    const isInIntroMore = introMore && introMore.contains(target)
+    const isInIntroButton = introButton && introButton.contains(target)
+    
+    if (!isInIntroText && !isInIntroMore && !isInIntroButton) {
+      isIntroExpanded.value = false
+    }
+  }
 }
 
 // 获取覆盖层位置类名
@@ -499,6 +472,9 @@ onMounted(() => {
   setTimeout(() => {
     initializePagePosition()
   }, 100)
+  
+  // 添加点击页面任意位置还原品牌介绍的事件监听
+  window.addEventListener('click', handlePageClick)
 
   // 大事件时间线动画 - 参考提供的代码实现
   const cards = document.querySelectorAll<HTMLElement>('.card')
@@ -559,18 +535,6 @@ onMounted(() => {
   // 添加视差滚动效果监听器
   window.addEventListener('scroll', handleParallaxScroll, { passive: true })
   
-  // 添加页脚区域的正常滚动支持
-  const footerObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      // 当页脚可见时的处理逻辑（如果需要）
-    })
-  }, { threshold: 0.1 })
-  
-  const footer = document.querySelector('.footer')
-  if (footer) {
-    footerObserver.observe(footer)
-  }
-  
   // 添加点击空白处隐藏下拉菜单的事件监听
   window.addEventListener('click', handleClickOutside)
 })
@@ -578,6 +542,7 @@ onMounted(() => {
 onUnmounted(() => {
   // 清理事件监听器
   window.removeEventListener('click', handleClickOutside)
+  window.removeEventListener('click', handlePageClick)
   window.removeEventListener('scroll', handleParallaxScroll)
 })
 </script>
@@ -649,6 +614,7 @@ onUnmounted(() => {
   min-height: 100vh; /* 改为min-height，允许内容撑开 */
   padding: 2rem 0;
   box-sizing: border-box;
+  overflow: visible; /* 展开覆盖层图片可伸出不裁切 */
 }
 
 .history-section::before {
@@ -666,6 +632,7 @@ onUnmounted(() => {
 .history-section .history-content {
   position: relative;
   z-index: 2;
+  overflow: visible;
 }
 
 /* 导航栏 */
@@ -1215,12 +1182,13 @@ onUnmounted(() => {
 /* 时间线 */
 .timeline {
   display: flex;
-  justify-content: center;
+  justify-content: center; /* 居中对齐 */
   gap: 0;
   margin-top: 0; /* 移除额外间距，使用subtitle的margin-bottom控制 */
-  max-width: 1220px; /* 5个色块 * 244px = 1220px，1920*1080基准 */
+  max-width: 1464px; /* 6个位置 * 244px = 1464px，但只有5个色块（4个事件+1个固定），右侧留白一个位置 */
   margin-left: auto;
   margin-right: auto;
+  overflow: visible; /* 展开覆盖层可伸出 */
 }
 
 
@@ -1234,6 +1202,7 @@ onUnmounted(() => {
   transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   width: 100%;
   position: relative; /* 添加相对定位，作为覆盖层的参考 */
+  overflow: visible; /* 展开覆盖层可伸出 */
 }
 
 /* 移除展开和收起状态的flex变化 */
@@ -1280,6 +1249,54 @@ onUnmounted(() => {
   height: 400px; /* 1920*1080基准高度400px */
   width: 244px; /* 1920*1080基准宽度244px */
   margin-bottom: 1rem;
+}
+
+/* 固定的"CONSTANLY UPDATING"色块 */
+.timeline-item-fixed {
+  flex: 0 0 244px; /* 固定宽度，不伸缩 */
+  cursor: default; /* 不可点击 */
+  pointer-events: none; /* 不响应鼠标事件 */
+  transform: translateY(40px); /* 与其他色块对齐 */
+  transition: all 0.8s ease;
+}
+
+.timeline-bar-fixed {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.constantly-updating-text {
+  position: absolute;
+  color: #000000; /* 黑色文字 */
+  font-size: 12px;
+  font-weight: 600;
+  font-family: 'MiSans-Demibold', 'MiSans', 'Noto Sans SC', sans-serif;
+  text-align: center;
+  letter-spacing: 0.15em;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  padding: 0 10px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+}
+
+.constantly-updating-text span {
+  display: block;
+  line-height: 1.2;
+}
+
+/* 当其他内容被选中时，固定色块也变浅 */
+.timeline-item-fixed.dimmed-card .timeline-bar-fixed {
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
 }
 
 .timeline-date {
@@ -1345,140 +1362,47 @@ onUnmounted(() => {
 
 .expanded-image {
   width: 100%;
+  min-width: 200px;
   height: 400px; /* 与timeline-bar一样的高度 */
+  min-height: 200px;
   object-fit: cover; /* 完全填充，裁剪多余部分 */
   display: block;
+  vertical-align: top;
 }
 
-/* 页脚 */
-.footer {
-  background: #000000;
-  height: 160px; /* 从200px缩小到160px (80%) */
-  padding: 30px 0; /* 从40px缩小到30px */
-  color: #ffffff;
-  box-sizing: border-box;
-}
-
-.footer-container {
-  max-width: 1920px;
-  margin: 0 auto;
-  padding: 0;
-  position: relative;
-}
-
-/* AXON LABS Logo - 左侧200px */
-.footer-logo {
+/* 展开内容文字样式 */
+.timeline-expanded-content {
   position: absolute;
-  left: 200px;
-  top: 30px; /* 从40px缩小到30px */
-}
-
-.footer-logo-img {
-  width: 200px; /* 从250px缩小到200px (80%) */
-  height: auto;
-  filter: brightness(0) invert(1);
-}
-
-/* 页脚主要内容区域 - 居中左对齐 */
-.footer-content {
-  max-width: 800px;
-  margin: 0 auto;
-  text-align: left;
-  padding-left: 2rem;
-  margin-left: 480px; /* logo位置200px + logo宽度200px + 间距80px = 480px */
+  bottom: 0;
+  left: 0;
+  width: 50%; /* 只占左侧50% */
+  padding: 30px 40px 25px;
+  color: #000000; /* 黑色文字 */
+  z-index: 11;
   display: flex;
   flex-direction: column;
-}
-
-/* 社交媒体图标 */
-.social-icons {
-  display: flex;
-  justify-content: flex-start;
-  gap: 0.8rem; /* 从1rem缩小到0.8rem */
-  margin-bottom: 12px; /* 从15px缩小到12px */
-}
-
-.social-icon {
-  display: inline-block;
-  width: 20px; /* 从24px缩小到20px */
-  height: 20px; /* 从24px缩小到20px */
-  transition: transform 0.3s ease, opacity 0.3s ease;
-}
-
-.social-icon img {
-  width: 100%;
-  height: 100%;
-  object-fit: fill;
-}
-
-.social-icon:hover {
-  transform: scale(1.1);
-  opacity: 0.8;
-}
-
-/* 页脚文字区域 */
-.footer-text-area {
-  height: 75px; /* 从90px缩小到75px */
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-/* 页脚链接 */
-.footer-links {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  font-size: 14px; /* 从16px缩小到14px */
-  height: 20px; /* 从24px缩小到20px */
-}
-
-.footer-link {
-  color: #ffffff;
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-.footer-link:hover {
-  color: #01CE7E;
-}
-
-.separator {
-  color: #ffffff;
-  margin: 0 0.25rem;
-}
-
-/* 联系信息 */
-.footer-contact {
-  height: 20px; /* 从24px缩小到20px */
-  display: flex;
-  align-items: center;
-}
-
-.footer-contact p {
-  color: #9E9E9E;
-  font-size: 14px; /* 从16px缩小到14px */
-  margin: 0;
+  justify-content: flex-end;
   text-align: left;
 }
 
-/* 版权信息 */
-.footer-copyright {
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  min-height: 20px; /* 从固定高度改为最小高度，允许内容换行 */
-  display: flex;
-  align-items: center;
+.timeline-expanded-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #000000; /* 黑色文字 */
+  line-height: 1.2;
+  font-family: 'MiSans', 'Noto Sans SC', sans-serif;
+  white-space: nowrap; /* 确保标题在一行显示 */
 }
 
-.footer-copyright p {
-  color: #9E9E9E;
-  font-size: 14px; /* 从16px缩小到14px */
+.timeline-expanded-description {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #000000; /* 黑色文字 */
   margin: 0;
-  line-height: 1.4;
-  text-align: left;
+  font-family: 'MiSans', 'Noto Sans SC', sans-serif;
 }
+
 
 /* 响应式设计 - 以1920*1080为基准 */
 @media (max-width: 1440px) {
@@ -1532,6 +1456,34 @@ onUnmounted(() => {
   
   .section-subtitle {
     margin-bottom: 15px; /* 20px * 0.75 */
+  }
+}
+
+/* 1220 宽下大事件时间线收窄为 1090 */
+@media (max-width: 1220px) {
+  .timeline {
+    max-width: 1090px;
+  }
+  
+  .timeline-item.card {
+    flex: 0 0 182px; /* 1090/6≈182 */
+  }
+  
+  .timeline-bar {
+    width: 182px;
+    height: 298px; /* 400*1090/1464 等比 */
+  }
+  
+  .timeline-item-fixed {
+    flex: 0 0 182px;
+  }
+  
+  .timeline-expanded-overlay {
+    height: 298px;
+  }
+  
+  .expanded-image {
+    height: 298px;
   }
 }
 
@@ -1589,59 +1541,6 @@ onUnmounted(() => {
     margin-bottom: 12px; /* 20px * 0.6 */
   }
   
-  /* 页脚响应式 */
-  .footer-logo {
-    left: 120px; /* 200px * 0.6 */
-  }
-  
-  .footer {
-    height: 120px; /* 200px * 0.6 */
-    padding: 24px 0; /* 40px * 0.6 */
-  }
-  
-  .footer-content {
-    margin-left: 330px; /* logo位置120px + logo宽度150px + 间距60px = 330px */
-    max-width: 500px;
-  }
-  
-  .social-icons {
-    margin-bottom: 9px; /* 15px * 0.6 */
-  }
-  
-  .footer-text-area {
-    height: 54px; /* 90px * 0.6 */
-  }
-  
-  .footer-links {
-    height: 14.4px; /* 24px * 0.6 */
-  }
-  
-  .footer-contact {
-    height: 14.4px; /* 24px * 0.6 */
-  }
-  
-  .footer-copyright {
-    height: 14.4px; /* 24px * 0.6 */
-  }
-  
-  .social-icon {
-    width: 18px; /* 24px * 0.75 */
-    height: 18px; /* 24px * 0.75 */
-  }
-  
-  .footer-logo-img {
-    width: 150px; /* 250px * 0.6 */
-    height: auto;
-  }
-  
-  .footer-links {
-    font-size: 9.6px; /* 16px * 0.6 */
-  }
-  
-  .footer-contact p,
-  .footer-copyright p {
-    font-size: 9.6px; /* 16px * 0.6 */
-  }
   
   .timeline {
     max-width: 732px; /* 1220px * 0.6 */
@@ -1839,6 +1738,22 @@ onUnmounted(() => {
     position: relative;
   }
   
+  .timeline-item-fixed {
+    flex: 0 0 58px; /* 固定宽度，与timeline-bar宽度一致 */
+  }
+  
+  .constantly-updating-text {
+    font-size: 8px; /* 中等屏幕字体 */
+    letter-spacing: 0.1em;
+    padding: 0 6px;
+    color: #000000; /* 黑色文字 */
+  }
+  
+  .constantly-updating-text span {
+    display: block;
+    line-height: 1.2;
+  }
+  
   .timeline-date {
     margin-top: 0.4rem;
     font-size: 0.7rem;
@@ -1886,6 +1801,25 @@ onUnmounted(() => {
     object-fit: cover;
   }
   
+  /* 移动端展开内容文字样式 */
+  .timeline-expanded-content {
+    width: 60%; /* 移动端占60% */
+    padding: 15px 18px 12px;
+  }
+  
+  .timeline-expanded-title {
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+    color: #000000; /* 黑色文字 */
+  }
+  
+  .timeline-expanded-description {
+    font-size: 0.85rem;
+    line-height: 1.5;
+    margin: 0;
+    color: #000000; /* 黑色文字 */
+  }
+  
   /* 移动端保持桌面端的隐藏逻辑 */
   .timeline-item.hidden-by-overlay .timeline-bar {
     opacity: 0 !important;
@@ -1920,58 +1854,6 @@ onUnmounted(() => {
 
   
   /* 页脚响应式 */
-  .footer-logo {
-    left: 100px; /* 200px * 0.5 */
-  }
-  
-  .footer {
-    height: 100px; /* 200px * 0.5 */
-    padding: 20px 0; /* 40px * 0.5 */
-  }
-  
-  .footer-content {
-    margin-left: 275px; /* logo位置100px + logo宽度125px + 间距50px = 275px */
-    max-width: 400px;
-  }
-  
-  .social-icons {
-    margin-bottom: 7.5px; /* 15px * 0.5 */
-  }
-  
-  .footer-text-area {
-    height: 45px; /* 90px * 0.5 */
-  }
-  
-  .footer-links {
-    height: 12px; /* 24px * 0.5 */
-  }
-  
-  .footer-contact {
-    height: 12px; /* 24px * 0.5 */
-  }
-  
-  .footer-copyright {
-    height: 12px; /* 24px * 0.5 */
-  }
-  
-  .social-icon {
-    width: 16px; /* 24px * 0.67 */
-    height: 16px; /* 24px * 0.67 */
-  }
-  
-  .footer-logo-img {
-    width: 125px; /* 250px * 0.5 */
-    height: auto;
-  }
-  
-  .footer-links {
-    font-size: 8px; /* 16px * 0.5 */
-  }
-  
-  .footer-contact p,
-  .footer-copyright p {
-    font-size: 8px; /* 16px * 0.5 */
-  }
   
   .timeline {
     max-width: 915px; /* 1220px * 0.75 */
@@ -1993,64 +1875,6 @@ onUnmounted(() => {
   }
   
 
-  
-  /* 页脚响应式 */
-  .footer-logo {
-    left: 150px; /* 200px * 0.75 */
-  }
-  
-  .footer {
-    height: 150px; /* 200px * 0.75 */
-    padding: 30px 0; /* 40px * 0.75 */
-  }
-  
-  .footer-content {
-    max-width: 600px;
-    padding-left: 1.5rem;
-    margin-left: 412.5px; /* logo位置150px + logo宽度187.5px + 间距75px = 412.5px */
-  }
-  
-  .social-icons {
-    margin-bottom: 11.25px; /* 15px * 0.75 */
-    gap: 0.8rem;
-  }
-  
-  .footer-text-area {
-    height: 67.5px; /* 90px * 0.75 */
-  }
-  
-  .footer-links {
-    height: 18px; /* 24px * 0.75 */
-  }
-  
-  .footer-contact {
-    height: 18px; /* 24px * 0.75 */
-  }
-  
-  .footer-copyright {
-    height: 18px; /* 24px * 0.75 */
-  }
-  
-  .social-icon {
-    width: 20px; /* 24px * 0.83 */
-    height: 20px; /* 24px * 0.83 */
-  }
-  
-  .footer-logo-img {
-    width: 187.5px; /* 250px * 0.75 */
-    height: auto;
-  }
-  
-  .footer-links {
-    justify-content: center; /* 移动端居中 */
-    font-size: 12px; /* 16px * 0.75 */
-    gap: 0.4rem;
-  }
-  
-  .footer-contact p,
-  .footer-copyright p {
-    font-size: 12px; /* 16px * 0.75 */
-  }
 }
 
 @media (max-width: 480px) {
@@ -2192,6 +2016,22 @@ onUnmounted(() => {
     position: relative;
   }
   
+  .timeline-item-fixed {
+    flex: 0 0 50px; /* 固定宽度，与timeline-bar宽度一致 */
+  }
+  
+  .constantly-updating-text {
+    font-size: 7px; /* 小屏幕字体 */
+    letter-spacing: 0.1em;
+    padding: 0 5px;
+    color: #000000; /* 黑色文字 */
+  }
+  
+  .constantly-updating-text span {
+    display: block;
+    line-height: 1.2;
+  }
+  
   .timeline-date {
     margin-top: 0.3rem;
     font-size: 0.65rem;
@@ -2239,6 +2079,25 @@ onUnmounted(() => {
     object-fit: cover;
   }
   
+  /* 小屏幕展开内容文字样式 */
+  .timeline-expanded-content {
+    width: 65%; /* 小屏幕占65% */
+    padding: 12px 15px 10px;
+  }
+  
+  .timeline-expanded-title {
+    font-size: 1rem;
+    margin-bottom: 6px;
+    color: #000000; /* 黑色文字 */
+  }
+  
+  .timeline-expanded-description {
+    font-size: 0.8rem;
+    line-height: 1.4;
+    margin: 0;
+    color: #000000; /* 黑色文字 */
+  }
+  
   /* 小屏幕保持桌面端的隐藏逻辑 */
   .timeline-item.hidden-by-overlay .timeline-bar {
     opacity: 0 !important;
@@ -2273,69 +2132,5 @@ onUnmounted(() => {
 
   
   /* 页脚移动端适配 */
-  .footer-logo {
-    position: relative; /* 移动端改为相对定位 */
-    left: 0;
-    top: 0;
-    text-align: center;
-    margin-bottom: 1rem;
-  }
-  
-  .footer {
-    padding-bottom: 12.8px; /* 32px * 0.4 */
-  }
-  
-  .footer-content {
-    max-width: none;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    text-align: center; /* 移动端居中对齐 */
-    margin-left: 0; /* 移动端不需要左边距 */
-  }
-  
-  .social-icons {
-    margin-bottom: 6px; /* 15px * 0.4 */
-    justify-content: center; /* 移动端居中 */
-    gap: 0.6rem;
-  }
-  
-  .footer-text-area {
-    height: 36px; /* 90px * 0.4 */
-  }
-  
-  .footer-links {
-    height: 9.6px; /* 24px * 0.4 */
-    justify-content: center; /* 移动端居中 */
-  }
-  
-  .footer-contact {
-    height: 9.6px; /* 24px * 0.4 */
-  }
-  
-  .footer-copyright {
-    height: 9.6px; /* 24px * 0.4 */
-  }
-  
-  .social-icon {
-    width: 20px; /* 保持在24px以下 */
-    height: 20px; /* 保持在24px以下 */
-  }
-  
-  .footer-logo-img {
-    width: 100px; /* 250px * 0.4 */
-    height: auto;
-  }
-  
-  .footer-links {
-    justify-content: center; /* 移动端居中 */
-    font-size: 6.4px; /* 16px * 0.4 */
-    gap: 0.3rem;
-  }
-  
-  .footer-contact p,
-  .footer-copyright p {
-    font-size: 6.4px; /* 16px * 0.4 */
-    text-align: center; /* 移动端居中 */
-  }
 }
 </style>
