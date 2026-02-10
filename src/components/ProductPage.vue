@@ -1758,4 +1758,100 @@ onUnmounted(() => {
     white-space: normal !important;
   }
 }
+
+/* 4K屏幕适配 (min-width: 2560px) - 按2倍放大 */
+@media (min-width: 2560px) {
+  .navbar {
+    height: 240px !important; /* 与首页一致，从200px增加到240px */
+  }
+  
+  .main-content {
+    padding-top: 240px !important; /* 匹配导航栏高度，与首页一致 */
+  }
+  
+  .product-section-title {
+    font-size: 120px; /* 60px * 2 */
+    margin-bottom: 80px; /* 40px * 2 */
+  }
+  
+  .product-section-subtitle {
+    font-size: 60px; /* 30px * 2 */
+    margin-bottom: 120px; /* 60px * 2 */
+  }
+  
+  .product-grid {
+    gap: 80px; /* 40px * 2 */
+    margin-bottom: 120px; /* 60px * 2 */
+  }
+  
+  .product-card {
+    padding: 60px; /* 30px * 2 */
+  }
+  
+  .product-card-title {
+    font-size: 48px; /* 24px * 2 */
+    margin-bottom: 32px; /* 16px * 2 */
+  }
+  
+  .product-card-description {
+    font-size: 28px; /* 14px * 2 */
+    line-height: 3; /* 1.5 * 2 */
+  }
+  
+  .footer {
+    height: 320px; /* 160px * 2 */
+    padding: 60px 0; /* 30px * 2 */
+  }
+  
+  .footer-logo {
+    left: 400px; /* 200px * 2 */
+    top: 60px; /* 30px * 2 */
+  }
+  
+  .footer-logo-img {
+    width: 400px; /* 200px * 2 */
+  }
+  
+  .footer-content {
+    max-width: 1600px; /* 800px * 2 */
+    margin-left: 960px; /* 480px * 2 */
+    padding-left: 4rem; /* 2rem * 2 */
+  }
+  
+  .social-icons {
+    gap: 1.6rem; /* 0.8rem * 2 */
+    margin-bottom: 24px; /* 12px * 2 */
+  }
+  
+  .social-icon {
+    width: 48px; /* 24px * 2 */
+    height: 48px; /* 24px * 2 */
+  }
+  
+  .footer-text-area {
+    height: 180px; /* 90px * 2 */
+  }
+  
+  .footer-links {
+    font-size: 32px; /* 16px * 2 */
+    height: 48px; /* 24px * 2 */
+    gap: 1rem; /* 0.5rem * 2 */
+  }
+  
+  .footer-contact {
+    height: 48px; /* 24px * 2 */
+  }
+  
+  .footer-contact p {
+    font-size: 32px; /* 16px * 2 */
+  }
+  
+  .footer-copyright {
+    height: 48px; /* 24px * 2 */
+  }
+  
+  .footer-copyright p {
+    font-size: 32px; /* 16px * 2 */
+  }
+}
 </style>

@@ -95,10 +95,13 @@ function updateQRPosition() {
   if (!currentQR.value || !icon) return
   nextTick(() => {
     const rect = icon.getBoundingClientRect()
-    const qrWidth = 140
+    // 检测是否为4K屏幕，如果是则使用更大的二维码尺寸
+    const is4K = window.innerWidth >= 2560
+    const qrWidth = is4K ? 280 : 140 // 4K下使用2倍尺寸
+    const bottomOffset = is4K ? 20 : 10 // 4K下使用2倍间距
     qrPortalStyle.value = {
       left: `${rect.left + rect.width / 2 - qrWidth / 2}px`,
-      bottom: `${window.innerHeight - rect.top + 10}px`
+      bottom: `${window.innerHeight - rect.top + bottomOffset}px`
     }
   })
 }
@@ -250,11 +253,9 @@ onUnmounted(() => {
 }
 
 .bilibili-qr-portal img {
-  max-width: 160px;
-  max-height: 160px;
-  width: auto;
-  height: auto;
-  object-fit: contain;
+  width: 160px; /* 使用固定宽度，确保所有二维码大小一致 */
+  height: 160px; /* 使用固定高度，确保所有二维码大小一致 */
+  object-fit: contain; /* 保持图片比例，完整显示 */
   display: block;
 }
 
@@ -617,6 +618,99 @@ onUnmounted(() => {
   .footer-copyright p {
     font-size: 5.6px; /* 14px * 0.4 */
     text-align: center; /* 移动端居中 */
+  }
+}
+
+/* 4K屏幕适配 (min-width: 2560px) - 按2倍放大 */
+@media (min-width: 2560px) {
+  .footer {
+    height: 320px; /* 160px * 2 */
+    padding: 60px 0; /* 30px * 2 */
+  }
+  
+  .footer-container {
+    margin: 0; /* 覆盖基础样式中的 margin: 0 auto;，避免居中 */
+    max-width: none; /* 移除最大宽度限制 */
+  }
+  
+  .footer-logo {
+    left: 300px; /* 靠左一些，从400px减少到300px */
+    top: 60px; /* 30px * 2 */
+  }
+  
+  .footer-logo-img {
+    width: 400px; /* 200px * 2 */
+  }
+  
+  .footer-content {
+    max-width: 1600px; /* 800px * 2 */
+    margin: 0; /* 覆盖基础样式中的 margin: 0 auto; */
+    margin-left: 900px; /* 增加间距，从760px增加到900px */
+    padding-left: 4rem; /* 2rem * 2 */
+  }
+  
+  .social-icons {
+    gap: 1.6rem; /* 0.8rem * 2 */
+    margin-bottom: 24px; /* 12px * 2 */
+  }
+  
+  .social-icon {
+    width: 48px; /* 24px * 2 */
+    height: 48px; /* 24px * 2 */
+  }
+  
+  .social-icon.bilibili-icon {
+    width: 84px; /* 42px * 2 */
+    height: 38px; /* 19px * 2 */
+  }
+  
+  .social-icon.bilibili-icon img {
+    width: 84px; /* 42px * 2 */
+    height: 38px; /* 19px * 2 */
+  }
+  
+  .footer-text-area {
+    height: 150px; /* 75px * 2 */
+  }
+  
+  .footer-links {
+    font-size: 28px; /* 14px * 2 */
+    height: 40px; /* 20px * 2 */
+    gap: 1rem; /* 0.5rem * 2 */
+  }
+  
+  .separator {
+    margin: 0 0.5rem; /* 0.25rem * 2 */
+  }
+  
+  .footer-contact {
+    height: 40px; /* 20px * 2 */
+  }
+  
+  .footer-contact p {
+    font-size: 28px; /* 14px * 2 */
+  }
+  
+  .footer-copyright {
+    min-height: 40px; /* 20px * 2 */
+    border-top-width: 2px; /* 1px * 2 */
+  }
+  
+  .footer-copyright p {
+    font-size: 28px; /* 14px * 2 */
+  }
+  
+  /* 二维码弹窗在4K下也需要放大 */
+  .bilibili-qr-portal {
+    padding: 20px; /* 10px * 2 */
+    border-radius: 16px; /* 8px * 2 */
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3); /* 0 4px 12px * 2 */
+  }
+  
+  .bilibili-qr-portal img {
+    width: 320px !important; /* 160px * 2，使用固定宽度，确保所有二维码大小一致 */
+    height: 320px !important; /* 160px * 2，使用固定高度，确保所有二维码大小一致 */
+    object-fit: contain !important; /* 保持图片比例，完整显示 */
   }
 }
 </style>

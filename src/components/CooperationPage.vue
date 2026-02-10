@@ -1198,5 +1198,112 @@ onUnmounted(() => {
   }
   
 }
+
+/* 4K屏幕适配 (min-width: 2560px) - 按2倍放大 */
+@media (min-width: 2560px) {
+  .cooperation-container {
+    --nav-h: 240px; /* 增加高度，从200px增加到240px */
+  }
+  
+  .navbar {
+    height: 240px !important; /* 与首页一致，从200px增加到240px */
+  }
+  
+  .main-content {
+    padding-top: 240px !important; /* 匹配导航栏高度 */
+  }
+  
+  /* 标题和副标题 */
+  .main-title {
+    font-size: 112px !important; /* 56px * 2 */
+    margin-bottom: 8px !important; /* 4px * 2 */
+    letter-spacing: 4px !important; /* 2px * 2 */
+  }
+  
+  .main-subtitle {
+    font-size: 60px !important; /* 30px * 2 */
+    margin-bottom: 32px !important; /* 16px * 2 */
+  }
+  
+  /* 联系卡片网格 */
+  .contacts-grid {
+    gap: 128px !important; /* 64px * 2 */
+    max-width: 1640px !important; /* 820px * 2 */
+  }
+  
+  /* 联系卡片 */
+  .contact-card {
+    gap: 24px !important; /* 12px * 2 */
+  }
+  
+  /* 联系信息 */
+  .contact-title {
+    font-size: 36px !important; /* 18px * 2 */
+    margin-bottom: 32px !important; /* 16px * 2 */
+  }
+  
+  .contact-desc {
+    font-size: 26px !important; /* 13px * 2 */
+    margin-bottom: 20px !important; /* 10px * 2 */
+    line-height: 1.7 !important;
+  }
+  
+  .contact-details {
+    gap: 12px !important; /* 6px * 2 */
+  }
+  
+  .contact-item {
+    font-size: 26px !important; /* 13px * 2 */
+  }
+  
+  /* 二维码 */
+  .qr-code-box {
+    gap: 16px !important; /* 8px * 2 */
+  }
+  
+  .qr-image {
+    width: 280px !important; /* 140px * 2 */
+    height: 280px !important; /* 140px * 2 */
+  }
+  
+  /* 品牌合作部分 - 确保标题大小与业务联系部分一致 */
+  .cobranding-section .main-title {
+    font-size: 112px !important; /* 与业务联系部分一致 */
+    margin-bottom: 8px !important; /* 与业务联系部分一致 */
+    letter-spacing: 4px !important; /* 与业务联系部分一致 */
+  }
+  
+  .cobranding-section .main-subtitle {
+    font-size: 60px !important; /* 与业务联系部分一致 */
+    margin-bottom: 32px !important; /* 与业务联系部分一致 */
+  }
+  
+  .brands-grid {
+    gap: 86px 80px !important; /* 43px 40px * 2 */
+    max-width: 1800px !important; /* 900px * 2 */
+    margin-bottom: 40px !important; /* 20px * 2 */
+  }
+  
+  .brand-logo {
+    width: 356px !important; /* 178px * 2 */
+    height: 200px !important; /* 100px * 2 */
+  }
+  
+  /* 滚动指示器 */
+  .scroll-indicator {
+    bottom: 40px !important; /* 20px * 2 */
+  }
+  
+  .scroll-arrow-img {
+    width: 60px !important; /* 30px * 2 */
+    height: 56px !important; /* 28px * 2 */
+  }
+  
+  /* 区域容器 */
+  .section-container {
+    max-width: 2800px !important; /* 1400px * 2 */
+    padding: 0 clamp(32px, 8vw, 8rem) !important; /* 16px-4rem * 2 */
+  }
+}
 </style>
 

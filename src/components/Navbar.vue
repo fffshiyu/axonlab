@@ -977,5 +977,125 @@ onUnmounted(() => {
     padding: 0.7rem 1.2rem;
   }
 }
+
+/* 4K屏幕适配 (min-width: 2560px) - 按2倍放大 */
+@media (min-width: 2560px) {
+  .navbar {
+    height: 240px; /* 增加高度，从200px增加到240px */
+  }
+  
+  .nav-content {
+    max-width: 3840px; /* 1920px * 2 */
+  }
+  
+  .logo {
+    left: 284px; /* 142px * 2，保持与右侧对齐 */
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  .logo-img {
+    width: 500px; /* 250px * 2 */
+    height: auto;
+  }
+  
+  .nav-links {
+    left: 1300px; /* 650px * 2 */
+    gap: 7.5rem !important; /* 增加间距，从6rem增加到7.5rem */
+    align-items: center; /* 确保垂直居中 */
+    display: flex;
+  }
+  
+  .nav-link {
+    font-size: 1.8rem; /* 0.9rem * 2 */
+    white-space: nowrap; /* 防止文字换行 */
+    line-height: 1.2; /* 保持行高正常 */
+    height: auto; /* 自动高度 */
+  }
+  
+  .nav-link.active::after {
+    height: 4px; /* 2px * 2 */
+    bottom: -10px; /* -5px * 2 */
+  }
+  
+  .nav-right {
+    right: 284px; /* 142px * 2 */
+    display: flex;
+    align-items: center; /* 确保垂直居中 */
+    gap: 1rem; /* 0.5rem * 2 */
+  }
+  
+  .nav-language {
+    font-size: 32px; /* 16px * 2 */
+    line-height: 1.2; /* 保持行高正常 */
+    white-space: nowrap; /* 防止文字换行 */
+  }
+  
+  .lang-sep {
+    font-size: 32px; /* 16px * 2 */
+  }
+  
+  .dropdown-menu {
+    width: 320px; /* 160px * 2 */
+    padding: 1rem 0; /* 0.5rem * 2 */
+    margin-top: 20px; /* 10px * 2 */
+    min-width: 320px; /* 160px * 2 */
+  }
+  
+  .dropdown-item {
+    padding: 1.5rem 2rem; /* 0.75rem 1rem * 2 */
+    font-size: 1.8rem; /* 0.9rem * 2 */
+    line-height: 1.5; /* 保持行高 */
+    white-space: nowrap; /* 防止文字换行 */
+  }
+  
+  .qr-code-container {
+    width: 320px; /* 160px * 2 */
+    padding: 1rem 0; /* 0.5rem * 2 */
+  }
+  
+  .qr-code-image {
+    width: 200px; /* 100px * 2 */
+    height: 200px; /* 100px * 2 */
+    margin-bottom: 1rem; /* 0.5rem * 2 */
+  }
+  
+  .qr-code-placeholder {
+    width: 200px; /* 100px * 2 */
+    height: 200px; /* 100px * 2 */
+    font-size: 20px; /* 10px * 2 */
+    margin-bottom: 1rem; /* 0.5rem * 2 */
+  }
+  
+  .qr-code-title {
+    font-size: 22px; /* 11px * 2 */
+  }
+  
+  .qr-code-link {
+    font-size: 20px; /* 10px * 2 */
+  }
+  
+  .mobile-qr-image {
+    width: 240px; /* 120px * 2 */
+    height: 240px; /* 120px * 2 */
+    margin-bottom: 1rem; /* 0.5rem * 2 */
+  }
+  
+  .mobile-qr-placeholder {
+    width: 240px; /* 120px * 2 */
+    height: 240px; /* 120px * 2 */
+    font-size: 22px; /* 11px * 2 */
+    margin-bottom: 1rem; /* 0.5rem * 2 */
+  }
+  
+  .mobile-qr-title {
+    font-size: 24px; /* 12px * 2 */
+    margin-bottom: 0.5rem; /* 0.25rem * 2 */
+  }
+  
+  .mobile-qr-link {
+    font-size: 22px; /* 11px * 2 */
+  }
+}
 </style>
 

@@ -500,9 +500,13 @@ onMounted(() => {
   links.forEach(link => {
     link.addEventListener('click', (e) => {
       e.preventDefault()
-      const target = document.querySelector(link.getAttribute('href')!)
-      if (target) {
-        target.scrollIntoView({ behavior: 'smooth' })
+      const href = link.getAttribute('href')
+      // 检查href是否有效（不是'#'或空）
+      if (href && href !== '#' && href.length > 1) {
+        const target = document.querySelector(href)
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' })
+        }
       }
     })
   })
@@ -887,7 +891,7 @@ onUnmounted(() => {
   position: absolute; /* 使用absolute，相对于introduction-section定位 */
   left: 200px; /* 1920*1080基准：距离左侧200px，与logo对齐 */
   bottom: 280px; /* 1920*1080基准：距离底部280px */
-  max-width: 900px; /* 增加宽度，确保英文标题完整显示 */
+  max-width: 900px; /* 恢复原始宽度 */
   color: #ffffff;
   padding: 0; /* 移除padding */
   margin: 0; /* 移除margin */
@@ -910,7 +914,7 @@ onUnmounted(() => {
 
 /* 品牌介绍文字块（还原 index-text.webp 视觉样式） */
 .intro-text {
-  max-width: 650px; /* 减小宽度以匹配段落宽度 */
+  max-width: 650px; /* 恢复原始宽度 */
   transition: transform 400ms ease-out;
   text-align: left; /* 确保文字左对齐 */
 }
@@ -922,10 +926,10 @@ onUnmounted(() => {
 .intro-title-en {
   font-family: 'MiSans-Demibold', 'MiSans', 'Noto Sans SC', sans-serif;
   font-weight: 600;
-  font-size: 44px;
+  font-size: 44px; /* 恢复原始大小 */
   line-height: 1.05;
-  letter-spacing: 0.02em;
-  margin: 0 0 6px 0;
+  letter-spacing: 0.1em; /* 恢复原始字母间距 */
+  margin: 0 0 6px 0; /* 恢复原始margin */
   background: linear-gradient(to right, #01CE7E, #016840);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -936,9 +940,9 @@ onUnmounted(() => {
 .intro-title-cn {
   font-family: 'MiSans', 'Noto Sans SC', sans-serif;
   font-weight: 700;
-  font-size: 28px;
+  font-size: 28px; /* 恢复原始大小 */
   line-height: 1.1;
-  margin: 0 0 12px 0;
+  margin: 0 0 12px 0; /* 恢复原始margin */
   color: #ffffff;
 }
 
@@ -1218,6 +1222,7 @@ onUnmounted(() => {
   border: none;
   outline: none;
   vertical-align: top; /* 参考泡泡马特，消除垂直对齐空隙 */
+  pointer-events: auto; /* 确保可以接收点击事件 */
 }
 
 /* 移除展开和收起状态的flex变化 */
@@ -2286,5 +2291,247 @@ onUnmounted(() => {
 
   
   /* 页脚移动端适配 */
+}
+
+/* 4K屏幕适配 (min-width: 2560px) - 按2倍放大，确保所有内容等比例放大 */
+@media (min-width: 2560px) {
+  /* 导航栏 */
+  .navbar {
+    height: 240px; /* 增加高度，从200px增加到240px */
+  }
+  
+  .main-content {
+    padding-top: 240px; /* 匹配导航栏高度 */
+  }
+  
+  .introduction-section {
+    margin-top: -240px;
+    padding-top: 240px;
+  }
+  
+  /* Logo和导航 */
+  .logo {
+    left: 400px; /* 200px * 2 */
+  }
+  
+  .logo-img {
+    width: 500px; /* 250px * 2 */
+  }
+  
+  .nav-links {
+    left: 1300px; /* 650px * 2 */
+    gap: 6rem; /* 3rem * 2 */
+  }
+  
+  .nav-link {
+    font-size: 1.8rem; /* 0.9rem * 2 */
+  }
+  
+  .nav-right {
+    right: 284px; /* 142px * 2 */
+  }
+  
+  .nav-language {
+    font-size: 32px; /* 16px * 2 */
+  }
+  
+  /* 品牌介绍区域 */
+  .section-content {
+    left: 400px; /* 200px * 2 */
+    bottom: 560px; /* 280px * 2 */
+    max-width: 1800px; /* 900px * 2，恢复原始值后按2倍放大 */
+  }
+  
+  .section-content.lang-en {
+    bottom: 480px; /* 240px * 2 */
+  }
+  
+  .section-content.lang-en.expanded {
+    bottom: 460px; /* 230px * 2 */
+  }
+  
+  .intro-text {
+    max-width: 2000px !important; /* 增加宽度，确保英文标题完整显示 */
+  }
+  
+  .section-content {
+    max-width: 2400px !important; /* 增加宽度，确保英文标题完整显示 */
+  }
+  
+  .intro-title-en {
+    font-size: 106px !important; /* 进一步放大，从88px增加到106px (44px * 2.4) */
+    line-height: 1.05; /* 保持原始行高 */
+    margin-bottom: 14px !important; /* 进一步放大 */
+    letter-spacing: 0.24em !important; /* 进一步放大 */
+    white-space: nowrap !important; /* 确保单行显示 */
+  }
+  
+  .intro-title-cn {
+    font-size: 67px !important; /* 进一步放大，从56px增加到67px (28px * 2.4) */
+    line-height: 1.1; /* 保持原始行高 */
+    margin-bottom: 29px !important; /* 进一步放大 */
+  }
+  
+  .intro-paragraph {
+    font-size: 31px !important; /* 进一步放大，从26px增加到31px (13px * 2.4) */
+    line-height: 2.1 !important; /* 减少行间距，从4.2减少到2.1 */
+    margin-bottom: 1.2rem !important; /* 减少段落间距，从2.4rem减少到1.2rem */
+    max-width: 1440px !important; /* 进一步放大 */
+  }
+  
+  .intro-paragraph-en {
+    max-width: 1800px !important; /* 进一步放大 */
+  }
+  
+  /* 展开后的文字也使用相同的行间距 */
+  .intro-more .intro-paragraph {
+    line-height: 2.1 !important; /* 与未展开时保持一致 */
+    margin-bottom: 1.2rem !important; /* 与未展开时保持一致 */
+  }
+  
+  .learn-more-btn {
+    padding: 1.92rem 4.8rem !important; /* 进一步放大 */
+    font-size: 2.16rem !important; /* 进一步放大 */
+  }
+  
+  /* 历史大事件区域 */
+  .section-title {
+    font-size: 144px !important; /* 进一步放大，从120px增加到144px (60px * 2.4) */
+  }
+  
+  .section-subtitle {
+    font-size: 72px !important; /* 进一步放大，从60px增加到72px (30px * 2.4) */
+    margin-bottom: 48px !important; /* 进一步放大 */
+  }
+  
+  .history-content {
+    padding-top: 240px !important; /* 匹配导航栏高度 */
+  }
+  
+  .timeline {
+    max-width: 2440px !important; /* 244px * 5 * 2 = 2440px，与非4K逻辑一致，按2倍放大 */
+    gap: 0 !important; /* 与非4K一致 */
+    justify-content: center !important; /* 居中显示 */
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+  
+  /* 按2倍放大，与非4K逻辑一致 */
+  .timeline-item {
+    flex: 0 0 488px !important; /* 244px * 2，与非4K逻辑一致 */
+    width: 488px !important; /* 244px * 2，与非4K逻辑一致 */
+    cursor: pointer !important; /* 确保可点击 */
+    pointer-events: auto !important; /* 确保可以接收点击事件 */
+    position: relative !important; /* 确保定位正确 */
+    overflow: visible !important; /* 确保展开覆盖层可伸出 */
+    z-index: 1 !important; /* 确保在正确的层级 */
+  }
+  
+  /* 确保被覆盖层隐藏的item仍然可以点击 */
+  .timeline-item.hidden-by-overlay {
+    pointer-events: auto !important; /* 确保可以接收点击事件 */
+    z-index: 1 !important; /* 保持可点击 */
+  }
+  
+  .timeline-item-fixed {
+    flex: 0 0 488px !important; /* 244px * 2，与非4K逻辑一致 */
+    width: 488px !important; /* 244px * 2，与非4K逻辑一致 */
+    pointer-events: none !important; /* 固定块不可点击 */
+  }
+  
+  .timeline-bar {
+    height: 800px !important; /* 400px * 2 */
+    min-height: 800px !important;
+    max-height: 800px !important;
+    width: 100% !important; /* 保持100%填满父容器 */
+    pointer-events: auto !important; /* 确保可以接收点击事件 */
+    position: relative !important; /* 确保定位正确 */
+    z-index: 1 !important; /* 确保在正确的层级 */
+  }
+  
+  /* 确保被隐藏的bar仍然可以点击 */
+  .timeline-item.hidden-by-overlay .timeline-bar {
+    pointer-events: auto !important; /* 确保可以接收点击事件 */
+  }
+  
+  .timeline-bar-fixed {
+    height: 800px !important; /* 400px * 2 */
+    min-height: 800px !important;
+    max-height: 800px !important;
+  }
+  
+  .timeline-expanded-overlay {
+    height: 800px !important; /* 400px * 2，与非4K逻辑一致 */
+    min-height: 800px !important;
+    max-height: 800px !important;
+    width: 300% !important; /* 保持3个格子的宽度比例，与非4K一致 */
+    pointer-events: none !important; /* 不阻挡下面元素的点击 */
+    z-index: 2 !important; /* 降低z-index，确保不阻挡其他item的点击 */
+    overflow: hidden !important; /* 确保内容不会超出高度，与非4K一致 */
+  }
+  
+  .expanded-image {
+    height: 800px !important; /* 400px * 2，与非4K逻辑一致 */
+    min-height: 800px !important;
+    max-height: 800px !important;
+    width: 100% !important; /* 与非4K一致 */
+    object-fit: cover !important; /* 与非4K一致，完全填充，裁剪多余部分 */
+    pointer-events: none !important; /* 图片不阻挡点击 */
+    display: block !important; /* 与非4K一致 */
+    vertical-align: top !important; /* 与非4K一致 */
+  }
+  
+  .constantly-updating-text {
+    font-size: 24px; /* 12px * 2 */
+    letter-spacing: 0.3em; /* 0.15em * 2 */
+    gap: 8px; /* 4px * 2 */
+    padding: 0 20px; /* 10px * 2 */
+  }
+  
+  .timeline-date {
+    font-size: 1.8rem; /* 0.9rem * 2 */
+  }
+  
+  .constantly-updating-text {
+    font-size: 24px; /* 假设基础12px * 2 */
+    gap: 8px; /* 4px * 2 */
+  }
+  
+  /* 滚动指示器 */
+  .scroll-indicator {
+    bottom: 100px; /* 50px * 2 */
+  }
+  
+  .scroll-arrow-img {
+    width: 60px; /* 30px * 2 */
+    height: 56px; /* 28px * 2 */
+  }
+  
+  /* 下拉菜单和二维码 */
+  .dropdown-menu {
+    width: 320px; /* 160px * 2 */
+    padding: 1rem 0; /* 0.5rem * 2 */
+  }
+  
+  .dropdown-item {
+    padding: 1.5rem 2rem; /* 0.75rem 1rem * 2 */
+    font-size: 1.8rem; /* 0.9rem * 2 */
+  }
+  
+  .qr-code-container {
+    width: 320px; /* 160px * 2 */
+    padding: 1rem 0; /* 0.5rem * 2 */
+  }
+  
+  .qr-code-placeholder {
+    width: 200px; /* 100px * 2 */
+    height: 200px; /* 100px * 2 */
+    font-size: 24px; /* 12px * 2 */
+    margin-bottom: 1rem; /* 0.5rem * 2 */
+  }
+  
+  .qr-code-title {
+    font-size: 22px; /* 11px * 2 */
+  }
 }
 </style>

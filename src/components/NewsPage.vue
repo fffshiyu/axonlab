@@ -1865,4 +1865,152 @@ onUnmounted(() => {
     justify-content: center; /* 移动端文字居中 */
   }
 }
+
+/* 4K屏幕适配 (min-width: 2560px) - 按2倍放大 */
+@media (min-width: 2560px) {
+  .navbar {
+    height: 240px !important; /* 增加高度，从200px增加到240px */
+  }
+  
+  .section-container {
+    padding-top: 240px !important; /* 匹配导航栏高度 */
+  }
+  
+  .hero-image {
+    width: 2160px !important; /* 进一步放大，从1800px增加到2160px (900px * 2.4) */
+    height: 1440px !important; /* 进一步放大，从1200px增加到1440px (600px * 2.4) */
+  }
+  
+  .hero-controls-below {
+    width: 2160px !important; /* 进一步放大 */
+    margin-top: 96px !important; /* 进一步放大 */
+    padding: 0 144px !important; /* 进一步放大 */
+  }
+  
+  .hero-arrow {
+    width: 77px !important; /* 进一步放大 */
+    height: 77px !important; /* 进一步放大 */
+  }
+  
+  .arrow-icon {
+    width: 77px !important; /* 进一步放大 */
+    height: 77px !important; /* 进一步放大 */
+  }
+  
+  .hero-dots-below {
+    gap: 24px !important; /* 进一步放大 */
+  }
+  
+  .hero-dots-below .dot-below {
+    width: 24px !important; /* 进一步放大 */
+    height: 24px !important; /* 进一步放大 */
+  }
+  
+  .hero-dots-below .dot-below.wide {
+    width: 58px !important; /* 进一步放大 */
+    height: 24px !important; /* 进一步放大 */
+  }
+  
+  .hero-right {
+    top: calc(50% + 600px) !important; /* 往下移动，从500px增加到600px */
+    margin-left: 1128px !important; /* 进一步放大 */
+    max-width: 576px !important; /* 进一步放大 */
+  }
+  
+  .right-text {
+    height: 1440px !important; /* 进一步放大 */
+    max-height: 1440px !important; /* 进一步放大 */
+    font-size: 34px !important; /* 进一步放大，从28px增加到34px */
+    padding-right: 19px !important; /* 进一步放大 */
+    line-height: 2.5 !important; /* 减少行间距，从4.56减少到2.5 */
+  }
+  
+  .right-text p {
+    margin-bottom: 20px !important; /* 减少段落间距，从38px减少到20px */
+  }
+  
+  .date-overlay {
+    font-size: 154px !important; /* 进一步放大，从128px增加到154px */
+    letter-spacing: 5px !important; /* 进一步放大 */
+  }
+  
+  .news-bottom {
+    margin-top: 67px !important; /* 进一步放大 */
+  }
+  
+  .news-bottom-title {
+    font-size: 40px; /* 20px * 2 */
+    margin-bottom: 24px; /* 12px * 2 */
+  }
+  
+  .learn-more-btn {
+    padding: 1.6rem 4rem; /* 0.8rem 2rem * 2 */
+    font-size: 1.8rem; /* 0.9rem * 2 */
+  }
+  
+  .scroll-indicator {
+    bottom: 98px; /* 49px * 2 */
+  }
+  
+  .scroll-arrow-img {
+    width: 60px; /* 30px * 2 */
+    height: 56px; /* 28px * 2 */
+  }
+  
+  .footer {
+    height: 320px; /* 160px * 2 */
+    padding: 60px 0; /* 30px * 2 */
+  }
+  
+  .footer-logo {
+    left: 400px; /* 200px * 2 */
+    top: 60px; /* 30px * 2 */
+  }
+  
+  .footer-logo-img {
+    width: 400px; /* 200px * 2 */
+  }
+  
+  .footer-content {
+    max-width: 1600px; /* 800px * 2 */
+    margin-left: 960px; /* 480px * 2 */
+    padding-left: 4rem; /* 2rem * 2 */
+  }
+  
+  .social-icons {
+    gap: 1.6rem; /* 0.8rem * 2 */
+    margin-bottom: 24px; /* 12px * 2 */
+  }
+  
+  .social-icon {
+    width: 48px; /* 24px * 2 */
+    height: 48px; /* 24px * 2 */
+  }
+  
+  .footer-text-area {
+    height: 180px; /* 90px * 2 */
+  }
+  
+  .footer-links {
+    font-size: 32px; /* 16px * 2 */
+    height: 48px; /* 24px * 2 */
+    gap: 1rem; /* 0.5rem * 2 */
+  }
+  
+  .footer-contact {
+    height: 48px; /* 24px * 2 */
+  }
+  
+  .footer-contact p {
+    font-size: 32px; /* 16px * 2 */
+  }
+  
+  .footer-copyright {
+    height: 48px; /* 24px * 2 */
+  }
+  
+  .footer-copyright p {
+    font-size: 32px; /* 16px * 2 */
+  }
+}
 </style>

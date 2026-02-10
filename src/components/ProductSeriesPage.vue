@@ -3079,5 +3079,118 @@ onUnmounted(() => {
 .fade-enter-from, .fade-leave-to {
   opacity: 0;
 }
+
+/* 4K屏幕适配 (min-width: 2560px) - 按2倍放大 */
+@media (min-width: 2560px) {
+  /* 导航栏设置 - 与首页一致 */
+  .navbar {
+    height: 240px !important; /* 与首页一致 */
+  }
+  
+  .product-title-img {
+    max-width: 800px !important; /* 400px * 2 */
+    width: 800px !important;
+  }
+  
+  .loomi-title {
+    max-width: 500px !important; /* 250px * 2 */
+    width: 500px !important;
+  }
+  
+  .product-hint-text {
+    font-size: 28px; /* 14px * 2 */
+    margin-top: 20px; /* 10px * 2 */
+  }
+  
+  .product-title-container {
+    margin-bottom: 80px; /* 40px * 2 */
+  }
+  
+  .icon-column {
+    right: clamp(100px, 14vw, 280px); /* 50px-140px * 2 */
+    gap: clamp(40px, 6vh, 80px); /* 20px-40px * 2 */
+  }
+  
+  .icon-item {
+    width: 120px; /* 放大一些，从100px增加到120px */
+    height: 120px; /* 放大一些，从100px增加到120px */
+    border-radius: 60px; /* 对应调整圆角 */
+  }
+  
+  .icon-img {
+    width: 72px; /* 放大一些，从60px增加到72px */
+    height: 72px; /* 放大一些，从60px增加到72px */
+  }
+  
+  .icon-label {
+    font-size: 36px; /* 放大一些，从32px增加到36px */
+    margin-top: 14px; /* 对应调整 */
+  }
+  
+  /* 下方4个音频按钮往外侧摆放 */
+  .audio-btn-1 {
+    /* 位置1：右下曲线 - 更靠右 */
+    right: 15%; /* 进一步减少，更靠右 */
+  }
+  
+  .audio-btn-2 {
+    /* 位置2：中右曲线 - 更靠右 */
+    right: 15%; /* 进一步减少，更靠右 */
+  }
+  
+  .audio-btn-4 {
+    /* 位置4：中左曲线 - 更靠左 */
+    left: 15%; /* 进一步减少，更靠左 */
+  }
+  
+  .audio-btn-5 {
+    /* 位置5：左下曲线 - 更靠左 */
+    left: 15%; /* 进一步减少，更靠左 */
+  }
+  
+  .audio-btn img {
+    width: 100px; /* 50px * 2 */
+    height: 100px; /* 50px * 2 */
+  }
+  
+  /* 参数图片在4K下放大 */
+  .params-detail-img {
+    max-height: none !important; /* 移除最大高度限制 */
+    max-width: none !important; /* 移除最大宽度限制 */
+    width: 400px !important; /* 设置固定宽度，强制放大 */
+    height: auto !important;
+    top: 220px !important; /* 往下移动，让顶部和参数按钮对齐（参数按钮高度120px的一半） */
+    transform: scale(2) !important; /* 使用scale放大2倍 */
+    transform-origin: right center !important; /* 从右侧中心点缩放 */
+    margin-right: 60px !important; /* 30px * 2 */
+  }
+  
+  .video-modal-content {
+    max-width: 180vw !important; /* 进一步放大，从140vw增加到180vw */
+    max-height: 180vh !important; /* 进一步放大，从140vh增加到180vh */
+  }
+  
+  .video-modal-close {
+    width: 100px !important; /* 放大一些，从80px增加到100px */
+    height: 100px !important; /* 放大一些，从80px增加到100px */
+    font-size: 70px !important; /* 放大一些，从56px增加到70px */
+    top: 20px; /* 10px * 2 */
+    right: 20px; /* 10px * 2 */
+  }
+  
+  .video-modal-player {
+    max-width: 180vw !important; /* 进一步放大，从140vw增加到180vw */
+    max-height: 180vh !important; /* 进一步放大，从140vh增加到180vh */
+  }
+  
+  .scroll-indicator {
+    bottom: 40px; /* 20px * 2 */
+  }
+  
+  .scroll-arrow-img {
+    width: 60px; /* 30px * 2 */
+    height: 56px; /* 28px * 2 */
+  }
+}
 </style>
 

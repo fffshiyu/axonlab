@@ -342,4 +342,26 @@ const startCharging = () => {
     font-size: 10px;
   }
 }
+
+/* 4K屏幕适配 (min-width: 2560px) - 按2倍放大 */
+@media (min-width: 2560px) {
+  .logo-layers,
+  .logo-white,
+  .logo-green {
+    width: 1216px; /* 608px * 2 */
+    height: 114px; /* 57px * 2 */
+  }
+  
+  .logo-container {
+    gap: 3rem; /* 1.5rem * 2 */
+  }
+  
+  .loading-container {
+    padding: 4rem; /* 2rem * 2 */
+  }
+  
+  .brand-slogan {
+    font-size: 32px; /* 16px * 2 */
+  }
+}
 </style>
