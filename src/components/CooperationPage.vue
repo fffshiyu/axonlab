@@ -71,45 +71,15 @@
               <img src="/logo1.webp" alt="合作品牌" class="brand-logo" />
             </div>
             <div class="brand-item">
+              <img src="/santilogo.png" alt="合作品牌" class="brand-logo" />
+            </div>
+            <div class="brand-item">
               <img src="/logo2.webp" alt="合作品牌" class="brand-logo" />
             </div>
             <div class="brand-item">
               <img src="/logo3.webp" alt="合作品牌" class="brand-logo" />
             </div>
-            <div class="brand-item">
-              <img src="/iplogo.webp" alt="合作品牌" class="brand-logo placeholder" />
             </div>
-            
-            <!-- 第二行：4个占位logo -->
-            <div class="brand-item">
-              <img src="/iplogo.webp" alt="合作品牌" class="brand-logo placeholder" />
-            </div>
-            <div class="brand-item">
-              <img src="/iplogo.webp" alt="合作品牌" class="brand-logo placeholder" />
-            </div>
-            <div class="brand-item">
-              <img src="/iplogo.webp" alt="合作品牌" class="brand-logo placeholder" />
-            </div>
-            <div class="brand-item">
-              <img src="/iplogo.webp" alt="合作品牌" class="brand-logo placeholder" />
-            </div>
-            
-            <!-- 第三行：4个占位logo -->
-            <div class="brand-item">
-              <img src="/iplogo.webp" alt="合作品牌" class="brand-logo placeholder" />
-            </div>
-            <div class="brand-item">
-              <img src="/iplogo.webp" alt="合作品牌" class="brand-logo placeholder" />
-            </div>
-            <div class="brand-item">
-              <img src="/iplogo.webp" alt="合作品牌" class="brand-logo placeholder" />
-            </div>
-            <div class="brand-item">
-              <img src="/iplogo.webp" alt="合作品牌" class="brand-logo placeholder" />
-            </div>
-            </div>
-
-            <button class="learn-more-btn">{{ currentLanguage === 'zh' ? '了解更多' : 'Learn More' }}</button>
           </div>
         </div>
         

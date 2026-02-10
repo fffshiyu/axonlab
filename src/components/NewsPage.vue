@@ -9,39 +9,41 @@
         <div class="news-hero-layout">
           <!-- 左侧主图与日期 -->
           <div class="hero-left">
-            <button class="hero-arrow hero-arrow-left" @click="prevNews">
-              <img src="/arrow_right.webp" :alt="currentLanguage === 'zh' ? '上一张' : 'Previous'" class="arrow-icon arrow-icon-left" />
-            </button>
             <div class="hero-image">
-              <img :src="newsData[currentNewsIndex].image" alt="news" class="hero-img" />
-              <div class="date-overlay">{{ newsData[currentNewsIndex].date }}</div>
-              <!-- 轮播图切换点移到图片内部靠下 -->
-              <div class="hero-dots">
+              <img :src="currentImage" alt="news" class="hero-img" :class="{ 'hero-img-first': currentImageIndex === 0 }" />
+              <div v-if="currentImageIndex === 0" class="date-overlay">{{ latestNews.date }}</div>
+            </div>
+            <!-- 箭头和绿色标签移到图片下面 -->
+            <div class="hero-controls-below">
+              <button class="hero-arrow hero-arrow-left" @click="prevImage">
+                <img src="/arrow_right.webp" :alt="currentLanguage === 'zh' ? '上一张' : 'Previous'" class="arrow-icon arrow-icon-left" />
+              </button>
+              <div class="hero-dots-below">
                 <span 
-                  v-for="(_, index) in newsData" 
+                  v-for="(_, index) in latestNews.images" 
                   :key="index"
-                  :class="['dot', { active: currentNewsIndex === index }]"
-                  @click="goToNews(index)">
+                  :class="['dot-below', { active: currentImageIndex === index, wide: currentImageIndex === index }]"
+                  @click="goToImage(index)">
                 </span>
               </div>
+              <button class="hero-arrow hero-arrow-right" @click="nextImage">
+                <img src="/arrow_right.webp" :alt="currentLanguage === 'zh' ? '下一张' : 'Next'" class="arrow-icon" />
+              </button>
             </div>
-            <button class="hero-arrow hero-arrow-right" @click="nextNews">
-              <img src="/arrow_right.webp" :alt="currentLanguage === 'zh' ? '下一张' : 'Next'" class="arrow-icon" />
-            </button>
           </div>
 
           <!-- 右侧文字内容 -->
           <div class="hero-right">
             <div class="right-text">
-              <p>{{ newsData[currentNewsIndex].content }}</p>
+              <p>{{ currentContent }}</p>
             </div>
           </div>
         </div>
 
         <!-- 底部标题与按钮 -->
         <div class="news-bottom">
-          <h3 class="news-bottom-title">{{ currentLanguage === 'zh' ? 'LOOMI x 邱贻可产品即将发布' : 'LOOMI x Qiu Yike Product Launching Soon' }}</h3>
-          <button class="learn-more-btn">{{ currentLanguage === 'zh' ? '了解更多' : 'Learn More' }}</button>
+          <h3 class="news-bottom-title">{{ latestNews.title }}</h3>
+          <button class="learn-more-btn" @click="handleLearnMore">LEARN MORE</button>
         </div>
       </div>
     </section>
@@ -52,50 +54,61 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import Navbar from './Navbar.vue'
 import Footer from './Footer.vue'
 import { useLanguage } from '../composables/useLanguage'
 
 const { currentLanguage } = useLanguage()
 
-// 新闻数据
-const newsData = ref([
-  {
-    image: '/news.webp',
-    date: '2025.10.24',
-    title: 'AXON LABS发布全新AI智能硬件产品线',
-    content: `北京玄圃科技有限公司今日正式发布AXON LABS羽山系列全新AI智能硬件产品，该产品线融合了最新的人工智能技术与创新硬件设计，旨在为用户提供更加智能、便捷的生活体验。新产品采用了先进的机器学习算法，能够自主学习用户习惯，提供个性化的智能服务。产品设计注重用户体验，简洁的外观搭配强大的功能，完美诠释了科技与美学的结合。`
-  },
-  {
-    image: '/news.webp',
-    date: '2025.09.15',
-    title: 'LOOMI x 邱晗可产品即将发布',
-    content: `AXON LABS旗下智能生活品牌LOOMI宣布与知名设计师邱晗可展开深度合作，共同打造全新智能家居产品系列。此次合作将设计美学与智能科技完美融合，为用户带来前所未有的生活体验。邱晗可作为国际知名的工业设计师，曾获得多项设计大奖。此次与LOOMI的合作，她将其独特的设计理念融入智能产品中，打造出既美观又实用的智能家居解决方案。`
-  },
-  {
-    image: '/news.webp',
-    date: '2025.08.08',
-    title: 'AXON LABS荣获2025年度最佳创新企业奖',
-    content: `在刚刚结束的2025年度科技创新峰会上，AXON LABS凭借其在人工智能和智能硬件领域的卓越表现，荣获"年度最佳创新企业"大奖。这是对公司长期以来坚持技术创新和产品研发的充分肯定。颁奖典礼上，评委会高度评价了AXON LABS在技术创新、产品设计、市场表现等方面的突出成就。公司研发的多项核心技术已获得国内外专利，产品远销海外多个国家和地区。`
+// 最新新闻数据（只有一条）
+const latestNews = ref({
+  title: '新一代陪伴玩具"Loomi噜咪"',
+  date: '2026.02.12',
+  images: ['/news/1.jpg', '/news/2.jpg', '/news/3.jpg', '/news/4.jpg'],
+  contents: [
+    `2026年2月12日，Axonlabs羽山科技正式揭晓"LOOMI鹿米"系列首作——"Loomi噜咪"。Loomi噜咪作为新一代陪伴玩具，不仅是一个拥有"猫咪灵魂"的数字生命，也是一台3C认证的充电宝。Loomi噜咪通过AI技术与硬件的结合，给用户提供恰如其分的情绪价值，为用户的心情充电。`,
+    `有灵魂的对话：内置原创猫咪角色，依托AI情感大模型深度模拟真实猫咪习性，它能秒懂你的情绪，提供即时、治愈的实时对话。`,
+    `次元壁的突破：特有的"呼猫"功能，让用户能随时随地召唤周边的猫咪伙伴，将数字陪伴延伸至物理世界。`,
+    `无忧的旅途伴侣：它是符合2026.03最新3C执行标准的可上机充电宝，支持20W快充与多设备连接。扫描机身二维码即可即时查询合规信息，确保在每一段旅途中，都能给你最踏实、最简单的快乐。`
+  ]
+})
+
+const currentImageIndex = ref(0)
+
+// 当前显示的图片
+const currentImage = computed(() => {
+  return latestNews.value.images[currentImageIndex.value]
+})
+
+// 当前显示的文字内容
+const currentContent = computed(() => {
+  return latestNews.value.contents[currentImageIndex.value]
+})
+
+// 切换到上一张图片（点击左箭头跳到最右边）
+const prevImage = () => {
+  if (currentImageIndex.value === 0) {
+    currentImageIndex.value = latestNews.value.images.length - 1
+  } else {
+    currentImageIndex.value = currentImageIndex.value - 1
   }
-])
-
-const currentNewsIndex = ref(0)
-
-// 切换到上一条新闻
-const prevNews = () => {
-  currentNewsIndex.value = (currentNewsIndex.value - 1 + newsData.value.length) % newsData.value.length
 }
 
-// 切换到下一条新闻
-const nextNews = () => {
-  currentNewsIndex.value = (currentNewsIndex.value + 1) % newsData.value.length
+// 切换到下一张图片
+const nextImage = () => {
+  currentImageIndex.value = (currentImageIndex.value + 1) % latestNews.value.images.length
 }
 
-// 切换到指定新闻
-const goToNews = (index: number) => {
-  currentNewsIndex.value = index
+// 切换到指定图片
+const goToImage = (index: number) => {
+  currentImageIndex.value = index
+}
+
+// 处理"了解更多"按钮点击
+const handleLearnMore = () => {
+  // 暂时不做跳转
+  // window.open('https://mp.weixin.qq.com/', '_blank')
 }
 
 // 导航栏可见性
@@ -627,18 +640,21 @@ onUnmounted(() => {
 .hero-right {
   position: absolute;
   left: 50%;
-  bottom: 0; /* 底部对齐 */
+  top: calc(50% + 300px); /* 从中心向下偏移图片高度的一半(300px)，使文字顶部在图片底部位置 */
+  transform: translateY(-100%); /* 向上移动100%，使文字底部与图片底部对齐 */
   margin-left: 470px; /* 图片宽度的一半(450px) + 间隔20px */
   color: #fff;
   max-width: 240px; /* 从320px继续缩小到240px */
   width: 100%;
+  display: flex;
+  align-items: flex-end; /* 底部对齐 */
 }
 
 .hero-image {
   position: relative;
   width: 900px; /* 放大图片尺寸 */
   height: 600px; /* 保持3:2比例 */
-  border-radius: 12px;
+  border-radius: 0; /* 移除圆角 */
   overflow: hidden;
   transition: opacity 0.3s ease;
   margin: 0; /* 移除auto，让flex布局控制居中 */
@@ -648,8 +664,12 @@ onUnmounted(() => {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: brightness(0.6);
   transition: opacity 0.3s ease;
+}
+
+/* 只有首图显示暗色遮罩 */
+.hero-img-first {
+  filter: brightness(0.6);
 }
 
 .date-overlay {
@@ -668,28 +688,38 @@ onUnmounted(() => {
   font-family: 'MiSans', 'Noto Sans SC', sans-serif;
 }
 
+/* 箭头和标签容器 */
+.hero-controls-below {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 900px; /* 与图片宽度一致 */
+  margin-top: 40px; /* 距离图片底部更远 */
+  padding: 0 60px; /* 两侧留出更多空间，让箭头离图片更远 */
+  z-index: 2;
+  position: relative;
+  box-sizing: border-box;
+}
+
 .hero-arrow {
-  position: absolute;
-  top: 50%;
+  position: relative;
   width: 32px; /* 固定宽度 */
-  height: 32px; /* 固定高度 */
+  height: 32px; /* 恢复原来的大小 */
   border-radius: 0;
   border: none;
   background: transparent;
   cursor: pointer;
-  z-index: 3;
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0;
   flex-shrink: 0; /* 防止缩小 */
-  margin-top: -16px; /* 使用margin-top替代transform来垂直居中，避免与旋转冲突 */
 }
 
 .arrow-icon {
   width: 32px; /* 固定宽度 */
-  height: 32px; /* 固定高度 */
+  height: 32px; /* 恢复原来的大小 */
   object-fit: contain;
   transition: all 0.3s ease;
   display: block;
@@ -707,51 +737,46 @@ onUnmounted(() => {
   transform: rotate(180deg) scale(1.2); /* 左箭头悬停时保持旋转并放大 */
 }
 
-.hero-arrow-left { left: 16px; } /* 距离左边16px */
-.hero-arrow-right { right: 16px; } /* 距离右边16px */
-
-.hero-dots {
-  position: absolute;
-  bottom: 24px; /* 距离图片底部24px */
-  left: 50%;
-  transform: translateX(-50%);
+/* 绿色标签移到图片下面 */
+.hero-dots-below {
   display: flex;
+  justify-content: center;
   gap: 10px;
-  z-index: 2; /* 确保在图片上方 */
+  z-index: 2;
 }
 
-.hero-dots .dot {
+.hero-dots-below .dot-below {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.4);
+  background: #ffffff; /* 未选中的圆点是纯白色 */
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
-/* 中间的圆点显示为圆角矩形 */
-.hero-dots .dot:nth-child(2) {
+/* 激活的标签显示为宽型（圆角矩形） */
+.hero-dots-below .dot-below.wide {
   width: 24px;
   height: 10px;
   border-radius: 5px;
+  background: #01CE7E;
 }
 
-.hero-dots .dot:hover {
-  background: rgba(1, 206, 126, 0.7);
+.hero-dots-below .dot-below:hover {
+  background: rgba(255, 255, 255, 0.7); /* 悬停时保持白色但稍微透明 */
   transform: scale(1.2);
 }
 
-.hero-dots .dot.active { 
+.hero-dots-below .dot-below.active { 
   background: #01CE7E;
-  transform: scale(1.3);
 }
 
-/* 中间圆角矩形激活时不放大太多 */
-.hero-dots .dot:nth-child(2).active {
+.hero-dots-below .dot-below.active.wide {
   transform: scale(1.1);
 }
 
 .right-text {
+  height: 600px; /* 固定高度，与图片高度一致，确保所有页面文字高度一致 */
   max-height: 600px; /* 与图片高度一致 */
   overflow-y: auto;
   line-height: 1.9;
@@ -760,11 +785,17 @@ onUnmounted(() => {
   font-size: 14px; /* 从16px缩小到14px */
   font-family: 'MiSans', 'Noto Sans SC', sans-serif;
   text-align: left;
+  margin-bottom: 0; /* 确保底部对齐 */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end; /* 文字从底部开始向上显示 */
+  align-items: flex-start;
 }
 
 .right-text p {
   margin-bottom: 16px;
   text-align: justify;
+  margin-top: 0; /* 移除顶部边距 */
 }
 
 .right-text p:last-child {
@@ -984,7 +1015,7 @@ onUnmounted(() => {
   justify-content: center;
   position: relative;
   overflow: hidden;
-  border-radius: 12px;
+  border-radius: 0; /* 移除圆角 */
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
@@ -1170,13 +1201,26 @@ onUnmounted(() => {
     height: 450px; /* 600px * 0.75 */
   }
   
+  .hero-controls-below {
+    width: 675px; /* 与图片宽度一致 */
+    padding: 0 45px; /* 60px * 0.75 */
+  }
+  
   .hero-right {
+    top: calc(50% + 225px); /* 从中心向下偏移图片高度的一半(225px) */
+    transform: translateY(-110%); /* 向上移动100%，使文字底部与图片底部对齐 */
     margin-left: 352.5px; /* 675px / 2 + 15px间隔 */
     max-width: 180px; /* 240px * 0.75 */
   }
   
   .right-text {
+    height: 450px; /* 固定高度，600px * 0.75 */
     max-height: 450px; /* 600px * 0.75 */
+    margin-bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
   }
 }
 
@@ -1186,13 +1230,26 @@ onUnmounted(() => {
     height: 360px; /* 600px * 0.6 */
   }
   
+  .hero-controls-below {
+    width: 540px; /* 与图片宽度一致 */
+    padding: 0 36px; /* 60px * 0.6 */
+  }
+  
   .hero-right {
+    top: calc(50% + 180px); /* 从中心向下偏移图片高度的一半(180px) */
+    transform: translateY(-100%); /* 向上移动100%，使文字底部与图片底部对齐 */
     margin-left: 282px; /* 540px / 2 + 12px间隔 */
     max-width: 144px; /* 240px * 0.6 */
   }
   
   .right-text {
+    height: 360px; /* 固定高度，600px * 0.6 */
     max-height: 360px; /* 600px * 0.6 */
+    margin-bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
   }
 }
 
@@ -1217,9 +1274,10 @@ onUnmounted(() => {
     width: 100%;
     max-width: 90vw;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    position: relative; /* 改为相对定位，箭头放在图片上 */
+    position: relative;
   }
   
   .hero-image {
@@ -1241,36 +1299,40 @@ onUnmounted(() => {
     padding: 0.5rem 1rem;
   }
   
+  .hero-controls-below {
+    width: 80vw;
+    max-width: 450px;
+    margin-top: 25px;
+    padding: 0 30px;
+    justify-content: space-between;
+  }
+  
+  .hero-right {
+    bottom: 25px; /* 控制按钮的margin-top，使文字底部与图片底部对齐 */
+  }
+  
   .hero-arrow {
-    position: absolute; /* 绝对定位到图片上 */
-    width: 40px;
-    height: 40px;
-    padding: 0.5rem;
-    background: rgba(0, 0, 0, 0.5); /* 半透明背景 */
-    z-index: 10;
-  }
-  
-  .hero-arrow-left {
-    left: 10px; /* 左箭头位置 */
-  }
-  
-  .hero-arrow-right {
-    right: 10px; /* 右箭头位置 */
+    width: 32px;
+    height: 32px;
   }
   
   .arrow-icon {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .hero-dots-below {
+    gap: 8px;
+  }
+  
+  .hero-dots-below .dot-below {
+    width: 8px;
+    height: 8px;
+  }
+  
+  .hero-dots-below .dot-below.wide {
     width: 20px;
-    height: 20px;
-  }
-  
-  .hero-dots {
-    bottom: 10px;
-    gap: 6px;
-  }
-  
-  .dot {
-    width: 6px;
-    height: 6px;
+    height: 8px;
   }
   
   .hero-right {
@@ -1286,6 +1348,11 @@ onUnmounted(() => {
     max-height: none;
     padding: 1rem;
     text-align: center; /* 文字居中 */
+    margin-bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
   }
   
   .right-text p {
@@ -1405,33 +1472,40 @@ onUnmounted(() => {
     padding: 0.4rem 0.8rem;
   }
   
+  .hero-controls-below {
+    width: 85vw;
+    max-width: 400px;
+    margin-top: 20px;
+    padding: 0 25px;
+    justify-content: space-between;
+  }
+  
+  .hero-right {
+    bottom: 20px; /* 控制按钮的margin-top，使文字底部与图片底部对齐 */
+  }
+  
   .hero-arrow {
-    width: 35px;
-    height: 35px;
-    padding: 0.4rem;
-  }
-  
-  .hero-arrow-left {
-    left: 8px; /* 调整位置 */
-  }
-  
-  .hero-arrow-right {
-    right: 8px; /* 调整位置 */
+    width: 28px;
+    height: 28px;
   }
   
   .arrow-icon {
-    width: 16px;
-    height: 16px;
+    width: 28px;
+    height: 28px;
   }
   
-  .hero-dots {
-    bottom: 8px;
-    gap: 5px;
+  .hero-dots-below {
+    gap: 6px;
   }
   
-  .dot {
-    width: 5px;
-    height: 5px;
+  .hero-dots-below .dot-below {
+    width: 6px;
+    height: 6px;
+  }
+  
+  .hero-dots-below .dot-below.wide {
+    width: 18px;
+    height: 6px;
   }
   
   .hero-right {
@@ -1445,6 +1519,11 @@ onUnmounted(() => {
   .right-text {
     padding: 0.8rem;
     text-align: center; /* 文字居中 */
+    margin-bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
   }
   
   .right-text p {

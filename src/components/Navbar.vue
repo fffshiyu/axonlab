@@ -105,7 +105,7 @@
             <div class="mobile-dropdown-item" @click="toggleMobileQRCode('tmall')">
               <span>{{ currentLanguage === 'zh' ? '天猫商城' : 'Tmall' }}</span>
               <div class="mobile-qr-code" :class="{ 'show': mobileQRCode === 'tmall' }">
-                <div class="mobile-qr-placeholder">{{ currentLanguage === 'zh' ? '二维码待核实' : 'QR Code Pending' }}</div>
+                <img src="/天猫.svg" :alt="currentLanguage === 'zh' ? '天猫商城' : 'Tmall'" class="mobile-qr-image" />
                 <div class="mobile-qr-title">{{ currentLanguage === 'zh' ? '天猫商城' : 'Tmall' }}</div>
                 <a href="https://yushanznjj.world.tmall.com/shop/view_shop.html" target="_blank" rel="noopener noreferrer" class="mobile-qr-link" @click.stop>{{ currentLanguage === 'zh' ? '点击进入' : 'Enter' }}</a>
               </div>
@@ -128,14 +128,14 @@
             <div class="mobile-dropdown-item" @click="toggleMobileQRCode('xiaochengxu')">
               <span>{{ currentLanguage === 'zh' ? '小程序官方商城' : 'Mini Program' }}</span>
               <div class="mobile-qr-code" :class="{ 'show': mobileQRCode === 'xiaochengxu' }">
-                <div class="mobile-qr-placeholder">{{ currentLanguage === 'zh' ? '二维码待给' : 'QR Code Pending' }}</div>
+                <img src="/小程序QR.png" :alt="currentLanguage === 'zh' ? '小程序官方商城' : 'Mini Program'" class="mobile-qr-image" />
                 <div class="mobile-qr-title">{{ currentLanguage === 'zh' ? '小程序官方商城' : 'Mini Program' }}</div>
               </div>
             </div>
             <div class="mobile-dropdown-item" @click="toggleMobileQRCode('xiaohongshu')">
               <span>{{ currentLanguage === 'zh' ? '小红书周边店' : 'Xiaohongshu' }}</span>
               <div class="mobile-qr-code" :class="{ 'show': mobileQRCode === 'xiaohongshu' }">
-                <div class="mobile-qr-placeholder">{{ currentLanguage === 'zh' ? '二维码待给' : 'QR Code Pending' }}</div>
+                <img src="/小红书QR .png" :alt="currentLanguage === 'zh' ? '小红书周边店' : 'Xiaohongshu'" class="mobile-qr-image" />
                 <div class="mobile-qr-title">{{ currentLanguage === 'zh' ? '小红书周边店' : 'Xiaohongshu' }}</div>
               </div>
             </div>
@@ -210,11 +210,11 @@ const showQRCode = (platform: string) => {
   }
   
   const images = {
-    tmall: '', // 待核实
+    tmall: '/天猫.svg', // 天猫商城二维码
     douyin: '/抖音qr.jpg',
     jd: '/京东qr.jpg',
-    xiaochengxu: '', // 待给
-    xiaohongshu: '' // 待给
+    xiaochengxu: '/小程序QR.png', // 小程序二维码
+    xiaohongshu: '/小红书QR .png' // 小红书二维码（注意文件名中有空格）
   }
   
   const links = {

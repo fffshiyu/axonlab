@@ -54,9 +54,9 @@
       <div v-if="currentQR" class="bilibili-qr-portal footer-qr-portal" :style="qrPortalStyle">
         <img v-if="currentQR === 'wechat'" src="/wxqr.png" alt="微信公众号二维码" />
         <img v-else-if="currentQR === 'xhs'" src="/xhsqr.png" alt="小红书二维码" />
-        <img v-else-if="currentQR === 'weibo'" src="/weibo.png" alt="微博二维码" />
+        <img v-else-if="currentQR === 'weibo'" src="/weiboqr.png" alt="微博二维码" />
         <img v-else-if="currentQR === 'douyin'" src="/dyqr.png" alt="抖音二维码" />
-        <img v-else-if="currentQR === 'bilibili'" src="/qr.webp" alt="B站二维码" />
+        <img v-else-if="currentQR === 'bilibili'" src="/bqr.png" alt="B站二维码" />
       </div>
     </Teleport>
   </footer>
@@ -68,7 +68,7 @@ import { useLanguage } from '../composables/useLanguage'
 
 const { currentLanguage } = useLanguage()
 
-// 页脚二维码：微信 wxqr.png、小红书 xhsqr.png、抖音 dyqr.png、微博 weibo.png、B站 qr.webp
+// 页脚二维码：微信 wxqr.png、小红书 xhsqr.png、抖音 dyqr.png、微博 weiboqr.png、B站 bqr.png
 type QRType = 'wechat' | 'xhs' | 'douyin' | 'weibo' | 'bilibili'
 const currentQR = ref<QRType | null>(null)
 const wechatIconRef = ref<HTMLElement | null>(null)
@@ -320,6 +320,14 @@ onUnmounted(() => {
   margin: 0;
   line-height: 1.4;
   text-align: left;
+}
+
+.footer-copyright .footer-link {
+  color: #9E9E9E; /* 与同行文字颜色一致 */
+}
+
+.footer-copyright .footer-link:hover {
+  color: #9E9E9E; /* 悬停时保持相同颜色 */
 }
 
 /* 响应式设计 - 以1920*1080为基准 */

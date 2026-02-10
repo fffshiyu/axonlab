@@ -77,19 +77,15 @@
                    }"
                    @mouseenter="expandedCardIndex = index"
                    @click="handleCardClick(index)">
-                <!-- 色块 - 始终显示 -->
-                <div class="timeline-bar" 
-                     :style="{ backgroundColor: item.color }">
+                <!-- 色块 - 始终显示，使用 history1-4 图片作为背景 -->
+                <div class="timeline-bar timeline-bar-img" 
+                     :style="{ backgroundImage: `url(/history${index + 1}.png)` }">
                 </div>
                 <!-- 展开状态：图片覆盖层 -->
                 <div v-if="expandedCardIndex === index" 
                      class="timeline-expanded-overlay"
                      :class="getOverlayPositionClass(index)">
-                  <img src="/Group 3.webp" alt="历史事件" class="expanded-image" />
-                  <div class="timeline-expanded-content">
-                    <h3 class="timeline-expanded-title">{{ item.title }}</h3>
-                    <p class="timeline-expanded-description">{{ item.description }}</p>
-                  </div>
+                  <img :src="`/history${index + 1}-${index + 1}.png`" alt="历史事件" class="expanded-image" />
                 </div>
                 <div class="timeline-date" 
                      :class="{ 'dimmed-date': expandedCardIndex !== -1 && expandedCardIndex !== index }">
@@ -99,12 +95,16 @@
               <!-- 固定的"CONSTANLY UPDATING"色块 -->
               <div class="timeline-item timeline-item-fixed" 
                    :class="{ 'dimmed-card': expandedCardIndex !== -1 }">
-                <div class="timeline-bar timeline-bar-fixed" 
-                     :style="{ backgroundColor: '#01CE7E' }">
+                <div class="timeline-bar timeline-bar-fixed timeline-bar-img" 
+                     :style="{ backgroundImage: 'url(/history5.png)' }">
                   <div class="constantly-updating-text">
                     <span>CONSTANLY</span>
                     <span>UPDATING</span>
                   </div>
+                </div>
+                <div class="timeline-date timeline-date-hidden" 
+                     :class="{ 'dimmed-date': expandedCardIndex !== -1 }">
+                  2026
                 </div>
               </div>
             </div>
@@ -476,8 +476,9 @@ onMounted(() => {
   // 添加点击页面任意位置还原品牌介绍的事件监听
   window.addEventListener('click', handlePageClick)
 
-  // 大事件时间线动画 - 参考提供的代码实现
+  // 大事件时间线动画 - 卡片与固定块一起入场，最终都 translateY(0)，避免色块5低一截
   const cards = document.querySelectorAll<HTMLElement>('.card')
+  const fixedTimelineItem = document.querySelector<HTMLElement>('.timeline-item-fixed')
 
   const observer = new IntersectionObserver(
     (entries) => {
@@ -492,6 +493,7 @@ onMounted(() => {
   )
 
   cards.forEach((card) => observer.observe(card))
+  if (fixedTimelineItem) observer.observe(fixedTimelineItem)
   
   // 平滑滚动
   const links = document.querySelectorAll('a[href^="#"]')
@@ -1183,27 +1185,39 @@ onUnmounted(() => {
 .timeline {
   display: flex;
   justify-content: center;
-  gap: 0;
-  margin-top: 0;
-  max-width: 1464px;
+  align-items: flex-start;
+  gap: 0; /* 确保无缝隙 */
+  margin: 0;
   margin-left: auto;
   margin-right: auto;
+  margin-top: 0;
+  padding: 0;
+  max-width: 1220px; /* 5个色块 * 244px = 1220px，1920*1080基准 */
   overflow: visible;
-  touch-action: manipulation; /* 触屏与桌面一致，减少点击延迟 */
+  touch-action: manipulation;
+  font-size: 0; /* 消除 HTML 换行符导致的空格，参考泡泡马特 */
+  letter-spacing: 0;
+  word-spacing: 0;
 }
 
 
 
 .timeline-item {
-  flex: 1;
+  flex: 0 0 244px; /* 固定宽度，与 timeline-bar 一致 */
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch; /* 拉伸填充，确保色块填满 */
   cursor: pointer;
   transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-  width: 100%;
+  width: 244px;
+  margin: 0; /* 确保没有 margin */
+  padding: 0; /* 确保没有 padding */
   position: relative; /* 添加相对定位，作为覆盖层的参考 */
   overflow: visible; /* 展开覆盖层可伸出 */
+  box-sizing: border-box;
+  border: none;
+  outline: none;
+  vertical-align: top; /* 参考泡泡马特，消除垂直对齐空隙 */
 }
 
 /* 移除展开和收起状态的flex变化 */
@@ -1233,6 +1247,11 @@ onUnmounted(() => {
   transform: translateY(0);
 }
 
+/* 固定块同样入场后 translateY(0)，与左侧四块顶对齐 */
+.timeline-item-fixed.fade-in-up {
+  transform: translateY(0);
+}
+
 /* 悬停时的效果 - 移除scale，保持原位 */
 .card:hover {
   /* transform: scale(1.1); */ /* 移除放大效果 */
@@ -1247,25 +1266,65 @@ onUnmounted(() => {
 }
 
 .timeline-bar {
-  height: 400px; /* 1920*1080基准高度400px */
-  width: 244px; /* 1920*1080基准宽度244px */
-  margin-bottom: 1rem;
+  height: 400px !important; /* 1920*1080基准高度400px，使用!important确保不被覆盖 */
+  min-height: 400px !important; /* 确保最小高度一致 */
+  max-height: 400px !important; /* 确保最大高度一致 */
+  width: 100%; /* 使用 100% 填满父容器 */
+  margin: 0 0 1rem 0; /* 底部 margin 用于日期间距 */
+  padding: 0; /* 确保没有 padding */
+  flex-shrink: 0;
+  box-sizing: border-box;
+  border: none; /* 确保没有边框 */
+  outline: none;
+  display: block; /* 参考泡泡马特，确保是块级元素 */
+}
+
+/* 展开前色块使用 history1-5 图片作为背景，完全填充无缝隙 */
+.timeline-bar-img {
+  background-size: 103.5% 104%; /* 宽度103%稍微放大，消除可能的透明边缘 */
+  background-position: center center;
+  background-repeat: no-repeat;
+  border: none;
+  outline: none;
+  /* 不设置高度相关属性，使用父元素的高度设置 */
 }
 
 /* 固定的"CONSTANLY UPDATING"色块 */
 .timeline-item-fixed {
   flex: 0 0 244px; /* 固定宽度，不伸缩 */
+  width: 244px;
+  margin: 0; /* 移除底部 margin，让色块本身控制间距 */
+  padding: 0; /* 确保没有 padding */
   cursor: default; /* 不可点击 */
   pointer-events: none; /* 不响应鼠标事件 */
   transform: translateY(40px); /* 与其他色块对齐 */
   transition: all 0.8s ease;
+  box-sizing: border-box;
+  border: none;
+  outline: none;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  position: relative;
+  vertical-align: top; /* 参考泡泡马特，消除垂直对齐空隙 */
 }
 
 .timeline-bar-fixed {
+  height: 400px !important; /* 与其他色块一致的高度，使用!important确保不被覆盖 */
+  min-height: 400px !important;
+  max-height: 400px !important;
+  width: 100%; /* 完全填满父容器 */
+  margin: 0 0 1rem 0; /* 底部 margin 与其他色块完全一致 */
+  padding: 0;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  border: none;
+  outline: none;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
+  overflow: hidden; /* 确保内容不会超出高度 */
 }
 
 .constantly-updating-text {
@@ -1313,16 +1372,25 @@ onUnmounted(() => {
   opacity: 0.5;
 }
 
+/* 色块五的日期设置为隐藏 */
+.timeline-date-hidden {
+  visibility: hidden; /* 隐藏但保留占位空间 */
+  /* 或者使用 display: none; 完全隐藏不占位 */
+}
+
 /* 展开内容样式 - 改为覆盖层 */
 .timeline-expanded-overlay {
   position: absolute;
   top: 0;
   width: 300%; /* 3个格子的宽度 */
-  height: 400px;
+  height: 400px !important; /* 与timeline-bar一致的高度，使用!important确保不被覆盖 */
+  min-height: 400px !important; /* 确保最小高度一致 */
+  max-height: 400px !important; /* 确保最大高度一致 */
   z-index: 10;
   animation: expandAnimation 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   pointer-events: none; /* 不阻挡下面元素的点击 */
   transform-origin: center center;
+  overflow: hidden; /* 确保内容不会超出高度 */
 }
 
 /* 索引0：从当前位置开始向右，覆盖0,1,2 */
@@ -1364,8 +1432,9 @@ onUnmounted(() => {
 .expanded-image {
   width: 100%;
   min-width: 200px;
-  height: 400px; /* 与timeline-bar一样的高度 */
-  min-height: 200px;
+  height: 400px !important; /* 与timeline-bar一样的高度，使用!important确保不被覆盖 */
+  min-height: 400px !important; /* 与timeline-bar一致的最小高度 */
+  max-height: 400px !important; /* 与timeline-bar一致的最大高度 */
   object-fit: cover; /* 完全填充，裁剪多余部分 */
   display: block;
   vertical-align: top;
@@ -1475,19 +1544,31 @@ onUnmounted(() => {
   
   .timeline-bar {
     width: 182px;
-    height: 298px;
+    height: 298px !important;
+    min-height: 298px !important;
+    max-height: 298px !important;
   }
   
   .timeline-item-fixed {
     flex: 0 0 182px;
   }
   
+  .timeline-bar-fixed {
+    height: 298px !important;
+    min-height: 298px !important;
+    max-height: 298px !important;
+  }
+  
   .timeline-expanded-overlay {
-    height: 298px;
+    height: 298px !important;
+    min-height: 298px !important;
+    max-height: 298px !important;
   }
   
   .expanded-image {
-    height: 298px;
+    height: 298px !important;
+    min-height: 298px !important;
+    max-height: 298px !important;
   }
 }
 
@@ -1552,8 +1633,16 @@ onUnmounted(() => {
   }
   
   .timeline-bar {
-    height: 240px; /* 400px * 0.6 */
+    height: 240px !important; /* 400px * 0.6 */
+    min-height: 240px !important;
+    max-height: 240px !important;
     width: 146px; /* 244px * 0.6 */
+  }
+  
+  .timeline-bar-fixed {
+    height: 240px !important;
+    min-height: 240px !important;
+    max-height: 240px !important;
   }
   
   .timeline-item {
@@ -1562,11 +1651,15 @@ onUnmounted(() => {
   }
   
   .timeline-expanded-overlay {
-    height: 240px;
+    height: 240px !important;
+    min-height: 240px !important;
+    max-height: 240px !important;
   }
   
   .expanded-image {
-    height: 240px;
+    height: 240px !important;
+    min-height: 240px !important;
+    max-height: 240px !important;
   }
   
   .history-content {
@@ -1743,9 +1836,17 @@ onUnmounted(() => {
   }
   
   .timeline-bar {
-    height: 100px;
+    height: 100px !important;
+    min-height: 100px !important;
+    max-height: 100px !important;
     width: 58px;
     flex-shrink: 0;
+  }
+  
+  .timeline-bar-fixed {
+    height: 100px !important;
+    min-height: 100px !important;
+    max-height: 100px !important;
   }
   
   .timeline-item {
@@ -1787,7 +1888,9 @@ onUnmounted(() => {
     position: absolute;
     top: 0;
     width: 300%;
-    height: 100px;
+    height: 100px !important;
+    min-height: 100px !important;
+    max-height: 100px !important;
     z-index: 10;
     animation: expandAnimation 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
     pointer-events: none;
@@ -1881,16 +1984,28 @@ onUnmounted(() => {
   }
   
   .timeline-bar {
-    height: 300px;
+    height: 300px !important;
+    min-height: 300px !important;
+    max-height: 300px !important;
     width: 183px;
   }
   
+  .timeline-bar-fixed {
+    height: 300px !important;
+    min-height: 300px !important;
+    max-height: 300px !important;
+  }
+  
   .timeline-expanded-overlay {
-    height: 300px;
+    height: 300px !important;
+    min-height: 300px !important;
+    max-height: 300px !important;
   }
   
   .expanded-image {
-    height: 300px;
+    height: 300px !important;
+    min-height: 300px !important;
+    max-height: 300px !important;
   }
   
   .history-content {
@@ -2030,9 +2145,17 @@ onUnmounted(() => {
   }
   
   .timeline-bar {
-    height: 80px;
+    height: 80px !important;
+    min-height: 80px !important;
+    max-height: 80px !important;
     width: 50px;
     flex-shrink: 0;
+  }
+  
+  .timeline-bar-fixed {
+    height: 80px !important;
+    min-height: 80px !important;
+    max-height: 80px !important;
   }
   
   .timeline-item {
@@ -2074,7 +2197,9 @@ onUnmounted(() => {
     position: absolute;
     top: 0;
     width: 300%; /* 覆盖3个格子的宽度 */
-    height: 80px; /* 与色块高度一致 */
+    height: 80px !important; /* 与色块高度一致 */
+    min-height: 80px !important;
+    max-height: 80px !important;
     z-index: 10;
     animation: expandAnimation 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
     pointer-events: none; /* 不阻挡下面元素的点击 */

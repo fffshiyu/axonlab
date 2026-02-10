@@ -13,6 +13,7 @@
         <!-- 小标题 -->
         <div class="product-title-container">
           <img src="/loomi_text.webp" alt="LOOMI" class="product-title-img loomi-title" />
+          <p class="product-hint-text">{{ currentLanguage === 'zh' ? '点击产品拖拽，可360度观看' : 'Click and drag to rotate 360°' }}</p>
         </div>
         
         <!-- 产品图片 -->
@@ -27,33 +28,36 @@
               </div>
             </div>
             
-            <!-- 顶部按钮 -->
+            <!-- 音频按钮 - 5个位置 -->
             <button 
-              class="product-btn top-btn" 
-              :class="{ active: activeButton === 'top' }"
-              @click="handleButtonClick('top')"
+              class="audio-btn audio-btn-1" 
+              @click.stop="playAudio(1, $event)"
             >
-              <img :src="activeButton === 'top' ? '/BTN_onmodel.webp' : '/BTN_before.webp'" alt="顶部" />
+              <img src="/audio.png" alt="音频1" />
             </button>
-            
-            <!-- 左侧按钮 -->
             <button 
-              v-show="activeButton !== 'left'"
-              class="product-btn left-btn" 
-              :class="{ active: activeButton === 'left' }"
-              @click="handleButtonClick('left')"
+              class="audio-btn audio-btn-2" 
+              @click.stop="playAudio(2, $event)"
             >
-              <img :src="activeButton === 'left' ? '/BTN_onmodel.webp' : '/BTN_before.webp'" alt="左侧" />
+              <img src="/audio.png" alt="音频2" />
             </button>
-            
-            <!-- 底部按钮 -->
             <button 
-              v-show="activeButton !== 'bottom'"
-              class="product-btn bottom-btn" 
-              :class="{ active: activeButton === 'bottom' }"
-              @click="handleButtonClick('bottom')"
+              class="audio-btn audio-btn-3" 
+              @click.stop="playAudio(3, $event)"
             >
-              <img :src="activeButton === 'bottom' ? '/BTN_onmodel.webp' : '/BTN_before.webp'" alt="底部" />
+              <img src="/audio.png" alt="音频3" />
+            </button>
+            <button 
+              class="audio-btn audio-btn-4" 
+              @click.stop="playAudio(4, $event)"
+            >
+              <img src="/audio.png" alt="音频4" />
+            </button>
+            <button 
+              class="audio-btn audio-btn-5" 
+              @click.stop="playAudio(5, $event)"
+            >
+              <img src="/audio.png" alt="音频5" />
             </button>
             
             <!-- 叠加的侧边图片 -->
@@ -97,6 +101,11 @@
             <img src="/cemian_icon.webp" alt="侧面" class="icon-img" />
             <span class="icon-label">侧面</span>
           </div>
+          <div class="icon-item" @click="handleIconClick('右侧')">
+            <div class="icon-fill"></div>
+            <img src="/cemian_icon.webp" alt="右侧" class="icon-img icon-mirror" />
+            <span class="icon-label">右侧</span>
+          </div>
           <div class="icon-item" @click="handleIconClick('背面')">
             <div class="icon-fill"></div>
             <img src="/beimian_icon.webp" alt="背面" class="icon-img" />
@@ -121,6 +130,7 @@
         <!-- 小标题 -->
         <div class="product-title-container">
           <img src="/axonrob_text.webp" alt="AXONROB" class="product-title-img" />
+          <p class="product-hint-text">{{ currentLanguage === 'zh' ? '点击产品拖拽，可360度观看' : 'Click and drag to rotate 360°' }}</p>
         </div>
         
         <!-- 产品图片 - 3D模型 -->
@@ -135,66 +145,11 @@
               </div>
             </div>
             
-            <!-- 顶部按钮 -->
-            <button 
-              class="product-btn top-btn" 
-              :class="{ active: activeButton2 === 'top' }"
-              @click="handleButtonClick2('top')"
-            >
-              <img :src="activeButton2 === 'top' ? '/BTN_onmodel.webp' : '/BTN_before.webp'" alt="顶部" />
-            </button>
-            
-            <!-- 左侧按钮 -->
-            <button 
-              v-show="activeButton2 !== 'left'"
-              class="product-btn left-btn" 
-              :class="{ active: activeButton2 === 'left' }"
-              @click="handleButtonClick2('left')"
-            >
-              <img :src="activeButton2 === 'left' ? '/BTN_onmodel.webp' : '/BTN_before.webp'" alt="左侧" />
-            </button>
-            
-            <!-- 底部按钮 -->
-            <button 
-              v-show="activeButton2 !== 'bottom'"
-              class="product-btn bottom-btn" 
-              :class="{ active: activeButton2 === 'bottom' }"
-              @click="handleButtonClick2('bottom')"
-            >
-              <img :src="activeButton2 === 'bottom' ? '/BTN_onmodel.webp' : '/BTN_before.webp'" alt="底部" />
-            </button>
-            
-            <!-- 叠加的侧边图片 -->
-            <transition name="fade">
-              <img 
-                v-if="sideImage2" 
-                :src="sideImage2" 
-                alt="详细信息" 
-                :class="['overlay-img', overlayPosition2]"
-                @click="closeOverlay2"
-              />
-            </transition>
           </div>
         </div>
         
         <!-- 右侧图标列 -->
         <div class="icon-column">
-          <!-- 参数图片显示区域 -->
-          <transition name="fade-params">
-            <img 
-              v-if="showParamsImage2" 
-              src="/csys.webp" 
-              alt="参数详情" 
-              class="params-detail-img"
-              @click="closeParamsImage2"
-            />
-          </transition>
-          
-          <div class="icon-item" @click="handleIconClick2('参数')">
-            <div class="icon-fill"></div>
-            <img src="/canshu_icon.webp" alt="参数" class="icon-img" />
-            <span class="icon-label">参数</span>
-          </div>
           <div class="icon-item" @click="handleIconClick2('正面')">
             <div class="icon-fill"></div>
             <img src="/zhengmian_icon.webp" alt="正面" class="icon-img" />
@@ -205,6 +160,11 @@
             <img src="/cemian_icon.webp" alt="侧面" class="icon-img" />
             <span class="icon-label">侧面</span>
           </div>
+          <div class="icon-item" @click="handleIconClick2('右侧')">
+            <div class="icon-fill"></div>
+            <img src="/cemian_icon.webp" alt="右侧" class="icon-img icon-mirror" />
+            <span class="icon-label">右侧</span>
+          </div>
           <div class="icon-item" @click="handleIconClick2('背面')">
             <div class="icon-fill"></div>
             <img src="/beimian_icon.webp" alt="背面" class="icon-img" />
@@ -213,6 +173,22 @@
         </div>
       </div>
     </div>
+    
+    <!-- 视频播放弹窗 -->
+    <transition name="fade">
+      <div v-if="showVideoModalRef" class="video-modal-overlay" @click="closeVideoModal">
+        <div class="video-modal-content" @click.stop>
+          <button class="video-modal-close" @click="closeVideoModal">×</button>
+          <video 
+            :src="currentVideoSrc" 
+            controls 
+            autoplay
+            class="video-modal-player"
+            @ended="closeVideoModal"
+          ></video>
+        </div>
+      </div>
+    </transition>
     
     <!-- 页脚 -->
     <Footer />
@@ -238,13 +214,55 @@ const activeButton = ref<string | null>(null)
 const sideImage = ref<string | null>(null)
 const overlayPosition = ref<string>('')
 const showParamsImage = ref(false)
+const showVideoModalRef = ref(false) // 视频弹窗显示状态
+const currentVideoSrc = ref<string>('') // 当前播放的视频路径
 let autoRotateTimer1: number | null = null // 第一个产品旋转恢复定时器
 
+// 音频播放相关
+const currentAudio = ref<HTMLAudioElement | null>(null)
+const audioFiles = [
+  '/audio/d_lumi_callover01_audio.WAV', // 音频1
+  '/audio/d_lumi_callover02_audio.WAV', // 音频2
+  '/audio/d_lumi_callover03_audio.WAV', // 音频3
+  '/audio/d_lumi_callover04_audio.WAV', // 音频4
+  '/audio/d_lumi_callover05_audio.WAV'  // 音频5
+]
+
+// 播放音频函数
+const playAudio = (index: number, event?: Event) => {
+  // 如果视频弹窗打开，不播放音频
+  if (showVideoModalRef.value) {
+    return
+  }
+  
+  // 阻止事件冒泡，避免影响其他元素的点击
+  if (event) {
+    event.stopPropagation()
+  }
+  
+  // 如果正在播放其他音频，先停止
+  if (currentAudio.value) {
+    currentAudio.value.pause()
+    currentAudio.value.currentTime = 0
+  }
+  
+  // 播放对应索引的音频（索引从1开始，数组从0开始）
+  const audioIndex = index - 1
+  if (audioIndex >= 0 && audioIndex < audioFiles.length) {
+    const audio = new Audio(audioFiles[audioIndex])
+    currentAudio.value = audio
+    audio.play().catch(err => {
+      console.error('音频播放失败:', err)
+    })
+    
+    // 音频播放结束后清理
+    audio.onended = () => {
+      currentAudio.value = null
+    }
+  }
+}
+
 // 第二个产品的状态
-const activeButton2 = ref<string | null>(null)
-const sideImage2 = ref<string | null>(null)
-const overlayPosition2 = ref<string>('')
-const showParamsImage2 = ref(false)
 let autoRotateTimer2: number | null = null // 第二个产品旋转恢复定时器
 
 // 第一个产品的3D模型相关（LOOMI - loomy.glb）
@@ -254,10 +272,158 @@ let camera1: THREE.PerspectiveCamera
 let renderer1: THREE.WebGLRenderer
 let controls1: OrbitControls
 let content1: THREE.Object3D | null = null
+let videoLabelFront1: THREE.Sprite | null = null
+let videoLabelBack1: THREE.Sprite | null = null
+let raycaster1: THREE.Raycaster | null = null
+let mouse1 = new THREE.Vector2()
 let animationId1: number
 let retryCount1 = 0
 let isSection1Visible = ref(true) // 第一个区域是否可见
 const isFirstModelLoaded = ref(false) // 第一个模型是否加载完成（响应式）
+
+// 创建 Sprite 标签函数
+const createSpriteLabel = (imagePath: string, onClick: () => void): THREE.Sprite => {
+  // 加载图片并创建纹理
+  const textureLoader = new THREE.TextureLoader()
+  const texture = textureLoader.load(imagePath)
+  
+  // 创建 SpriteMaterial，启用深度测试和深度写入
+  const spriteMaterial = new THREE.SpriteMaterial({
+    map: texture,
+    transparent: true,
+    opacity: 0.8,
+    depthTest: true,  // 启用深度测试
+    depthWrite: true // 启用深度写入
+  })
+  
+  // 创建 Sprite
+  const sprite = new THREE.Sprite(spriteMaterial)
+  
+  // 设置 Sprite 的 center 属性（底部中心）
+  sprite.center.set(0.5, 0)
+  
+  // 存储点击回调
+  ;(sprite.userData as any).onClick = onClick
+  
+  // 为 Sprite 创建一个不可见的几何体用于点击检测
+  // Sprite 本身无法直接进行射线检测，我们需要手动计算
+  sprite.userData.isVideoLabel = true
+  
+  return sprite
+}
+
+// 显示视频弹窗
+const showVideoModal = (videoPath: string) => {
+  // 如果正在播放音频，先停止
+  if (currentAudio.value) {
+    currentAudio.value.pause()
+    currentAudio.value.currentTime = 0
+    currentAudio.value = null
+  }
+  
+  currentVideoSrc.value = videoPath
+  showVideoModalRef.value = true
+  // 禁用页面滚动
+  document.body.style.overflow = 'hidden'
+}
+
+// 关闭视频弹窗
+const closeVideoModal = () => {
+  showVideoModalRef.value = false
+  currentVideoSrc.value = ''
+  // 恢复页面滚动
+  document.body.style.overflow = ''
+}
+
+// Sprite 点击事件处理
+const onSpriteClick1 = (event: MouseEvent) => {
+  // 如果视频弹窗已打开，不处理点击
+  if (showVideoModalRef.value) {
+    return
+  }
+  
+  if (!camera1 || !renderer1 || !modelContainer1.value) return
+  
+  const rect = renderer1.domElement.getBoundingClientRect()
+  const clickX = event.clientX - rect.left
+  const clickY = event.clientY - rect.top
+  
+  // 手动检测 Sprite 点击（Sprite 无法直接使用 Raycaster）
+  const sprites: Array<{ sprite: THREE.Sprite, onClick: () => void, name: string }> = []
+  if (videoLabelFront1) {
+    sprites.push({ 
+      sprite: videoLabelFront1, 
+      onClick: (videoLabelFront1.userData as any).onClick,
+      name: 'front'
+    })
+  }
+  if (videoLabelBack1) {
+    sprites.push({ 
+      sprite: videoLabelBack1, 
+      onClick: (videoLabelBack1.userData as any).onClick,
+      name: 'back'
+    })
+  }
+  
+  // 检查每个 Sprite 是否被点击
+  for (const { sprite, onClick, name } of sprites) {
+    if (!sprite.visible) continue
+    
+    // 将 Sprite 的世界位置转换为屏幕坐标
+    const worldPosition = new THREE.Vector3()
+    sprite.getWorldPosition(worldPosition)
+    
+    // 将世界坐标转换为屏幕坐标（归一化坐标）
+    const vector = worldPosition.clone().project(camera1)
+    // 转换为屏幕像素坐标
+    const x = (vector.x * 0.5 + 0.5) * rect.width
+    const y = (-vector.y * 0.5 + 0.5) * rect.height
+    
+    // 获取 Sprite 的屏幕尺寸
+    // Sprite 的 scale 是 Three.js 单位，需要转换为屏幕像素
+    const distance = camera1.position.distanceTo(worldPosition)
+    const scale = sprite.scale.x
+    // 使用相机的视野角度来计算屏幕尺寸
+    const fov = camera1.fov * Math.PI / 180
+    const viewHeight = 2 * Math.tan(fov / 2) * distance
+    const pixelPerUnit = rect.height / viewHeight
+    const spriteScreenSize = scale * pixelPerUnit
+    
+    // 扩大点击区域以提高响应性（增加50%的容差）
+    const tolerance = spriteScreenSize * 0.5
+    
+    // 检查点击是否在 Sprite 范围内
+    const dx = clickX - x
+    const dy = clickY - y
+    const distanceFromCenter = Math.sqrt(dx * dx + dy * dy)
+    
+    if (distanceFromCenter <= spriteScreenSize / 2 + tolerance) {
+      // 检查 Sprite 是否被模型遮挡
+      if (raycaster1 && content1) {
+        const direction = worldPosition.clone().sub(camera1.position).normalize()
+        raycaster1.set(camera1.position, direction)
+        const intersects = raycaster1.intersectObject(content1, true)
+        if (intersects.length > 0) {
+          const intersectionDistance = camera1.position.distanceTo(intersects[0].point)
+          const spriteDistance = camera1.position.distanceTo(worldPosition)
+          // 如果模型在 Sprite 之前，说明 Sprite 被遮挡
+          if (intersectionDistance < spriteDistance - 0.05) {
+            continue // Sprite 被遮挡，跳过
+          }
+        }
+      }
+      
+      // 点击在 Sprite 上且未被遮挡，执行点击回调
+      if (onClick && typeof onClick === 'function') {
+        console.log('Sprite clicked:', name)
+        onClick()
+        event.stopPropagation()
+        event.preventDefault()
+        return // 只处理第一个点击的 Sprite
+      }
+    }
+  }
+}
 
 // 第二个产品的3D模型相关（AXONROB - zbh.glb）
 const modelContainer = ref<HTMLDivElement | null>(null)
@@ -365,6 +531,12 @@ const init3DScene1 = () => {
   renderer1.toneMapping = THREE.ACESFilmicToneMapping
   renderer1.toneMappingExposure = 1.0
   modelContainer1.value.appendChild(renderer1.domElement)
+
+  // 创建 Raycaster 用于检测 Sprite 点击
+  raycaster1 = new THREE.Raycaster()
+  
+  // 添加点击事件监听（使用捕获阶段确保事件被处理）
+  renderer1.domElement.addEventListener('click', onSpriteClick1, true)
 
   // 创建OrbitControls
   controls1 = new OrbitControls(camera1, renderer1.domElement)
@@ -550,6 +722,9 @@ const setContent1 = (object: THREE.Object3D) => {
   controls1.minDistance = distance // 固定距离，不允许缩放
   controls1.maxDistance = distance // 固定距离，不允许缩放
 
+  // 创建视频标签
+  createVideoLabels1(size)
+
   camera1.near = size / 100
   camera1.far = size * 100
   camera1.updateProjectionMatrix()
@@ -572,7 +747,53 @@ const setContent1 = (object: THREE.Object3D) => {
   scene1.add(object)
   content1 = object
 
+  // 创建视频标签
+  createVideoLabels1(size)
+
   console.log('第一个产品模型已居中，相机位置:', camera1.position)
+}
+
+// 创建视频标签函数
+const createVideoLabels1 = (size: number) => {
+  // 移除旧的标签
+  if (videoLabelFront1) {
+    scene1.remove(videoLabelFront1)
+    videoLabelFront1.material.dispose()
+    videoLabelFront1 = null
+  }
+  if (videoLabelBack1) {
+    scene1.remove(videoLabelBack1)
+    videoLabelBack1.material.dispose()
+    videoLabelBack1 = null
+  }
+
+  // 创建正面偏下的 Sprite 标签
+  videoLabelFront1 = createSpriteLabel('/video.png', () => {
+    showVideoModal('/video/正面触点-语音交互.mp4')
+  })
+  // 正面偏下位置：Z轴正方向（正面），往下移动一点
+  videoLabelFront1.position.set(0, -size /4.5, size / 4) // 从 -size/6 改为 -size/5，往下移动
+  // 根据模型大小调整 Sprite 尺寸
+  const spriteSize = size * 0.08 // 标签大小约为模型的8%
+  videoLabelFront1.scale.set(spriteSize, spriteSize, 1)
+  // 存储原始缩放值用于呼吸动画
+  videoLabelFront1.userData.baseScale = spriteSize
+  // 设置 Sprite 可点击
+  videoLabelFront1.userData.isClickable = true
+  scene1.add(videoLabelFront1)
+
+  // 创建背面偏上的 Sprite 标签
+  videoLabelBack1 = createSpriteLabel('/video.png', () => {
+    showVideoModal('/video/背面触点-呼猫模式.mp4')
+  })
+  // 背面偏上位置：Z轴负方向（背面），往上移动一点
+  videoLabelBack1.position.set(0, size / 3.8, -size / 4) // 从 size/4 改为 size/3，往上移动
+  videoLabelBack1.scale.set(spriteSize, spriteSize, 1)
+  // 存储原始缩放值用于呼吸动画
+  videoLabelBack1.userData.baseScale = spriteSize
+  // 设置 Sprite 可点击
+  videoLabelBack1.userData.isClickable = true
+  scene1.add(videoLabelBack1)
 }
 
 // 窗口大小变化处理 - 第一个产品（节流优化）
@@ -594,6 +815,7 @@ const onWindowResize1 = () => {
     camera1.aspect = width / height
     camera1.updateProjectionMatrix()
     renderer1.setSize(width, height)
+    
     resizeTimeout1 = null
   }, 150) // 150ms节流
 }
@@ -629,7 +851,32 @@ const animate1 = () => {
   if (isSection1Visible.value && controls1 && renderer1 && scene1 && camera1) {
     // 更新controls（包括自动旋转）- 必须调用才能让自动旋转生效
     controls1.update()
+    
+    // 更新视频标签的呼吸动画
+    updateVideoLabelsBreathing1()
+    
     renderer1.render(scene1, camera1)
+  }
+}
+
+// 更新视频标签的呼吸动画
+const updateVideoLabelsBreathing1 = () => {
+  const time = Date.now() * 0.001 // 转换为秒
+  const breatheSpeed = 2.0 // 呼吸速度（每秒2次）
+  const breatheAmount = 0.15 // 呼吸幅度（15%）
+  
+  // 正面标签呼吸动画
+  if (videoLabelFront1 && videoLabelFront1.userData.baseScale) {
+    const baseScale = videoLabelFront1.userData.baseScale
+    const scale = baseScale * (1 + Math.sin(time * breatheSpeed) * breatheAmount)
+    videoLabelFront1.scale.set(scale, scale, 1)
+  }
+  
+  // 背面标签呼吸动画
+  if (videoLabelBack1 && videoLabelBack1.userData.baseScale) {
+    const baseScale = videoLabelBack1.userData.baseScale
+    const scale = baseScale * (1 + Math.sin(time * breatheSpeed) * breatheAmount)
+    videoLabelBack1.scale.set(scale, scale, 1)
   }
 }
 
@@ -1177,7 +1424,7 @@ const closeOverlay = () => {
 const handleIconClick = (type: string) => {
   if (type === '参数') {
     showParamsImage.value = !showParamsImage.value
-  } else if (type === '正面' || type === '侧面' || type === '背面') {
+  } else if (type === '正面' || type === '侧面' || type === '右侧' || type === '背面') {
     // 旋转相机到对应视角（旋转逻辑在rotateCameraToView1内部处理）
     rotateCameraToView1(type)
   }
@@ -1208,6 +1455,14 @@ const rotateCameraToView1 = (view: string) => {
     Math.pow(size / 1.5, 2)
   )
   
+  // 检测当前视角（通过相机位置判断）
+  const currentPos = camera1.position
+  const isCurrentlyRight = currentPos.x < -0.1
+  const isCurrentlyLeft = currentPos.x > 0.1
+  
+  // 判断是否是从侧面到右侧（或反之）的切换
+  const isSideToRightTransition = (isCurrentlyLeft && view === '右侧') || (isCurrentlyRight && view === '侧面')
+  
   switch (view) {
     case '正面':
       // 正面视角 - 相机在Z轴正方向，稍微向上偏移
@@ -1216,6 +1471,10 @@ const rotateCameraToView1 = (view: string) => {
     case '侧面':
       // 侧面视角 - 相机在X轴正方向，稍微向上偏移
       targetPosition.set(distance, size / 2.5, 0)
+      break
+    case '右侧':
+      // 右侧视角 - 相机在X轴负方向，稍微向上偏移
+      targetPosition.set(-distance, size / 2.5, 0)
       break
     case '背面':
       // 背面视角 - 相机在Z轴负方向，稍微向上偏移
@@ -1235,21 +1494,48 @@ const rotateCameraToView1 = (view: string) => {
     autoRotateTimer1 = null
   }
   
-  // 使用动画平滑过渡到目标位置
-  animateCameraToPosition1(targetPosition, center, () => {
-    // 动画完成后，根据view类型决定是否恢复旋转
-    if (view === '侧面' || view === '背面') {
-      // 侧面和背面不恢复旋转
-      controls1.autoRotate = false
-    } else if (view === '正面') {
-      // 正面3秒后恢复旋转
-      autoRotateTimer1 = window.setTimeout(() => {
-        if (controls1) {
-          controls1.autoRotate = true
-        }
-      }, 3000)
-    }
-  })
+  // 更新标签可见性
+  updateVideoLabelsVisibility1(view)
+
+  // 如果是侧面到右侧的切换，使用水平旋转动画
+  if (isSideToRightTransition) {
+    animateCameraHorizontalRotation1(targetPosition, center, () => {
+      // 动画完成后，根据view类型决定是否恢复旋转
+      if (view === '侧面' || view === '右侧' || view === '背面') {
+        // 侧面、右侧和背面不恢复旋转
+        controls1.autoRotate = false
+      } else if (view === '正面') {
+        // 正面3秒后恢复旋转
+        autoRotateTimer1 = window.setTimeout(() => {
+          if (controls1) {
+            controls1.autoRotate = true
+          }
+        }, 3000)
+      }
+    })
+  } else {
+    // 使用普通动画平滑过渡到目标位置
+    animateCameraToPosition1(targetPosition, center, () => {
+      // 动画完成后，根据view类型决定是否恢复旋转
+      if (view === '侧面' || view === '右侧' || view === '背面') {
+        // 侧面、右侧和背面不恢复旋转
+        controls1.autoRotate = false
+      } else if (view === '正面') {
+        // 正面3秒后恢复旋转
+        autoRotateTimer1 = window.setTimeout(() => {
+          if (controls1) {
+            controls1.autoRotate = true
+          }
+        }, 3000)
+      }
+    })
+  }
+}
+
+// 更新视频标签可见性（根据视角）- Sprite 会自动处理深度，无需手动更新
+const updateVideoLabelsVisibility1 = (_view: string) => {
+  // Sprite 使用 depthTest 和 depthWrite，会自动被模型遮挡
+  // 无需手动更新可见性
 }
 
 // 第一个产品 - 相机位置动画
@@ -1275,6 +1561,67 @@ const animateCameraToPosition1 = (targetPosition: THREE.Vector3, targetLookAt: T
     
     // 插值相机位置
     camera1.position.lerpVectors(startPosition, targetPosition, eased)
+    
+    // 插值相机目标
+    const newTarget = new THREE.Vector3().lerpVectors(startLookAt, targetLookAt, eased)
+    controls1.target.copy(newTarget)
+    camera1.lookAt(newTarget)
+    
+    controls1.update()
+    
+    // 确保在动画过程中也渲染场景
+    if (renderer1 && scene1 && camera1) {
+      renderer1.render(scene1, camera1)
+    }
+    
+    if (progress < 1) {
+      requestAnimationFrame(animate)
+    } else if (onComplete) {
+      onComplete()
+    }
+  }
+  
+  animate()
+}
+
+// 第一个产品 - 水平旋转动画（侧面到右侧）
+const animateCameraHorizontalRotation1 = (targetPosition: THREE.Vector3, targetLookAt: THREE.Vector3, onComplete?: () => void) => {
+  if (!camera1 || !controls1 || !renderer1 || !scene1) {
+    console.warn('animateCameraHorizontalRotation1: 场景未初始化')
+    return
+  }
+  
+  const startPosition = camera1.position.clone()
+  const startLookAt = controls1.target.clone()
+  const duration = 1000 // 1秒动画
+  const startTime = Date.now()
+  
+  // 保持Y坐标不变（水平旋转）
+  const fixedY = startPosition.y
+  
+  // 计算起始和目标角度（绕Y轴的水平角度）
+  const startAngle = Math.atan2(startPosition.x, startPosition.z)
+  const targetAngle = Math.atan2(targetPosition.x, targetPosition.z)
+  
+  // 计算水平距离（半径）
+  const radius = Math.sqrt(startPosition.x * startPosition.x + startPosition.z * startPosition.z)
+  
+  const animate = () => {
+    const elapsed = Date.now() - startTime
+    const progress = Math.min(elapsed / duration, 1)
+    
+    // 使用easeInOutCubic缓动函数
+    const eased = progress < 0.5
+      ? 4 * progress * progress * progress
+      : 1 - Math.pow(-2 * progress + 2, 3) / 2
+    
+    // 插值角度（水平旋转）
+    const currentAngle = startAngle + (targetAngle - startAngle) * eased
+    
+    // 计算新的相机位置（保持Y坐标不变，只改变X和Z）
+    camera1.position.x = Math.sin(currentAngle) * radius
+    camera1.position.y = fixedY // 保持Y坐标不变
+    camera1.position.z = Math.cos(currentAngle) * radius
     
     // 插值相机目标
     const newTarget = new THREE.Vector3().lerpVectors(startLookAt, targetLookAt, eased)
@@ -1331,40 +1678,9 @@ const closeParamsImage = () => {
   showParamsImage.value = false
 }
 
-// 第二个产品 - 处理按钮点击
-const handleButtonClick2 = (position: string) => {
-  if (activeButton2.value === position) {
-    activeButton2.value = null
-    sideImage2.value = null
-    overlayPosition2.value = ''
-  } else {
-    activeButton2.value = position
-    
-    if (position === 'left') {
-      sideImage2.value = '/button2.webp'
-      overlayPosition2.value = 'left-overlay'
-    } else if (position === 'bottom') {
-      sideImage2.value = '/button3.webp'
-      overlayPosition2.value = 'bottom-overlay'
-    } else {
-      sideImage2.value = null
-      overlayPosition2.value = ''
-    }
-  }
-}
-
-// 第二个产品 - 关闭叠加图片
-const closeOverlay2 = () => {
-  activeButton2.value = null
-  sideImage2.value = null
-  overlayPosition2.value = ''
-}
-
 // 第二个产品 - 处理图标点击
 const handleIconClick2 = (type: string) => {
-  if (type === '参数') {
-    showParamsImage2.value = !showParamsImage2.value
-  } else if (type === '正面' || type === '侧面' || type === '背面') {
+  if (type === '正面' || type === '侧面' || type === '右侧' || type === '背面') {
     // 旋转相机到对应视角（旋转逻辑在rotateCameraToView内部处理）
     rotateCameraToView(type)
   }
@@ -1401,6 +1717,10 @@ const rotateCameraToView = (view: string) => {
       // 侧面视角 - 相机在X轴正方向，稍微向上偏移
       targetPosition.set(distance, size / 2.5, 0)
       break
+    case '右侧':
+      // 右侧视角 - 相机在X轴负方向，稍微向上偏移
+      targetPosition.set(-distance, size / 2.5, 0)
+      break
     case '背面':
       // 背面视角 - 相机在Z轴负方向，稍微向上偏移
       targetPosition.set(0, size / 2.5, -distance)
@@ -1422,8 +1742,8 @@ const rotateCameraToView = (view: string) => {
   // 使用动画平滑过渡到目标位置
   animateCameraToPosition(targetPosition, center, () => {
     // 动画完成后，根据view类型决定是否恢复旋转
-    if (view === '侧面' || view === '背面') {
-      // 侧面和背面不恢复旋转
+    if (view === '侧面' || view === '右侧' || view === '背面') {
+      // 侧面、右侧和背面不恢复旋转
       controls.autoRotate = false
     } else if (view === '正面') {
       // 正面3秒后恢复旋转
@@ -1510,10 +1830,6 @@ const resetCameraToFront2 = () => {
   })
 }
 
-// 第二个产品 - 关闭参数图片
-const closeParamsImage2 = () => {
-  showParamsImage2.value = false
-}
 
 // 滚动到下一个产品
 const scrollToNextProduct = () => {
@@ -1784,12 +2100,14 @@ onUnmounted(() => {
   window.removeEventListener('resize', onWindowResize)
   window.removeEventListener('wheel', handleWheel)
   
+  // 移除 Sprite 点击事件监听
+  if (renderer1 && renderer1.domElement) {
+    renderer1.domElement.removeEventListener('click', onSpriteClick1)
+  }
+  
   console.log('组件卸载，场景已保存到缓存，下次进入将直接恢复')
   
   // 注意：不再调用cleanup3DScene1和cleanup3DScene，保留场景资源在缓存中
-  
-  // 移除事件监听器
-  window.removeEventListener('wheel', handleWheel)
 })
 </script>
 
@@ -1899,6 +2217,9 @@ onUnmounted(() => {
   position: relative; /* 必须有position才能让z-index生效 */
   z-index: 10; /* 提高z-index，确保在3D之上 */
   pointer-events: auto; /* 确保可点击 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .product-title-img {
@@ -1915,6 +2236,19 @@ onUnmounted(() => {
 .loomi-title {
   max-width: 250px !important;
   width: 250px !important;
+}
+
+/* 产品提示文字 */
+.product-hint-text {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 400;
+  margin-top: 8px;
+  margin-bottom: 0;
+  text-align: center;
+  font-family: 'MiSans', 'Noto Sans SC', sans-serif;
+  z-index: 10;
+  position: relative;
 }
 
 /* 产品图片容器 */
@@ -2062,6 +2396,135 @@ onUnmounted(() => {
   transform: translateX(-50%) scale(1.1);
 }
 
+/* 音频按钮样式 */
+.audio-btn {
+  position: absolute;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 10;
+}
+
+.audio-btn img {
+  width: 50px; /* 缩小按钮 */
+  height: 50px;
+  object-fit: contain;
+  display: block;
+  animation: breathe 2s ease-in-out infinite;
+}
+
+.audio-btn:hover img {
+  animation: breathe 1s ease-in-out infinite;
+}
+
+/* 呼吸动画 */
+@keyframes breathe {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+}
+
+/* 音频按钮位置 - 根据图片描述的5个位置 */
+.audio-btn-1 {
+  /* 位置1：右下曲线 */
+  bottom: 35%; /* 再往上移动 */
+  right: 35%; /* 与中间右侧按钮对齐 */
+  transform: translate(50%, 50%);
+}
+
+.audio-btn-2 {
+  /* 位置2：中右曲线（猫的右耳上方） */
+  top: 35%;
+  right: 35%; /* 继续往中心移动 */
+  transform: translate(50%, -50%);
+}
+
+.audio-btn-3 {
+  /* 位置3：顶部中心曲线（猫头正上方） */
+  top: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.audio-btn-4 {
+  /* 位置4：中左曲线（猫的左耳位置） */
+  top: 35%;
+  left: 35%; /* 继续往中心移动 */
+  transform: translate(-50%, -50%);
+}
+
+.audio-btn-5 {
+  /* 位置5：左下曲线（扬声器格栅上方） */
+  bottom: 35%; /* 再往上移动 */
+  left: 35%; /* 与中间左侧按钮对齐 */
+  transform: translate(-50%, 50%);
+}
+
+/* 3D视频按钮样式 - 3D标签效果 */
+.video-btn {
+  position: absolute;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 10;
+  perspective: 1000px;
+}
+
+.video-btn img {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  display: block;
+  transition: transform 0.3s ease, opacity 0.3s ease, filter 0.3s ease;
+  opacity: 0.9;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3)) 
+          drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  transform-style: preserve-3d;
+}
+
+.video-btn:hover img {
+  transform: scale(1.15) translateZ(10px);
+  opacity: 1;
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.4)) 
+          drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3))
+          drop-shadow(0 0 20px rgba(1, 206, 126, 0.3));
+}
+
+/* 正面偏下的3D按钮 - 添加3D倾斜效果 */
+.video-btn-front {
+  bottom: 20%;
+  left: 50%;
+  transform: translateX(-50%) perspective(1000px) rotateX(15deg);
+}
+
+.video-btn-front img {
+  transform: translateZ(5px);
+}
+
+.video-btn-front:hover {
+  transform: translateX(-50%) perspective(1000px) rotateX(10deg);
+}
+
+/* 背面偏上的3D按钮 - 添加3D倾斜效果 */
+.video-btn-back {
+  top: 15%;
+  left: 50%;
+  transform: translateX(-50%) perspective(1000px) rotateX(-15deg);
+}
+
+.video-btn-back img {
+  transform: translateZ(5px);
+}
+
+.video-btn-back:hover {
+  transform: translateX(-50%) perspective(1000px) rotateX(-10deg);
+}
+
 /* 右侧图标列 */
 .icon-column {
   position: absolute;
@@ -2133,7 +2596,7 @@ onUnmounted(() => {
   left: 0;
   width: 0;
   height: 100%;
-  background: rgba(217, 217, 217, 0.4);
+  background: rgba(1, 206, 126, 1); /* 页面专属绿色，透明填充 */
   border-radius: 25px;
   transition: width 0.4s ease;
   z-index: 1;
@@ -2158,6 +2621,11 @@ onUnmounted(() => {
   opacity: 1;
 }
 
+/* 镜像图标（用于右侧按钮） */
+.icon-mirror {
+  transform: scaleX(-1);
+}
+
 /* 图标标签 */
 .icon-label {
   font-size: 16px;
@@ -2177,7 +2645,7 @@ onUnmounted(() => {
 /* 滚动指示器 */
 .scroll-indicator {
   position: absolute;
-  bottom: 30px; /* 从49px改为30px，往下移动 */
+  bottom: 20px; /* 往下移动 */
   left: 50%;
   transform: translateX(-50%);
   text-align: center;
@@ -2420,6 +2888,11 @@ onUnmounted(() => {
     width: 200px !important;
   }
   
+  .product-hint-text {
+    font-size: 12px;
+    margin-top: 6px;
+  }
+  
   .product-image-container {
     max-width: 75vw;
     max-height: 45vh;
@@ -2454,6 +2927,10 @@ onUnmounted(() => {
     height: 40px; /* 从50px缩小到40px */
   }
   
+  .icon-mirror {
+    transform: scaleX(-1);
+  }
+  
   .icon-label {
     font-size: 14px; /* 从16px缩小到14px */
   }
@@ -2482,6 +2959,11 @@ onUnmounted(() => {
   .loomi-title {
     max-width: 160px !important;
     width: 160px !important;
+  }
+  
+  .product-hint-text {
+    font-size: 11px;
+    margin-top: 5px;
   }
   
   .product-image-container {
@@ -2518,9 +3000,84 @@ onUnmounted(() => {
     height: 35px; /* 从40px进一步缩小到35px */
   }
   
+  .icon-mirror {
+    transform: scaleX(-1);
+  }
+  
   .icon-label {
     font-size: 12px; /* 从14px进一步缩小到12px */
   }
+}
+
+/* 视频播放弹窗样式 */
+.video-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  backdrop-filter: none;
+}
+
+.video-modal-content {
+  position: relative;
+  max-width: 70vw;
+  max-height: 70vh;
+  width: auto;
+  height: auto;
+  background: #000;
+  border-radius: 0;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.video-modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 40px;
+  height: 40px;
+  background: rgba(1, 206, 126, 0.5);
+  border: none;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 10001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s ease, transform 0.3s ease;
+  line-height: 1;
+  padding: 0;
+}
+
+.video-modal-close:hover {
+  background: rgba(1, 206, 126, 0.7);
+  transform: scale(1.1);
+}
+
+.video-modal-player {
+  width: 100%;
+  height: 100%;
+  max-width: 70vw;
+  max-height: 70vh;
+  display: block;
+}
+
+/* 弹窗淡入淡出动画 */
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
 }
 </style>
 
