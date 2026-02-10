@@ -65,7 +65,7 @@ const { currentLanguage } = useLanguage()
 const latestNews = ref({
   title: '新一代陪伴玩具"Loomi噜咪"',
   date: '2026.02.12',
-  images: ['/news/1.jpg', '/news/2.jpg', '/news/3.jpg', '/news/4.jpg'],
+  images: ['/news/1.webp', '/news/2.webp', '/news/3.webp', '/news/4.webp'],
   contents: [
     `2026年2月12日，Axonlabs羽山科技正式揭晓"LOOMI鹿米"系列首作——"Loomi噜咪"。Loomi噜咪作为新一代陪伴玩具，不仅是一个拥有"猫咪灵魂"的数字生命，也是一台3C认证的充电宝。Loomi噜咪通过AI技术与硬件的结合，给用户提供恰如其分的情绪价值，为用户的心情充电。`,
     `有灵魂的对话：内置原创猫咪角色，依托AI情感大模型深度模拟真实猫咪习性，它能秒懂你的情绪，提供即时、治愈的实时对话。`,
