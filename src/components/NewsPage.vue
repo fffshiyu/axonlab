@@ -90,7 +90,7 @@ const { currentLanguage } = useLanguage()
 // 最新新闻数据（只有一条）
 const latestNews = ref({
   title: '新一代陪伴玩具"Loomi噜咪"',
-  date: '2026.02.12',
+  date: '2024.02',
   images: ['/news/1.webp', '/news/2.webp', '/news/3.jpg', '/news/4.webp', '/news/5.jpg', '/news/6.jpg'],
   contents: [
     `2026年春节后，Axonlabs羽山将正式揭晓"LOOMI鹿米"系列首作——"Loomi噜咪"。`,
@@ -128,7 +128,7 @@ const goToImage = (index: number) => {
 
 // 处理"了解更多"按钮点击
 const handleLearnMore = () => {
-  window.open('https://mp.weixin.qq.com/s/Ew4c-PkMk0cAWvBPurfztw', '_blank')
+  window.open('http://xhslink.com/o/2GgKGpJ5lLQ', '_blank')
 }
 
 // 自定义滚动条：强制始终显示（不依赖系统）
@@ -1596,6 +1596,7 @@ onUnmounted(() => {
     max-width: 380px !important;
     align-items: center;
     text-align: center;
+    margin-top: 16px;
   }
   
   .hero-right {
@@ -1603,7 +1604,7 @@ onUnmounted(() => {
   }
   
   .hero-below .news-bottom-title {
-    margin-top: 24px;
+    margin-top: 36px;
     margin-bottom: 8px;
   }
   
@@ -1613,7 +1614,7 @@ onUnmounted(() => {
     max-height: none;
     overflow: visible;
     color: #fff;
-    text-align: center;
+    text-align: left;
     padding: 0.3rem 0;
   }
   
@@ -1621,6 +1622,7 @@ onUnmounted(() => {
     font-size: 0.8rem !important;
     line-height: 1.5 !important;
     margin-bottom: 0.5rem !important;
+    text-align: left;
   }
   
   .hero-below .learn-more-btn {
@@ -1933,6 +1935,7 @@ onUnmounted(() => {
   .hero-below {
     width: 70vw !important;
     max-width: 320px !important;
+    margin-top: 14px;
   }
   
   .hero-right {
@@ -1940,12 +1943,17 @@ onUnmounted(() => {
   }
   
   .hero-below .news-bottom-title {
-    margin-top: 20px;
+    margin-top: 32px;
   }
   
   .hero-below-text {
     max-height: none;
     overflow: visible;
+    text-align: left;
+  }
+  
+  .hero-below-text p {
+    text-align: left;
   }
   
   .hero-image {
