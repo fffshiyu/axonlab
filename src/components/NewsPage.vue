@@ -9,41 +9,64 @@
         <div class="news-hero-layout">
           <!-- 左侧主图与日期 -->
           <div class="hero-left">
-            <div class="hero-image">
-              <img :src="currentImage" alt="news" class="hero-img" :class="{ 'hero-img-first': currentImageIndex === 0 }" />
-              <div v-if="currentImageIndex === 0" class="date-overlay">{{ latestNews.date }}</div>
-            </div>
-            <!-- 箭头和绿色标签移到图片下面 -->
-            <div class="hero-controls-below">
-              <button class="hero-arrow hero-arrow-left" @click="prevImage">
-                <img src="/arrow_right.webp" :alt="currentLanguage === 'zh' ? '上一张' : 'Previous'" class="arrow-icon arrow-icon-left" />
-              </button>
-              <div class="hero-dots-below">
-                <span 
-                  v-for="(_, index) in latestNews.images" 
-                  :key="index"
-                  :class="['dot-below', { active: currentImageIndex === index, wide: currentImageIndex === index }]"
-                  @click="goToImage(index)">
-                </span>
+            <!-- 第一行：仅图片+右侧文字，等高，文字底部与图片底部对齐 -->
+            <div class="hero-image-row">
+              <div class="hero-image">
+                <img :src="currentImage" alt="news" class="hero-img" :class="{ 'hero-img-first': currentImageIndex === 0 }" />
+                <div v-if="currentImageIndex === 0" class="date-overlay">{{ latestNews.date }}</div>
+                <button class="hero-arrow hero-arrow-inside hero-arrow-left" @click="prevImage">
+                  <img src="/arrow_right.webp" :alt="currentLanguage === 'zh' ? '上一张' : 'Previous'" class="arrow-icon arrow-icon-left" />
+                </button>
+                <button class="hero-arrow hero-arrow-inside hero-arrow-right" @click="nextImage">
+                  <img src="/arrow_right.webp" :alt="currentLanguage === 'zh' ? '下一张' : 'Next'" class="arrow-icon arrow-icon-right" />
+                </button>
               </div>
-              <button class="hero-arrow hero-arrow-right" @click="nextImage">
-                <img src="/arrow_right.webp" :alt="currentLanguage === 'zh' ? '下一张' : 'Next'" class="arrow-icon arrow-icon-right" />
-              </button>
+              <div class="hero-right">
+                <div
+                  class="right-text-wrapper"
+                  @wheel.stop="onRightTextWheel"
+                >
+                  <div
+                    ref="rightTextEl"
+                    class="right-text right-text-all"
+                    @scroll="onRightTextScroll"
+                  >
+                    <p v-for="(content, idx) in latestNews.contents" :key="idx">{{ content }}</p>
+                  </div>
+                  <div
+                    v-show="showCustomScrollbar"
+                    class="custom-scrollbar"
+                    ref="scrollbarTrackEl"
+                    @click="onScrollbarTrackClick"
+                  >
+                    <button
+                      type="button"
+                      class="custom-scrollbar-thumb"
+                      :style="customThumbStyle"
+                      @pointerdown="onThumbPointerDown"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- 第二行：点与按钮，与图片居中对齐 -->
+            <div class="hero-below">
+              <div class="hero-controls-below">
+                <div class="hero-dots-below">
+                  <span 
+                    v-for="(_, index) in latestNews.images" 
+                    :key="index"
+                    :class="['dot-below', { active: currentImageIndex === index, wide: currentImageIndex === index }]"
+                    @click="goToImage(index)">
+                  </span>
+                </div>
+              </div>
+              <div class="news-bottom">
+                <h3 class="news-bottom-title">{{ latestNews.title }}</h3>
+                <button class="learn-more-btn" @click="handleLearnMore">LEARN MORE</button>
+              </div>
             </div>
           </div>
-
-          <!-- 右侧文字内容 -->
-          <div class="hero-right">
-            <div class="right-text">
-              <p>{{ currentContent }}</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- 底部标题与按钮 -->
-        <div class="news-bottom">
-          <h3 class="news-bottom-title">{{ latestNews.title }}</h3>
-          <button class="learn-more-btn" @click="handleLearnMore">LEARN MORE</button>
         </div>
       </div>
     </section>
@@ -54,7 +77,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
 import Navbar from './Navbar.vue'
 import Footer from './Footer.vue'
 import { useLanguage } from '../composables/useLanguage'
@@ -65,9 +88,9 @@ const { currentLanguage } = useLanguage()
 const latestNews = ref({
   title: '新一代陪伴玩具"Loomi噜咪"',
   date: '2026.02.12',
-  images: ['/news/1.webp', '/news/2.webp', '/news/3.webp', '/news/4.webp'],
+  images: ['/news/1.webp', '/news/2.webp', '/news/3.jpg', '/news/4.webp', '/news/5.jpg', '/news/6.jpg'],
   contents: [
-    `2026年2月12日，Axonlabs羽山科技正式揭晓"LOOMI鹿米"系列首作——"Loomi噜咪"。Loomi噜咪作为新一代陪伴玩具，不仅是一个拥有"猫咪灵魂"的数字生命，也是一台3C认证的充电宝。Loomi噜咪通过AI技术与硬件的结合，给用户提供恰如其分的情绪价值，为用户的心情充电。`,
+    `2026年春节后，Axonlabs羽山将正式揭晓"LOOMI鹿米"系列首作——"Loomi噜咪"。`,
     `有灵魂的对话：内置原创猫咪角色，依托AI情感大模型深度模拟真实猫咪习性，它能秒懂你的情绪，提供即时、治愈的实时对话。`,
     `次元壁的突破：特有的"呼猫"功能，让用户能随时随地召唤周边的猫咪伙伴，将数字陪伴延伸至物理世界。`,
     `无忧的旅途伴侣：它是符合2026.03最新3C执行标准的可上机充电宝，支持20W快充与多设备连接。扫描机身二维码即可即时查询合规信息，确保在每一段旅途中，都能给你最踏实、最简单的快乐。`
@@ -79,11 +102,6 @@ const currentImageIndex = ref(0)
 // 当前显示的图片
 const currentImage = computed(() => {
   return latestNews.value.images[currentImageIndex.value]
-})
-
-// 当前显示的文字内容
-const currentContent = computed(() => {
-  return latestNews.value.contents[currentImageIndex.value]
 })
 
 // 切换到上一张图片（点击左箭头跳到最右边）
@@ -107,8 +125,106 @@ const goToImage = (index: number) => {
 
 // 处理"了解更多"按钮点击
 const handleLearnMore = () => {
-  // 暂时不做跳转
-  // window.open('https://mp.weixin.qq.com/', '_blank')
+  window.open('https://mp.weixin.qq.com/s/Ew4c-PkMk0cAWvBPurfztw', '_blank')
+}
+
+// 自定义滚动条：强制始终显示（不依赖系统）
+const rightTextEl = ref<HTMLElement | null>(null)
+const scrollbarTrackEl = ref<HTMLElement | null>(null)
+const scrollThumbTop = ref(0)
+const scrollThumbHeight = ref(30)
+const showCustomScrollbar = ref(true)
+let thumbDragging = false
+let thumbJustDragged = false
+let thumbStartY = 0
+let scrollStartTop = 0
+let scrollbarResizeObserver: ResizeObserver | null = null
+
+const updateCustomScrollbar = () => {
+  const el = rightTextEl.value
+  if (!el) return
+  const { scrollHeight, clientHeight, scrollTop } = el
+  if (scrollHeight <= clientHeight) {
+    showCustomScrollbar.value = false
+    return
+  }
+  showCustomScrollbar.value = true
+  const ratio = clientHeight / scrollHeight
+  scrollThumbHeight.value = Math.max(20, Math.round(ratio * clientHeight))
+  scrollThumbTop.value = (scrollTop / (scrollHeight - clientHeight)) * (clientHeight - scrollThumbHeight.value)
+}
+
+const customThumbStyle = computed(() => ({
+  height: `${scrollThumbHeight.value}px`,
+  transform: `translateY(${scrollThumbTop.value}px)`
+}))
+
+const onRightTextScroll = () => {
+  if (!thumbDragging) updateCustomScrollbar()
+}
+
+/** 右侧文字区域滚轮：只滚动文字，不触发页面滚动 */
+const onRightTextWheel = (e: WheelEvent) => {
+  e.stopPropagation()
+}
+
+const onScrollbarTrackClick = (e: MouseEvent) => {
+  if (thumbJustDragged) {
+    thumbJustDragged = false
+    return
+  }
+  const el = rightTextEl.value
+  const track = scrollbarTrackEl.value
+  if (!el || !track || thumbDragging) return
+  if ((e.target as HTMLElement)?.classList?.contains('custom-scrollbar-thumb')) return
+  const rect = track.getBoundingClientRect()
+  const y = e.clientY - rect.top
+  const trackHeight = rect.height
+  const thumbH = scrollThumbHeight.value
+  const clickRatio = (y - thumbH / 2) / (trackHeight - thumbH)
+  const maxScroll = el.scrollHeight - el.clientHeight
+  el.scrollTop = Math.max(0, Math.min(maxScroll, clickRatio * maxScroll))
+  updateCustomScrollbar()
+}
+
+const onThumbPointerDown = (e: PointerEvent) => {
+  e.preventDefault()
+  e.stopPropagation()
+  const thumbEl = e.currentTarget as HTMLElement
+  thumbEl.setPointerCapture(e.pointerId)
+  thumbDragging = true
+  thumbStartY = e.clientY
+  scrollStartTop = rightTextEl.value?.scrollTop ?? 0
+
+  const onPointerMove = (e2: PointerEvent) => {
+    e2.preventDefault()
+    if (!rightTextEl.value) return
+    const delta = e2.clientY - thumbStartY
+    const trackHeight = scrollbarTrackEl.value?.getBoundingClientRect().height ?? 1
+    const maxScroll = rightTextEl.value.scrollHeight - rightTextEl.value.clientHeight
+    const thumbH = scrollThumbHeight.value
+    const moveRange = trackHeight - thumbH
+    if (moveRange <= 0) return
+    const ratio = maxScroll / moveRange
+    const newScroll = scrollStartTop + delta * ratio
+    rightTextEl.value.scrollTop = Math.max(0, Math.min(maxScroll, newScroll))
+    updateCustomScrollbar()
+  }
+
+  const onPointerUp = () => {
+    thumbEl.releasePointerCapture(e.pointerId)
+    thumbDragging = false
+    thumbJustDragged = true
+    thumbEl.removeEventListener('pointermove', onPointerMove)
+    thumbEl.removeEventListener('pointerup', onPointerUp)
+    thumbEl.removeEventListener('pointercancel', onPointerUp)
+    document.body.style.removeProperty('user-select')
+  }
+
+  document.body.style.userSelect = 'none'
+  thumbEl.addEventListener('pointermove', onPointerMove)
+  thumbEl.addEventListener('pointerup', onPointerUp)
+  thumbEl.addEventListener('pointercancel', onPointerUp)
 }
 
 // 导航栏可见性
@@ -297,6 +413,13 @@ const initializePagePosition = () => {
 }
 
 onMounted(() => {
+  nextTick(() => {
+    updateCustomScrollbar()
+  })
+  scrollbarResizeObserver = new ResizeObserver(() => updateCustomScrollbar())
+  const el = rightTextEl.value
+  if (el) scrollbarResizeObserver.observe(el)
+
   // 添加点击空白处隐藏下拉菜单的事件监听
   window.addEventListener('click', handleClickOutside)
   
@@ -310,6 +433,7 @@ onMounted(() => {
   window.addEventListener('resize', () => {
     setTimeout(() => {
       initializePagePosition()
+      updateCustomScrollbar()
     }, 200)
   })
   
@@ -332,7 +456,10 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-  // 清理事件监听器
+  if (scrollbarResizeObserver && rightTextEl.value) {
+    scrollbarResizeObserver.unobserve(rightTextEl.value)
+    scrollbarResizeObserver = null
+  }
   window.removeEventListener('click', handleClickOutside)
   window.removeEventListener('wheel', handleWheel)
   window.removeEventListener('keydown', () => {})
@@ -626,7 +753,7 @@ onUnmounted(() => {
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: center; /* 让图片居中 */
+  justify-content: center;
   width: 100%;
 }
 
@@ -634,30 +761,113 @@ onUnmounted(() => {
   position: relative;
   display: flex;
   flex-direction: column;
+  align-items: flex-start; /* 下方点/按钮与图片左对齐，在图片正下方 */
+}
+
+/* 第一行：仅图片+右侧文字，等高，文字底部与图片底部对齐 */
+.hero-image-row {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 20px;
+}
+
+/* 第二行：点与按钮，与图片居中对齐 */
+.hero-below {
+  display: flex;
+  flex-direction: column;
   align-items: center;
+  width: 900px; /* 与图片同宽 */
+  flex-shrink: 0;
 }
 
 .hero-right {
-  position: absolute;
-  left: 50%;
-  top: calc(50% + 300px); /* 从中心向下偏移图片高度的一半(300px)，使文字顶部在图片底部位置 */
-  transform: translateY(-100%); /* 向上移动100%，使文字底部与图片底部对齐 */
-  margin-left: 470px; /* 图片宽度的一半(450px) + 间隔20px */
   color: #fff;
-  max-width: 240px; /* 从320px继续缩小到240px */
-  width: 100%;
+  max-width: 240px;
+  width: 240px;
+  flex-shrink: 0;
+  min-height: 0;
+  overflow: hidden;
   display: flex;
-  align-items: flex-end; /* 底部对齐 */
+  align-items: flex-start;
+}
+
+.right-text-wrapper {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  min-height: 0;
+  flex: 1;
+}
+
+.custom-scrollbar {
+  flex-shrink: 0;
+  width: 8px;
+  height: 100%;
+  min-height: 0;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+  margin-left: 4px;
+  z-index: 10;
+}
+
+.custom-scrollbar-thumb {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: #01CE7E;
+  border-radius: 4px;
+  cursor: grab;
+  min-height: 20px;
+  width: 100%;
+  display: block;
+  outline: none;
+  font: inherit;
+  -webkit-appearance: none;
+  appearance: none;
+  touch-action: none;
+}
+
+.custom-scrollbar-thumb:active {
+  cursor: grabbing;
+}
+
+.custom-scrollbar-thumb:focus {
+  outline: none;
 }
 
 .hero-image {
   position: relative;
-  width: 900px; /* 放大图片尺寸 */
-  height: 600px; /* 保持3:2比例 */
-  border-radius: 0; /* 移除圆角 */
+  width: 900px;
+  height: 600px;
+  border-radius: 0;
   overflow: hidden;
   transition: opacity 0.3s ease;
-  margin: 0; /* 移除auto，让flex布局控制居中 */
+  margin: 0;
+  flex-shrink: 0;
+}
+
+/* 箭头在图片内左右两侧 */
+.hero-arrow-inside {
+  position: absolute !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  z-index: 2;
+  margin: 0 !important;
+}
+.hero-arrow-inside.hero-arrow-left {
+  left: 16px;
+  right: auto;
+}
+.hero-arrow-inside.hero-arrow-right {
+  right: 16px;
+  left: auto;
 }
 
 .hero-img {
@@ -688,14 +898,14 @@ onUnmounted(() => {
   font-family: 'MiSans', 'Noto Sans SC', sans-serif;
 }
 
-/* 箭头和标签容器 */
+/* 点容器：紧贴图片下方 */
 .hero-controls-below {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  width: 900px; /* 与图片宽度一致 */
-  margin-top: 40px; /* 距离图片底部更远 */
-  padding: 0 60px; /* 两侧留出更多空间，让箭头离图片更远 */
+  justify-content: center;
+  width: 900px;
+  margin-top: 12px; /* 点离图片更近 */
+  padding: 0;
   z-index: 2;
   position: relative;
   box-sizing: border-box;
@@ -830,20 +1040,32 @@ onUnmounted(() => {
 }
 
 .right-text {
-  height: 600px; /* 固定高度，与图片高度一致，确保所有页面文字高度一致 */
-  max-height: 600px; /* 与图片高度一致 */
-  overflow-y: auto;
+  height: 100%;
+  min-height: 0;
+  max-height: 600px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  flex: 1;
+  min-width: 0;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   line-height: 1.9;
   color: #d0d0d0;
-  padding-right: 8px;
-  font-size: 14px; /* 从16px缩小到14px */
+  padding-right: 4px;
+  font-size: 14px;
   font-family: 'MiSans', 'Noto Sans SC', sans-serif;
   text-align: left;
-  margin-bottom: 0; /* 确保底部对齐 */
+  margin-bottom: 0;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end; /* 文字从底部开始向上显示 */
+  justify-content: flex-start;
   align-items: flex-start;
+}
+
+.right-text::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
 }
 
 .right-text p {
@@ -856,28 +1078,24 @@ onUnmounted(() => {
   margin-bottom: 0;
 }
 
-/* 自定义滚动条样式 */
-.right-text::-webkit-scrollbar {
-  width: 6px;
+/* 全部文字从顶部排布，不超出容器，超出部分往下滚动 */
+.right-text-all {
+  justify-content: flex-start !important;
 }
 
-.right-text::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 3px;
-}
-
-.right-text::-webkit-scrollbar-thumb {
-  background: rgba(1, 206, 126, 0.5);
-  border-radius: 3px;
-}
-
-.right-text::-webkit-scrollbar-thumb:hover {
-  background: rgba(1, 206, 126, 0.8);
-}
+/* 原生滚动条已隐藏，使用右侧自定义 div 滚动条，始终显示 */
 
 .news-bottom {
   margin-top: 28px;
   text-align: center;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.hero-below .news-bottom {
+  width: 100%;
+  max-width: 100%;
 }
 
 .news-bottom-title {
@@ -1251,58 +1469,62 @@ onUnmounted(() => {
 /* 响应式设计 */
 @media (max-width: 1440px) {
   .hero-image {
-    width: 675px; /* 900px * 0.75 */
-    height: 450px; /* 600px * 0.75 */
+    width: 675px;
+    height: 450px;
+  }
+  
+  .hero-below {
+    width: 675px;
   }
   
   .hero-controls-below {
-    width: 675px; /* 与图片宽度一致 */
-    padding: 0 45px; /* 60px * 0.75 */
+    width: 675px;
+    margin-top: 10px;
   }
   
   .hero-right {
-    top: calc(50% + 225px); /* 从中心向下偏移图片高度的一半(225px) */
-    transform: translateY(-110%); /* 向上移动100%，使文字底部与图片底部对齐 */
-    margin-left: 352.5px; /* 675px / 2 + 15px间隔 */
-    max-width: 180px; /* 240px * 0.75 */
+    max-width: 180px;
+    width: 180px;
   }
   
   .right-text {
-    height: 450px; /* 固定高度，600px * 0.75 */
-    max-height: 450px; /* 600px * 0.75 */
+    min-height: 0;
+    max-height: 450px;
     margin-bottom: 0;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
+    justify-content: flex-start;
     align-items: flex-start;
   }
 }
 
 @media (max-width: 1024px) {
   .hero-image {
-    width: 540px; /* 900px * 0.6 */
-    height: 360px; /* 600px * 0.6 */
+    width: 540px;
+    height: 360px;
+  }
+  
+  .hero-below {
+    width: 540px;
   }
   
   .hero-controls-below {
-    width: 540px; /* 与图片宽度一致 */
-    padding: 0 36px; /* 60px * 0.6 */
+    width: 540px;
+    margin-top: 8px;
   }
   
   .hero-right {
-    top: calc(50% + 180px); /* 从中心向下偏移图片高度的一半(180px) */
-    transform: translateY(-100%); /* 向上移动100%，使文字底部与图片底部对齐 */
-    margin-left: 282px; /* 540px / 2 + 12px间隔 */
-    max-width: 144px; /* 240px * 0.6 */
+    max-width: 144px;
+    width: 144px;
   }
   
   .right-text {
-    height: 360px; /* 固定高度，600px * 0.6 */
-    max-height: 360px; /* 600px * 0.6 */
+    min-height: 0;
+    max-height: 360px;
     margin-bottom: 0;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
+    justify-content: flex-start;
     align-items: flex-start;
   }
 }
@@ -1350,13 +1572,31 @@ onUnmounted(() => {
     padding: 0 !important; /* 移除所有padding */
   }
   
+  .hero-image-row {
+    gap: 12px;
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  .hero-below {
+    width: 75vw !important;
+    max-width: 380px !important;
+  }
+  
   .hero-image {
-    width: 75vw !important; /* 减小图片宽度 */
-    max-width: 380px !important; /* 减小最大宽度 */
+    width: 75vw !important;
+    max-width: 380px !important;
     height: auto;
-    aspect-ratio: 3/2; /* 保持3:2宽高比 */
-    margin-bottom: 0 !important; /* 移除底部margin */
-    margin-top: 0 !important; /* 移除顶部margin */
+    aspect-ratio: 3/2;
+    margin-bottom: 0 !important;
+    margin-top: 0 !important;
+  }
+  
+  .hero-arrow-inside.hero-arrow-left {
+    left: 10px !important;
+  }
+  .hero-arrow-inside.hero-arrow-right {
+    right: 10px !important;
   }
   
   .hero-img {
@@ -1372,14 +1612,14 @@ onUnmounted(() => {
   }
   
   .hero-controls-below {
-    width: 75vw !important; /* 与图片宽度一致 */
-    max-width: 380px !important; /* 与图片最大宽度一致 */
-    margin-top: 10px !important; /* 增加间距 */
-    margin-bottom: 0 !important; /* 移除底部margin */
-    padding: 0 20px !important; /* 保持左右padding对称 */
-    justify-content: space-between;
-    align-items: center !important; /* 确保垂直居中对齐 */
-    display: flex !important; /* 确保flex布局 */
+    width: 75vw !important;
+    max-width: 380px !important;
+    margin-top: 6px !important; /* 点离图片更近 */
+    margin-bottom: 0 !important;
+    padding: 0 !important;
+    justify-content: center;
+    align-items: center !important;
+    display: flex !important;
   }
   
   .hero-arrow {
@@ -1467,32 +1707,35 @@ onUnmounted(() => {
   }
   
   .hero-right {
-    position: relative !important; /* 移除绝对定位 */
+    position: relative !important;
     margin-left: 0 !important;
-    max-width: 85vw;
-    width: 100%;
-    left: auto !important; /* 重置left属性 */
-    bottom: auto !important; /* 重置bottom属性 */
-    top: auto !important; /* 重置top属性 */
-    transform: none !important; /* 移除transform */
-    margin-top: 0.8rem !important; /* 增加间距 */
-    margin-bottom: 0 !important; /* 移除底部margin */
-    padding: 0 !important; /* 移除所有padding */
-    align-self: stretch !important; /* 拉伸填充 */
+    max-width: 40%;
+    width: auto;
+    min-width: 120px;
+    left: auto !important;
+    bottom: auto !important;
+    top: auto !important;
+    transform: none !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    align-items: flex-start !important;
   }
   
   .right-text {
-    max-height: none !important; /* 移除高度限制 */
-    height: auto !important; /* 自动高度 */
-    padding: 0.5rem 0.8rem 0.4rem 0.8rem !important; /* 增加上下padding */
-    text-align: center; /* 文字居中 */
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    padding: 0.5rem 0.4rem 0.4rem 0.4rem !important;
+    text-align: center;
     margin-bottom: 0 !important;
-    margin-top: 0 !important; /* 移除顶部margin */
+    margin-top: 0 !important;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: flex-start !important;
     align-items: center;
-    line-height: 1.5 !important; /* 适当增加行高 */
+    line-height: 1.5 !important;
   }
   
   .right-text p {
@@ -1513,10 +1756,15 @@ onUnmounted(() => {
   }
   
   .news-bottom {
-    margin-top: 0.8rem !important; /* 增加间距 */
-    width: 85vw;
-    margin-bottom: 0 !important; /* 移除底部margin */
-    padding: 0 !important; /* 移除所有padding */
+    margin-top: 0.8rem !important;
+    width: 100% !important; /* 与图片列同宽，与图片居中对齐 */
+    margin-bottom: 0 !important;
+    padding: 0 !important;
+  }
+  
+  .hero-below .news-bottom {
+    width: 100% !important;
+    max-width: 100% !important;
   }
   
   .news-bottom-title {
@@ -1632,29 +1880,45 @@ onUnmounted(() => {
     justify-content: flex-start !important; /* 顶部对齐 */
   }
   
+  .hero-image-row {
+    gap: 10px;
+  }
+  
+  .hero-below {
+    width: 70vw !important;
+    max-width: 320px !important;
+  }
+  
   .hero-image {
-    width: 70vw !important; /* 减小图片宽度 */
-    max-width: 320px !important; /* 减小最大宽度 */
+    width: 70vw !important;
+    max-width: 320px !important;
     aspect-ratio: 3/2;
-    margin-bottom: 0 !important; /* 移除底部margin */
-    margin-top: 0 !important; /* 移除顶部margin */
+    margin-bottom: 0 !important;
+    margin-top: 0 !important;
+  }
+  
+  .hero-arrow-inside.hero-arrow-left {
+    left: 8px !important;
+  }
+  .hero-arrow-inside.hero-arrow-right {
+    right: 8px !important;
   }
   
   .date-overlay {
-    font-size: 0.9rem !important; /* 减小日期字体 */
-    font-weight: 600; /* 加粗 */
-    padding: 0.35rem 0.7rem !important; /* 减小padding */
+    font-size: 0.9rem !important;
+    font-weight: 600;
+    padding: 0.35rem 0.7rem !important;
   }
   
   .hero-controls-below {
-    width: 70vw !important; /* 与图片宽度一致 */
-    max-width: 320px !important; /* 与图片最大宽度一致 */
-    margin-top: 8px !important; /* 增加间距 */
-    margin-bottom: 0 !important; /* 移除底部margin */
-    padding: 0 15px !important; /* 保持左右padding对称 */
-    justify-content: space-between;
-    align-items: center !important; /* 确保垂直居中对齐 */
-    display: flex !important; /* 确保flex布局 */
+    width: 70vw !important;
+    max-width: 320px !important;
+    margin-top: 4px !important; /* 点离图片更近 */
+    margin-bottom: 0 !important;
+    padding: 0 !important;
+    justify-content: center;
+    align-items: center !important;
+    display: flex !important;
   }
   
   .hero-arrow {
@@ -1742,31 +2006,35 @@ onUnmounted(() => {
   }
   
   .hero-right {
-    position: relative !important; /* 移除绝对定位 */
-    max-width: 90vw;
-    left: auto !important; /* 重置left属性 */
-    bottom: auto !important; /* 重置bottom属性 */
-    top: auto !important; /* 重置top属性 */
-    transform: none !important; /* 移除transform */
+    position: relative !important;
+    max-width: 38%;
+    width: auto;
+    min-width: 100px;
+    left: auto !important;
+    bottom: auto !important;
+    top: auto !important;
+    transform: none !important;
     margin-left: 0 !important;
-    margin-top: 0.6rem !important; /* 增加间距 */
-    margin-bottom: 0 !important; /* 移除底部margin */
-    padding: 0 !important; /* 移除所有padding */
-    align-self: stretch !important; /* 拉伸填充 */
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    align-items: flex-start !important;
   }
   
   .right-text {
-    max-height: none !important; /* 移除高度限制 */
-    height: auto !important; /* 自动高度 */
-    padding: 0.4rem 0.6rem 0.35rem 0.6rem !important; /* 增加上下padding */
-    text-align: center; /* 文字居中 */
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    padding: 0.4rem 0.3rem 0.35rem 0.3rem !important;
+    text-align: center;
     margin-bottom: 0 !important;
-    margin-top: 0 !important; /* 移除顶部margin */
+    margin-top: 0 !important;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: flex-start !important;
     align-items: center;
-    line-height: 1.45 !important; /* 适当增加行高 */
+    line-height: 1.45 !important;
   }
   
   .right-text p {
@@ -1787,10 +2055,15 @@ onUnmounted(() => {
   }
   
   .news-bottom {
-    margin-top: 0.6rem !important; /* 增加间距 */
-    width: 90vw;
-    margin-bottom: 0 !important; /* 移除底部margin */
-    padding: 0 !important; /* 移除所有padding */
+    margin-top: 0.6rem !important;
+    width: 100% !important; /* 与图片列同宽，与图片居中对齐 */
+    margin-bottom: 0 !important;
+    padding: 0 !important;
+  }
+  
+  .hero-below .news-bottom {
+    width: 100% !important;
+    max-width: 100% !important;
   }
   
   .news-bottom-title {
@@ -2135,14 +2408,29 @@ onUnmounted(() => {
   }
   
   .hero-image {
-    width: 2160px !important; /* 进一步放大，从1800px增加到2160px (900px * 2.4) */
-    height: 1440px !important; /* 进一步放大，从1200px增加到1440px (600px * 2.4) */
+    width: 2160px !important;
+    height: 1440px !important;
+  }
+  
+  .hero-below {
+    width: 2160px !important;
   }
   
   .hero-controls-below {
-    width: 2160px !important; /* 进一步放大 */
-    margin-top: 96px !important; /* 进一步放大 */
-    padding: 0 144px !important; /* 进一步放大 */
+    width: 2160px !important;
+    margin-top: 24px !important;
+    padding: 0 !important;
+  }
+  
+  .hero-arrow-inside.hero-arrow-left {
+    left: 40px !important;
+  }
+  .hero-arrow-inside.hero-arrow-right {
+    right: 40px !important;
+  }
+  
+  .hero-image-row {
+    gap: 48px;
   }
   
   .hero-arrow {
@@ -2222,17 +2510,17 @@ onUnmounted(() => {
   }
   
   .hero-right {
-    top: calc(50% + 600px) !important; /* 往下移动，从500px增加到600px */
-    margin-left: 1128px !important; /* 进一步放大 */
-    max-width: 576px !important; /* 进一步放大 */
+    max-width: 576px !important;
+    width: 576px !important;
   }
   
   .right-text {
-    height: 1440px !important; /* 进一步放大 */
-    max-height: 1440px !important; /* 进一步放大 */
-    font-size: 34px !important; /* 进一步放大，从28px增加到34px */
-    padding-right: 19px !important; /* 进一步放大 */
-    line-height: 2.5 !important; /* 减少行间距，从4.56减少到2.5 */
+    min-height: 0 !important;
+    max-height: 1440px !important;
+    height: 100% !important;
+    font-size: 34px !important;
+    padding-right: 19px !important;
+    line-height: 2.5 !important;
   }
   
   .right-text p {

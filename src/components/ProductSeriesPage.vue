@@ -28,37 +28,7 @@
               </div>
             </div>
             
-            <!-- 音频按钮 - 5个位置 -->
-            <button 
-              class="audio-btn audio-btn-1" 
-              @click.stop="playAudio(1, $event)"
-            >
-              <img src="/audio.png" alt="音频1" />
-            </button>
-            <button 
-              class="audio-btn audio-btn-2" 
-              @click.stop="playAudio(2, $event)"
-            >
-              <img src="/audio.png" alt="音频2" />
-            </button>
-            <button 
-              class="audio-btn audio-btn-3" 
-              @click.stop="playAudio(3, $event)"
-            >
-              <img src="/audio.png" alt="音频3" />
-            </button>
-            <button 
-              class="audio-btn audio-btn-4" 
-              @click.stop="playAudio(4, $event)"
-            >
-              <img src="/audio.png" alt="音频4" />
-            </button>
-            <button 
-              class="audio-btn audio-btn-5" 
-              @click.stop="playAudio(5, $event)"
-            >
-              <img src="/audio.png" alt="音频5" />
-            </button>
+            <!-- 音频为 3D 精灵标签，与视频一致，放在模型两侧和顶部 -->
             
             <!-- 叠加的侧边图片 -->
             <transition name="fade">
@@ -274,6 +244,11 @@ let controls1: OrbitControls
 let content1: THREE.Object3D | null = null
 let videoLabelFront1: THREE.Sprite | null = null
 let videoLabelBack1: THREE.Sprite | null = null
+let audioLabelTop1: THREE.Sprite | null = null
+let audioLabelLeft1: THREE.Sprite | null = null
+let audioLabelLeft2: THREE.Sprite | null = null
+let audioLabelRight1: THREE.Sprite | null = null
+let audioLabelRight2: THREE.Sprite | null = null
 let raycaster1: THREE.Raycaster | null = null
 let mouse1 = new THREE.Vector2()
 let animationId1: number
@@ -363,6 +338,21 @@ const onSpriteClick1 = (event: MouseEvent) => {
       onClick: (videoLabelBack1.userData as any).onClick,
       name: 'back'
     })
+  }
+  if (audioLabelTop1) {
+    sprites.push({ sprite: audioLabelTop1, onClick: (audioLabelTop1.userData as any).onClick, name: 'audioTop' })
+  }
+  if (audioLabelLeft1) {
+    sprites.push({ sprite: audioLabelLeft1, onClick: (audioLabelLeft1.userData as any).onClick, name: 'audioLeft1' })
+  }
+  if (audioLabelLeft2) {
+    sprites.push({ sprite: audioLabelLeft2, onClick: (audioLabelLeft2.userData as any).onClick, name: 'audioLeft2' })
+  }
+  if (audioLabelRight1) {
+    sprites.push({ sprite: audioLabelRight1, onClick: (audioLabelRight1.userData as any).onClick, name: 'audioRight1' })
+  }
+  if (audioLabelRight2) {
+    sprites.push({ sprite: audioLabelRight2, onClick: (audioLabelRight2.userData as any).onClick, name: 'audioRight2' })
   }
   
   // 检查每个 Sprite 是否被点击
@@ -753,47 +743,87 @@ const setContent1 = (object: THREE.Object3D) => {
   console.log('第一个产品模型已居中，相机位置:', camera1.position)
 }
 
-// 创建视频标签函数
+// 创建视频与音频标签函数（3D 精灵：模型两侧和顶部）
 const createVideoLabels1 = (size: number) => {
-  // 移除旧的标签
+  const spriteSize = size * 0.08
+
+  // 移除旧的视频标签
   if (videoLabelFront1) {
     scene1.remove(videoLabelFront1)
-    videoLabelFront1.material.dispose()
+    ;(videoLabelFront1.material as THREE.Material).dispose()
     videoLabelFront1 = null
   }
   if (videoLabelBack1) {
     scene1.remove(videoLabelBack1)
-    videoLabelBack1.material.dispose()
+    ;(videoLabelBack1.material as THREE.Material).dispose()
     videoLabelBack1 = null
   }
+  // 移除旧的音频标签
+  for (const s of [audioLabelTop1, audioLabelLeft1, audioLabelLeft2, audioLabelRight1, audioLabelRight2]) {
+    if (s) {
+      scene1.remove(s)
+      ;(s.material as THREE.Material).dispose()
+    }
+  }
+  audioLabelTop1 = audioLabelLeft1 = audioLabelLeft2 = audioLabelRight1 = audioLabelRight2 = null
 
-  // 创建正面偏下的 Sprite 标签
+  // 视频：正面偏下
   videoLabelFront1 = createSpriteLabel('/video.png', () => {
     showVideoModal('/video/正面触点-语音交互.mp4')
   })
-  // 正面偏下位置：Z轴正方向（正面），往下移动一点
-  videoLabelFront1.position.set(0, -size /4.5, size / 4) // 从 -size/6 改为 -size/5，往下移动
-  // 根据模型大小调整 Sprite 尺寸
-  const spriteSize = size * 0.08 // 标签大小约为模型的8%
+  videoLabelFront1.position.set(0, -size / 4.5, size / 4)
   videoLabelFront1.scale.set(spriteSize, spriteSize, 1)
-  // 存储原始缩放值用于呼吸动画
   videoLabelFront1.userData.baseScale = spriteSize
-  // 设置 Sprite 可点击
   videoLabelFront1.userData.isClickable = true
   scene1.add(videoLabelFront1)
 
-  // 创建背面偏上的 Sprite 标签
+  // 视频：背面偏上
   videoLabelBack1 = createSpriteLabel('/video.png', () => {
     showVideoModal('/video/背面触点-呼猫模式.mp4')
   })
-  // 背面偏上位置：Z轴负方向（背面），往上移动一点
-  videoLabelBack1.position.set(0, size / 3.8, -size / 4) // 从 size/4 改为 size/3，往上移动
+  videoLabelBack1.position.set(0, size / 3.8, -size / 4)
   videoLabelBack1.scale.set(spriteSize, spriteSize, 1)
-  // 存储原始缩放值用于呼吸动画
   videoLabelBack1.userData.baseScale = spriteSize
-  // 设置 Sprite 可点击
   videoLabelBack1.userData.isClickable = true
   scene1.add(videoLabelBack1)
+
+  // 音频：正上方（稍微高一点）
+  audioLabelTop1 = createSpriteLabel('/audio.png', () => playAudio(3))
+  audioLabelTop1.position.set(0, size / 2.05, 0)
+  audioLabelTop1.scale.set(spriteSize, spriteSize, 1)
+  audioLabelTop1.userData.baseScale = spriteSize
+  audioLabelTop1.userData.isClickable = true
+  scene1.add(audioLabelTop1)
+
+  // 音频：正左侧 上、下（更靠近模型）
+  audioLabelLeft1 = createSpriteLabel('/audio.png', () => playAudio(4))
+  audioLabelLeft1.position.set(-size / 2.6, size / 5, 0)
+  audioLabelLeft1.scale.set(spriteSize, spriteSize, 1)
+  audioLabelLeft1.userData.baseScale = spriteSize
+  audioLabelLeft1.userData.isClickable = true
+  scene1.add(audioLabelLeft1)
+
+  audioLabelLeft2 = createSpriteLabel('/audio.png', () => playAudio(5))
+  audioLabelLeft2.position.set(-size / 2.6, -size / 25, 0)
+  audioLabelLeft2.scale.set(spriteSize, spriteSize, 1)
+  audioLabelLeft2.userData.baseScale = spriteSize
+  audioLabelLeft2.userData.isClickable = true
+  scene1.add(audioLabelLeft2)
+
+  // 音频：正右侧 上、下（更靠近模型）
+  audioLabelRight1 = createSpriteLabel('/audio.png', () => playAudio(2))
+  audioLabelRight1.position.set(size / 2.6, size / 5, 0)
+  audioLabelRight1.scale.set(spriteSize, spriteSize, 1)
+  audioLabelRight1.userData.baseScale = spriteSize
+  audioLabelRight1.userData.isClickable = true
+  scene1.add(audioLabelRight1)
+
+  audioLabelRight2 = createSpriteLabel('/audio.png', () => playAudio(1))
+  audioLabelRight2.position.set(size / 2.6, -size / 30, 0)
+  audioLabelRight2.scale.set(spriteSize, spriteSize, 1)
+  audioLabelRight2.userData.baseScale = spriteSize
+  audioLabelRight2.userData.isClickable = true
+  scene1.add(audioLabelRight2)
 }
 
 // 窗口大小变化处理 - 第一个产品（节流优化）
@@ -859,25 +889,26 @@ const animate1 = () => {
   }
 }
 
-// 更新视频标签的呼吸动画
+// 更新视频与音频标签的呼吸动画
 const updateVideoLabelsBreathing1 = () => {
-  const time = Date.now() * 0.001 // 转换为秒
-  const breatheSpeed = 2.0 // 呼吸速度（每秒2次）
-  const breatheAmount = 0.15 // 呼吸幅度（15%）
+  const time = Date.now() * 0.001
+  const breatheSpeed = 2.0
+  const breatheAmount = 0.15
   
-  // 正面标签呼吸动画
-  if (videoLabelFront1 && videoLabelFront1.userData.baseScale) {
-    const baseScale = videoLabelFront1.userData.baseScale
-    const scale = baseScale * (1 + Math.sin(time * breatheSpeed) * breatheAmount)
-    videoLabelFront1.scale.set(scale, scale, 1)
+  const applyBreathe = (sprite: THREE.Sprite | null) => {
+    if (sprite && sprite.userData.baseScale) {
+      const baseScale = sprite.userData.baseScale as number
+      const scale = baseScale * (1 + Math.sin(time * breatheSpeed) * breatheAmount)
+      sprite.scale.set(scale, scale, 1)
+    }
   }
-  
-  // 背面标签呼吸动画
-  if (videoLabelBack1 && videoLabelBack1.userData.baseScale) {
-    const baseScale = videoLabelBack1.userData.baseScale
-    const scale = baseScale * (1 + Math.sin(time * breatheSpeed) * breatheAmount)
-    videoLabelBack1.scale.set(scale, scale, 1)
-  }
+  applyBreathe(videoLabelFront1)
+  applyBreathe(videoLabelBack1)
+  applyBreathe(audioLabelTop1)
+  applyBreathe(audioLabelLeft1)
+  applyBreathe(audioLabelLeft2)
+  applyBreathe(audioLabelRight1)
+  applyBreathe(audioLabelRight2)
 }
 
 // 启动动画1
@@ -1141,6 +1172,9 @@ const setContent = (object: THREE.Object3D) => {
 
   // 将模型稍微往下移动（减少偏移量，让模型显示更高）
   object.position.y -= size * 0.05  // 向下移动模型高度的5%（从15%减少到5%）
+
+  // 下面的机器人稍微放大
+  object.scale.set(1.1, 1.1, 1.1)
 
   // 设置固定距离，不允许缩放
   const distance = Math.sqrt(
@@ -1443,17 +1477,35 @@ const rotateCameraToView1 = (view: string) => {
   // 获取当前相机到原点的距离
   const currentDistance = camera1.position.distanceTo(center)
   
-  // 根据视角设置相机目标位置，保持当前的距离
-  let targetPosition = new THREE.Vector3()
-  
-  // 计算模型尺寸以确定合适的相机距离
+  // 计算模型尺寸
   const box = new THREE.Box3().setFromObject(content1)
   const size = box.getSize(new THREE.Vector3()).length()
-  const distance = Math.sqrt(
-    Math.pow(size / 1.5, 2) + 
-    Math.pow(size / 2.5, 2) + 
-    Math.pow(size / 1.5, 2)
-  )
+  
+  // 用初始相机方向 (size/1.5, size/2.5, size/1.5) 算出俯仰角，保持各视角与此一致，避免俯视感
+  const initialDir = new THREE.Vector3(size / 1.5, size / 2.5, size / 1.5)
+  const initialLen = initialDir.length()
+  const sinElev = initialDir.y / initialLen
+  const cosElev = Math.sqrt(1 - sinElev * sinElev)
+  
+  let targetPosition = new THREE.Vector3()
+  switch (view) {
+    case '正面':
+      targetPosition.set(0, currentDistance * sinElev, currentDistance * cosElev)
+      break
+    case '侧面':
+      targetPosition.set(currentDistance * cosElev, currentDistance * sinElev, 0)
+      break
+    case '右侧':
+      // 右侧：略仰视（相机略低于中心，Y 为负）
+      targetPosition.set(-currentDistance * 0.98, -currentDistance * 0.08, 0)
+      break
+    case '背面':
+      targetPosition.set(0, currentDistance * sinElev, -currentDistance * cosElev)
+      break
+    default:
+      console.warn('rotateCameraToView1: 未知视角', view)
+      return
+  }
   
   // 检测当前视角（通过相机位置判断）
   const currentPos = camera1.position
@@ -1462,28 +1514,6 @@ const rotateCameraToView1 = (view: string) => {
   
   // 判断是否是从侧面到右侧（或反之）的切换
   const isSideToRightTransition = (isCurrentlyLeft && view === '右侧') || (isCurrentlyRight && view === '侧面')
-  
-  switch (view) {
-    case '正面':
-      // 正面视角 - 相机在Z轴正方向，稍微向上偏移
-      targetPosition.set(0, size / 2.5, distance)
-      break
-    case '侧面':
-      // 侧面视角 - 相机在X轴正方向，稍微向上偏移
-      targetPosition.set(distance, size / 2.5, 0)
-      break
-    case '右侧':
-      // 右侧视角 - 相机在X轴负方向，稍微向上偏移
-      targetPosition.set(-distance, size / 2.5, 0)
-      break
-    case '背面':
-      // 背面视角 - 相机在Z轴负方向，稍微向上偏移
-      targetPosition.set(0, size / 2.5, -distance)
-      break
-    default:
-      console.warn('rotateCameraToView1: 未知视角', view)
-      return
-  }
   
   // 禁用旋转，准备动画
   controls1.autoRotate = false
@@ -1696,34 +1726,32 @@ const rotateCameraToView = (view: string) => {
   // 模型已居中到原点，所以中心点是原点
   const center = new THREE.Vector3(0, 0, 0)
   
-  // 计算模型尺寸以确定合适的相机距离
+  // 获取当前相机到原点的距离
+  const currentDistance = camera.position.distanceTo(center)
+  
+  // 计算模型尺寸
   const box = new THREE.Box3().setFromObject(content)
   const size = box.getSize(new THREE.Vector3()).length()
-  const distance = Math.sqrt(
-    Math.pow(size / 1.5, 2) + 
-    Math.pow(size / 2.5, 2) + 
-    Math.pow(size / 1.5, 2)
-  )
   
-  // 根据视角设置相机目标位置
+  // 用初始相机方向 (size/1.5, size/2.5, size/1.5) 算出俯仰角，保持各视角与此一致，避免俯视感
+  const initialDir = new THREE.Vector3(size / 1.5, size / 2.5, size / 1.5)
+  const initialLen = initialDir.length()
+  const sinElev = initialDir.y / initialLen
+  const cosElev = Math.sqrt(1 - sinElev * sinElev)
+  
   let targetPosition = new THREE.Vector3()
-  
   switch (view) {
     case '正面':
-      // 正面视角 - 相机在Z轴正方向，稍微向上偏移
-      targetPosition.set(0, size / 2.5, distance)
+      targetPosition.set(0, currentDistance * sinElev, currentDistance * cosElev)
       break
     case '侧面':
-      // 侧面视角 - 相机在X轴正方向，稍微向上偏移
-      targetPosition.set(distance, size / 2.5, 0)
+      targetPosition.set(currentDistance * cosElev, currentDistance * sinElev, 0)
       break
     case '右侧':
-      // 右侧视角 - 相机在X轴负方向，稍微向上偏移
-      targetPosition.set(-distance, size / 2.5, 0)
+      targetPosition.set(-currentDistance * 0.98, -currentDistance * 0.08, 0)
       break
     case '背面':
-      // 背面视角 - 相机在Z轴负方向，稍微向上偏移
-      targetPosition.set(0, size / 2.5, -distance)
+      targetPosition.set(0, currentDistance * sinElev, -currentDistance * cosElev)
       break
     default:
       console.warn('rotateCameraToView: 未知视角', view)
@@ -2396,7 +2424,7 @@ onUnmounted(() => {
   transform: translateX(-50%) scale(1.1);
 }
 
-/* 音频按钮样式 */
+/* 音频按钮样式 - 与视频按钮相同的3D形式 */
 .audio-btn {
   position: absolute;
   background: transparent;
@@ -2404,28 +2432,28 @@ onUnmounted(() => {
   cursor: pointer;
   padding: 0;
   z-index: 10;
+  perspective: 1000px;
 }
 
 .audio-btn img {
-  width: 50px; /* 缩小按钮 */
+  width: 50px;
   height: 50px;
   object-fit: contain;
   display: block;
-  animation: breathe 2s ease-in-out infinite;
+  transition: transform 0.3s ease, opacity 0.3s ease, filter 0.3s ease;
+  opacity: 0.9;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3)) 
+          drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  transform-style: preserve-3d;
+  transform: translateZ(5px);
 }
 
 .audio-btn:hover img {
-  animation: breathe 1s ease-in-out infinite;
-}
-
-/* 呼吸动画 */
-@keyframes breathe {
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.15);
-  }
+  transform: scale(1.15) translateZ(10px);
+  opacity: 1;
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.4)) 
+          drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3))
+          drop-shadow(0 0 20px rgba(1, 206, 126, 0.3));
 }
 
 /* 音频按钮位置 - 根据图片描述的5个位置 */
