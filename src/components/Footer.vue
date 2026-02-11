@@ -43,7 +43,10 @@
           
           <!-- 版权信息 -->
           <div class="footer-copyright">
-            <p>COPYRIGHT © AXON LABS {{ currentLanguage === 'zh' ? '羽山' : 'Yushan' }} ALL RIGHTS RESERVED    |    <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer" class="footer-link">{{ currentLanguage === 'zh' ? '京ICP备2025105570号' : 'ICP No. 2025105570' }}</a>    |    <a href="/北京玄圃执照-盖章版.pdf" target="_blank" rel="noopener noreferrer" class="footer-link">{{ currentLanguage === 'zh' ? '营业执照' : 'Business License' }}</a></p>
+            <p>
+              <span class="copyright-first">COPYRIGHT © AXON LABS {{ currentLanguage === 'zh' ? '羽山' : 'Yushan' }} ALL RIGHTS RESERVED |</span>
+              <span class="copyright-second"> <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer" class="footer-link">{{ currentLanguage === 'zh' ? '京ICP备2025105570号' : 'ICP No. 2025105570' }}</a> | <a href="/北京玄圃执照-盖章版.pdf" target="_blank" rel="noopener noreferrer" class="footer-link">{{ currentLanguage === 'zh' ? '营业执照' : 'Business License' }}</a></span>
+            </p>
           </div>
         </div>
       </div>
@@ -97,7 +100,7 @@ function updateQRPosition() {
     const rect = icon.getBoundingClientRect()
     // 检测是否为4K屏幕，如果是则使用更大的二维码尺寸
     const is4K = window.innerWidth >= 2560
-    const qrWidth = is4K ? 280 : 140 // 4K下使用2倍尺寸
+    const qrWidth = is4K ? 260 : 130 // 4K下使用2倍尺寸，非4K从140缩小到130
     const bottomOffset = is4K ? 20 : 10 // 4K下使用2倍间距
     qrPortalStyle.value = {
       left: `${rect.left + rect.width / 2 - qrWidth / 2}px`,
@@ -205,8 +208,8 @@ onUnmounted(() => {
 
 .social-icon {
   display: inline-block;
-  width: 24px;
-  height: 24px;
+  width: 20px; /* 从24px缩小到20px */
+  height: 20px; /* 从24px缩小到20px */
   transition: transform 0.3s ease, opacity 0.3s ease;
   position: relative;
 }
@@ -219,13 +222,13 @@ onUnmounted(() => {
 
 /* B站图标单独尺寸 42×19 */
 .social-icon.bilibili-icon {
-  width: 42px;
-  height: 19px;
+  width: 35px; /* 从42px缩小到35px */
+  height: 16px; /* 从19px缩小到16px */
 }
 
 .social-icon.bilibili-icon img {
-  width: 42px;
-  height: 19px;
+  width: 35px; /* 从42px缩小到35px */
+  height: 16px; /* 从19px缩小到16px */
   object-fit: contain;
 }
 
@@ -253,8 +256,8 @@ onUnmounted(() => {
 }
 
 .bilibili-qr-portal img {
-  width: 160px; /* 使用固定宽度，确保所有二维码大小一致 */
-  height: 160px; /* 使用固定高度，确保所有二维码大小一致 */
+  width: 130px; /* 从160px缩小到130px */
+  height: 130px; /* 从160px缩小到130px */
   object-fit: contain; /* 保持图片比例，完整显示 */
   display: block;
 }
@@ -276,6 +279,7 @@ onUnmounted(() => {
   gap: 0.5rem;
   font-size: 14px; /* 从16px缩小到14px */
   height: 20px; /* 从24px缩小到20px */
+  line-height: 1.2; /* 统一行间距 */
 }
 
 .footer-link {
@@ -305,12 +309,13 @@ onUnmounted(() => {
   font-size: 14px; /* 从16px缩小到14px */
   margin: 0;
   text-align: left;
+  line-height: 1.2; /* 统一行间距 */
 }
 
 /* 版权信息 */
 .footer-copyright {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  min-height: 20px; /* 从固定高度改为最小高度，允许内容换行 */
+  height: 20px; /* 恢复固定高度 */
   display: flex;
   align-items: center;
 }
@@ -319,7 +324,7 @@ onUnmounted(() => {
   color: #9E9E9E;
   font-size: 14px; /* 从16px缩小到14px */
   margin: 0;
-  line-height: 1.4;
+  line-height: 1.2;
   text-align: left;
 }
 
@@ -332,19 +337,19 @@ onUnmounted(() => {
 }
 
 /* 响应式设计 - 以1920*1080为基准 */
-/* 1220 宽（大事件 1090 布局）下图标 24×24，B站 42×19 */
+/* 1220 宽（大事件 1090 布局）下图标 20×20，B站 35×16 */
 @media (max-width: 1220px) {
   .social-icon {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
   }
   .social-icon.bilibili-icon {
-    width: 42px;
-    height: 19px;
+    width: 35px;
+    height: 16px;
   }
   .social-icon.bilibili-icon img {
-    width: 42px;
-    height: 19px;
+    width: 35px;
+    height: 16px;
   }
 }
 
@@ -380,22 +385,22 @@ onUnmounted(() => {
   }
   
   .footer-copyright {
-    min-height: 14.4px; /* 20px * 0.72 */
+    height: 14.4px; /* 20px * 0.72 */
   }
   
   .social-icon {
-    width: 18px; /* 24*0.75 */
-    height: 18px;
+    width: 15px; /* 20*0.75 */
+    height: 15px;
   }
   
   .social-icon.bilibili-icon {
-    width: 32px; /* 42*0.75 */
-    height: 14px; /* 19*0.75 */
+    width: 26px; /* 35*0.75 */
+    height: 12px; /* 16*0.75 */
   }
   
   .social-icon.bilibili-icon img {
-    width: 32px;
-    height: 14px;
+    width: 26px;
+    height: 12px;
   }
   
   .footer-logo-img {
@@ -404,11 +409,13 @@ onUnmounted(() => {
   
   .footer-links {
     font-size: 10.5px; /* 14px * 0.75 */
+    line-height: 1.2; /* 统一行间距 */
   }
   
   .footer-contact p,
   .footer-copyright p {
     font-size: 10.5px; /* 14px * 0.75 */
+    line-height: 1.2; /* 统一行间距 */
   }
 }
 
@@ -448,18 +455,18 @@ onUnmounted(() => {
   }
   
   .social-icon {
-    width: 16px; /* 24*2/3 */
-    height: 16px;
+    width: 13px; /* 20*2/3 */
+    height: 13px;
   }
   
   .social-icon.bilibili-icon {
-    width: 28px; /* 42*2/3 */
-    height: 13px; /* 19*2/3 */
+    width: 23px; /* 35*2/3 */
+    height: 11px; /* 16*2/3 */
   }
   
   .social-icon.bilibili-icon img {
-    width: 28px;
-    height: 13px;
+    width: 23px;
+    height: 11px;
   }
   
   .footer-logo-img {
@@ -468,17 +475,19 @@ onUnmounted(() => {
   
   .footer-links {
     font-size: 8.4px; /* 14px * 0.6 */
+    line-height: 1.2; /* 统一行间距 */
   }
   
   .footer-contact p,
   .footer-copyright p {
     font-size: 8.4px; /* 14px * 0.6 */
+    line-height: 1.2; /* 统一行间距 */
   }
 }
 
 @media (max-width: 768px) {
   .footer-logo {
-    left: 150px; /* 200px * 0.75 */
+    left: 20px; /* 与导航栏左侧边距一致 */
   }
   
   .footer {
@@ -487,14 +496,17 @@ onUnmounted(() => {
   }
   
   .footer-content {
-    max-width: 600px;
-    padding-left: 1.5rem;
-    margin-left: 412.5px; /* logo位置150px + logo宽度187.5px + 间距75px = 412.5px */
+    max-width: none;
+    padding-left: 227.5px; /* logo位置20px + logo宽度187.5px + 间距20px = 227.5px */
+    padding-right: 20px; /* 与导航栏右侧边距一致 */
+    margin-left: 0; /* 移动端不需要左边距 */
+    text-align: left; /* 靠左显示 */
   }
   
   .social-icons {
     margin-bottom: 11.25px; /* 12px * 0.94 */
     gap: 0.8rem;
+    justify-content: flex-start; /* 靠左显示 */
   }
   
   .footer-text-area {
@@ -503,6 +515,7 @@ onUnmounted(() => {
   
   .footer-links {
     height: 18px; /* 20px * 0.9 */
+    justify-content: flex-start; /* 靠左显示 */
   }
   
   .footer-contact {
@@ -510,22 +523,24 @@ onUnmounted(() => {
   }
   
   .footer-copyright {
+    height: auto; /* 手机版允许高度自适应以支持换行 */
     min-height: 18px; /* 20px * 0.9 */
+    align-items: flex-start; /* 顶部对齐 */
   }
   
   .social-icon {
-    width: 20px; /* 24*0.83 */
-    height: 20px;
+    width: 17px; /* 20*0.85 */
+    height: 17px;
   }
   
   .social-icon.bilibili-icon {
-    width: 35px; /* 42*20/24 */
-    height: 16px; /* 19*20/24 */
+    width: 30px; /* 35*0.85 */
+    height: 14px; /* 16*0.85 */
   }
   
   .social-icon.bilibili-icon img {
-    width: 35px;
-    height: 16px;
+    width: 30px;
+    height: 14px;
   }
   
   .footer-logo-img {
@@ -533,24 +548,36 @@ onUnmounted(() => {
   }
   
   .footer-links {
-    justify-content: center; /* 移动端居中 */
+    justify-content: flex-start; /* 靠左显示 */
     font-size: 10.5px; /* 14px * 0.75 */
     gap: 0.4rem;
+    line-height: 1.2; /* 统一行间距 */
   }
   
   .footer-contact p,
   .footer-copyright p {
     font-size: 10.5px; /* 14px * 0.75 */
+    text-align: left; /* 靠左显示 */
+    line-height: 1.2; /* 统一行间距 */
+  }
+  
+  /* 手机版：从"京ICP备"开始的内容换到下一行 */
+  .footer-copyright p {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .footer-copyright .copyright-second {
+    display: block;
+    margin-top: 4px;
   }
 }
 
 @media (max-width: 480px) {
   .footer-logo {
-    position: relative; /* 移动端改为相对定位 */
-    left: 0;
-    top: 0;
-    text-align: center;
-    margin-bottom: 1rem;
+    left: 15px; /* 与导航栏左侧边距一致 */
+    position: absolute; /* 保持绝对定位 */
+    top: 30px; /* 垂直位置 */
   }
   
   .footer {
@@ -560,15 +587,15 @@ onUnmounted(() => {
   
   .footer-content {
     max-width: none;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    text-align: center; /* 移动端居中对齐 */
+    padding-left: 130px; /* logo位置15px + logo宽度100px + 间距15px = 130px */
+    padding-right: 15px; /* 与导航栏右侧边距一致 */
+    text-align: left; /* 靠左显示 */
     margin-left: 0; /* 移动端不需要左边距 */
   }
   
   .social-icons {
     margin-bottom: 6px; /* 12px * 0.5 */
-    justify-content: center; /* 移动端居中 */
+    justify-content: flex-start; /* 靠左显示 */
     gap: 0.6rem;
   }
   
@@ -578,7 +605,7 @@ onUnmounted(() => {
   
   .footer-links {
     height: 9.6px; /* 20px * 0.48 */
-    justify-content: center; /* 移动端居中 */
+    justify-content: flex-start; /* 靠左显示 */
   }
   
   .footer-contact {
@@ -586,22 +613,24 @@ onUnmounted(() => {
   }
   
   .footer-copyright {
+    height: auto; /* 手机版允许高度自适应以支持换行 */
     min-height: 9.6px; /* 20px * 0.48 */
+    align-items: flex-start; /* 顶部对齐 */
   }
   
   .social-icon {
-    width: 20px; /* 24*0.83 */
-    height: 20px;
+    width: 17px; /* 20*0.85 */
+    height: 17px;
   }
   
   .social-icon.bilibili-icon {
-    width: 35px;
-    height: 16px;
+    width: 30px; /* 35*0.85 */
+    height: 14px; /* 16*0.85 */
   }
   
   .social-icon.bilibili-icon img {
-    width: 35px;
-    height: 16px;
+    width: 30px;
+    height: 14px;
   }
   
   .footer-logo-img {
@@ -609,15 +638,28 @@ onUnmounted(() => {
   }
   
   .footer-links {
-    justify-content: center; /* 移动端居中 */
+    justify-content: flex-start; /* 靠左显示 */
     font-size: 5.6px; /* 14px * 0.4 */
     gap: 0.3rem;
+    line-height: 1.2; /* 统一行间距 */
   }
   
   .footer-contact p,
   .footer-copyright p {
     font-size: 5.6px; /* 14px * 0.4 */
-    text-align: center; /* 移动端居中 */
+    text-align: left; /* 靠左显示 */
+    line-height: 1.2; /* 统一行间距 */
+  }
+  
+  /* 手机版：从"京ICP备"开始的内容换到下一行 */
+  .footer-copyright p {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .footer-copyright .copyright-second {
+    display: block;
+    margin-top: 4px;
   }
 }
 
@@ -655,18 +697,18 @@ onUnmounted(() => {
   }
   
   .social-icon {
-    width: 48px; /* 24px * 2 */
-    height: 48px; /* 24px * 2 */
+    width: 40px; /* 20px * 2 */
+    height: 40px; /* 20px * 2 */
   }
   
   .social-icon.bilibili-icon {
-    width: 84px; /* 42px * 2 */
-    height: 38px; /* 19px * 2 */
+    width: 70px; /* 35px * 2 */
+    height: 32px; /* 16px * 2 */
   }
   
   .social-icon.bilibili-icon img {
-    width: 84px; /* 42px * 2 */
-    height: 38px; /* 19px * 2 */
+    width: 70px; /* 35px * 2 */
+    height: 32px; /* 16px * 2 */
   }
   
   .footer-text-area {
@@ -677,6 +719,7 @@ onUnmounted(() => {
     font-size: 28px; /* 14px * 2 */
     height: 40px; /* 20px * 2 */
     gap: 1rem; /* 0.5rem * 2 */
+    line-height: 1.2; /* 统一行间距 */
   }
   
   .separator {
@@ -689,15 +732,17 @@ onUnmounted(() => {
   
   .footer-contact p {
     font-size: 28px; /* 14px * 2 */
+    line-height: 1.2; /* 统一行间距 */
   }
   
   .footer-copyright {
-    min-height: 40px; /* 20px * 2 */
+    height: 40px; /* 20px * 2 */
     border-top-width: 2px; /* 1px * 2 */
   }
   
   .footer-copyright p {
     font-size: 28px; /* 14px * 2 */
+    line-height: 1.2; /* 统一行间距 */
   }
   
   /* 二维码弹窗在4K下也需要放大 */
@@ -708,8 +753,8 @@ onUnmounted(() => {
   }
   
   .bilibili-qr-portal img {
-    width: 320px !important; /* 160px * 2，使用固定宽度，确保所有二维码大小一致 */
-    height: 320px !important; /* 160px * 2，使用固定高度，确保所有二维码大小一致 */
+    width: 260px !important; /* 130px * 2，使用固定宽度，确保所有二维码大小一致 */
+    height: 260px !important; /* 130px * 2，使用固定高度，确保所有二维码大小一致 */
     object-fit: contain !important; /* 保持图片比例，完整显示 */
   }
 }

@@ -1554,6 +1554,12 @@ onUnmounted(() => {
     max-height: 298px !important;
   }
   
+  /* 中等屏幕背景图片完整显示 */
+  .timeline-bar-img {
+    background-size: contain !important; /* 改为contain，让图片完整显示 */
+    background-position: center center !important; /* 居中显示 */
+  }
+  
   .timeline-item-fixed {
     flex: 0 0 182px;
   }
@@ -1574,6 +1580,8 @@ onUnmounted(() => {
     height: 298px !important;
     min-height: 298px !important;
     max-height: 298px !important;
+    object-fit: contain !important; /* 改为contain，让图片完整显示 */
+    object-position: center center !important; /* 居中显示 */
   }
 }
 
@@ -1644,6 +1652,12 @@ onUnmounted(() => {
     width: 146px; /* 244px * 0.6 */
   }
   
+  /* 中等屏幕背景图片完整显示 */
+  .timeline-bar-img {
+    background-size: contain !important; /* 改为contain，让图片完整显示 */
+    background-position: center center !important; /* 居中显示 */
+  }
+  
   .timeline-bar-fixed {
     height: 240px !important;
     min-height: 240px !important;
@@ -1665,6 +1679,8 @@ onUnmounted(() => {
     height: 240px !important;
     min-height: 240px !important;
     max-height: 240px !important;
+    object-fit: contain !important; /* 改为contain，让图片完整显示 */
+    object-position: center center !important; /* 居中显示 */
   }
   
   .history-content {
@@ -1705,9 +1721,14 @@ onUnmounted(() => {
   }
   
   .history-content {
-    padding-top: 0; /* 移除顶部padding，使用flex居中 */
+    padding-top: 60px; /* 增加顶部padding，让内容往下移动 */
     padding-bottom: 0;
     transform: none; /* 移除原有的transform */
+    overflow: visible !important; /* 确保展开的图片不被裁剪 */
+  }
+  
+  .history-section {
+    overflow: visible !important; /* 确保展开的图片不被裁剪 */
   }
   
   .history-content .section-subtitle {
@@ -1831,27 +1852,17 @@ onUnmounted(() => {
 
   .timeline {
     flex-direction: row;
-    gap: 0;
-    max-width: 100%;
-    padding: 0 1rem;
+    gap: 0 !important; /* 确保无间隙 */
+    max-width: 100% !important;
+    padding: 0 !important; /* 参考PC端，移除padding消除间隙 */
+    margin: 0 !important;
     justify-content: center;
     flex-wrap: nowrap;
     overflow: visible;
     touch-action: manipulation; /* 减少触屏点击延迟，保持交互一致 */
-  }
-  
-  .timeline-bar {
-    height: 100px !important;
-    min-height: 100px !important;
-    max-height: 100px !important;
-    width: 58px;
-    flex-shrink: 0;
-  }
-  
-  .timeline-bar-fixed {
-    height: 100px !important;
-    min-height: 100px !important;
-    max-height: 100px !important;
+    font-size: 0 !important; /* 参考PC端，消除HTML换行符导致的空格 */
+    letter-spacing: 0 !important;
+    word-spacing: 0 !important;
   }
   
   .timeline-item {
@@ -1865,7 +1876,23 @@ onUnmounted(() => {
   }
   
   .timeline-item-fixed {
-    flex: 0 0 58px;
+    flex: 0 0 52px !important; /* 与timeline-item宽度一致 */
+    width: 52px !important; /* 固定宽度，与前面四个格子一样 */
+    margin: 0 !important; /* 参考PC端，确保没有margin */
+    padding: 0 !important; /* 参考PC端，确保没有padding */
+  }
+  
+  .timeline-bar-fixed {
+    height: 100px !important; /* 与timeline-bar高度一致 */
+    min-height: 100px !important;
+    max-height: 100px !important;
+    width: 52px !important; /* 与timeline-bar宽度一致 */
+    margin: 0 0 0.5rem 0 !important; /* 参考PC端，底部margin用于日期间距 */
+    padding: 0 !important;
+    box-sizing: border-box !important;
+    border: none !important;
+    outline: none !important;
+    display: block !important; /* 参考PC端，确保是块级元素 */
   }
   
   .constantly-updating-text {
@@ -1882,10 +1909,13 @@ onUnmounted(() => {
   
   .timeline-date {
     margin-top: 0.4rem;
-    font-size: 0.7rem;
+    font-size: 0.6rem !important; /* 减小字体，确保适应52px宽度 */
     color: #cccccc;
     text-align: center;
     white-space: nowrap; /* 不换行 */
+    max-width: 52px !important; /* 限制最大宽度，与格子宽度一致 */
+    overflow: hidden; /* 超出部分隐藏 */
+    text-overflow: ellipsis; /* 超出部分显示省略号 */
   }
   
   /* 移动端覆盖层 - 与桌面端一致：覆盖3格、隐藏/变暗逻辑不变 */
@@ -1896,37 +1926,42 @@ onUnmounted(() => {
     height: 100px !important;
     min-height: 100px !important;
     max-height: 100px !important;
-    z-index: 10;
+    z-index: 100 !important; /* 提高z-index确保显示在最上层 */
     animation: expandAnimation 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
     pointer-events: none;
-    transform-origin: center center;
+    transform-origin: center center; /* 改回center center，与PC端一致 */
+    overflow: visible !important; /* 确保内容不被裁剪 */
   }
   
-  /* 移动端覆盖层位置类 */
+  /* 移动端覆盖层位置类 - 调整定位，向左移动更多以精确对齐 */
   .overlay-position-0 {
-    left: 0;
+    left: -26px; /* 向左偏移半个格子（26px = 52px / 2） */
   }
   
   .overlay-position-1 {
-    left: -100%;
+    left: -78px; /* 向左移动一个半格子的宽度（78px = 52px * 1.5），覆盖0,1,2 */
   }
   
   .overlay-position-2 {
-    left: -100%;
+    left: -78px; /* 向左移动一个半格子的宽度（78px = 52px * 1.5），覆盖1,2,3 */
   }
   
   .overlay-position-3 {
-    left: -200%;
+    left: -130px; /* 向左移动两个半格子的宽度（130px = 52px * 2.5），覆盖1,2,3 */
   }
   
   .overlay-position-4 {
-    left: -200%;
+    left: -130px; /* 向左移动两个半格子的宽度（130px = 52px * 2.5），覆盖2,3,4 */
   }
   
   .expanded-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    width: 100% !important;
+    height: 100px !important; /* 明确设置高度 */
+    min-height: 100px !important;
+    max-height: 100px !important;
+    object-fit: contain !important; /* 改为contain，让图片完整显示，不被裁剪 */
+    object-position: center center !important; /* 居中显示 */
+    display: block !important; /* 确保是块级元素 */
   }
   
   /* 移动端展开内容文字样式 */
@@ -1995,6 +2030,12 @@ onUnmounted(() => {
     width: 183px;
   }
   
+  /* 移动端背景图片完整显示 */
+  .timeline-bar-img {
+    background-size: contain !important; /* 改为contain，让图片完整显示 */
+    background-position: center center !important; /* 居中显示 */
+  }
+  
   .timeline-bar-fixed {
     height: 300px !important;
     min-height: 300px !important;
@@ -2011,6 +2052,8 @@ onUnmounted(() => {
     height: 300px !important;
     min-height: 300px !important;
     max-height: 300px !important;
+    object-fit: contain !important; /* 改为contain，让图片完整显示 */
+    object-position: center center !important; /* 居中显示 */
   }
   
   .history-content {
@@ -2140,27 +2183,17 @@ onUnmounted(() => {
   
   .timeline {
     flex-direction: row;
-    gap: 0;
-    max-width: 100%;
-    padding: 0 0.5rem;
+    gap: 0 !important; /* 确保无间隙 */
+    max-width: 100% !important;
+    padding: 0 !important; /* 参考PC端，移除padding消除间隙 */
+    margin: 0 !important;
     justify-content: center;
     flex-wrap: nowrap;
     overflow: visible;
     touch-action: manipulation;
-  }
-  
-  .timeline-bar {
-    height: 80px !important;
-    min-height: 80px !important;
-    max-height: 80px !important;
-    width: 50px;
-    flex-shrink: 0;
-  }
-  
-  .timeline-bar-fixed {
-    height: 80px !important;
-    min-height: 80px !important;
-    max-height: 80px !important;
+    font-size: 0 !important; /* 参考PC端，消除HTML换行符导致的空格 */
+    letter-spacing: 0 !important;
+    word-spacing: 0 !important;
   }
   
   .timeline-item {
@@ -2171,10 +2204,54 @@ onUnmounted(() => {
     position: relative;
     overflow: visible;
     cursor: pointer;
+    flex: 0 0 48px !important; /* 设置固定宽度，确保所有item都能显示 */
+    width: 48px !important; /* 固定宽度 */
+    pointer-events: auto !important; /* 确保可以接收点击事件 */
+    margin: 0 !important; /* 确保没有margin */
+    padding: 0 !important; /* 确保没有padding */
+    vertical-align: top !important; /* 参考PC端，消除垂直对齐空隙 */
+  }
+  
+  .timeline-bar {
+    height: 80px !important;
+    min-height: 80px !important;
+    max-height: 80px !important;
+    width: 50px !important; /* 固定宽度，与item宽度一致 */
+    flex-shrink: 0;
+    margin: 0 0 0.4rem 0 !important; /* 参考PC端，底部margin用于日期间距 */
+    padding: 0 !important; /* 参考PC端，确保没有padding */
+    box-sizing: border-box !important;
+    border: none !important;
+    outline: none !important;
+    display: block !important; /* 参考PC端，确保是块级元素 */
+  }
+  
+  /* 小屏幕背景图片完整显示 */
+  .timeline-bar-img {
+    background-size: contain !important; /* 改为contain，让图片完整显示 */
+    background-position: center center !important; /* 居中显示 */
+    border: none !important;
+    outline: none !important;
+  }
+  
+  .timeline-bar-fixed {
+    height: 80px !important; /* 与timeline-bar高度一致 */
+    min-height: 80px !important;
+    max-height: 80px !important;
+    width: 52px !important; /* 与timeline-bar宽度一致 */
+    margin: 0 0 0.4rem 0 !important; /* 参考PC端，底部margin用于日期间距 */
+    padding: 0 !important;
+    box-sizing: border-box !important;
+    border: none !important;
+    outline: none !important;
+    display: block !important; /* 参考PC端，确保是块级元素 */
   }
   
   .timeline-item-fixed {
-    flex: 0 0 50px;
+    flex: 0 0 52px !important; /* 与timeline-item宽度一致 */
+    width: 52px !important; /* 固定宽度，与前面四个格子一样 */
+    margin: 0 !important; /* 参考PC端，确保没有margin */
+    padding: 0 !important; /* 参考PC端，确保没有padding */
   }
   
   .constantly-updating-text {
@@ -2191,51 +2268,59 @@ onUnmounted(() => {
   
   .timeline-date {
     margin-top: 0.3rem;
-    font-size: 0.65rem;
+    font-size: 0.55rem !important; /* 减小字体，确保适应52px宽度 */
     color: #cccccc;
     text-align: center;
     white-space: nowrap; /* 不换行 */
+    max-width: 52px !important; /* 限制最大宽度，与格子宽度一致 */
+    overflow: hidden; /* 超出部分隐藏 */
+    text-overflow: ellipsis; /* 超出部分显示省略号 */
   }
   
   /* 小屏幕覆盖层 - 完全复刻桌面端，覆盖3个格子 */
   .timeline-expanded-overlay {
     position: absolute;
     top: 0;
-    width: 300%; /* 覆盖3个格子的宽度 */
+    width: 300% !important; /* 覆盖3个格子的宽度 */
     height: 80px !important; /* 与色块高度一致 */
     min-height: 80px !important;
     max-height: 80px !important;
-    z-index: 10;
+    z-index: 100 !important; /* 提高z-index确保显示在最上层 */
     animation: expandAnimation 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
     pointer-events: none; /* 不阻挡下面元素的点击 */
-    transform-origin: center center;
+    transform-origin: center center; /* 改回center center，与PC端一致 */
+    overflow: visible !important; /* 确保内容不被裁剪 */
   }
   
-  /* 小屏幕覆盖层位置类 */
+  /* 小屏幕覆盖层位置类 - 调整定位，向左移动更多以精确对齐 */
   .overlay-position-0 {
-    left: 0;
+    left: -26px; /* 向左偏移半个格子（26px = 52px / 2） */
   }
   
   .overlay-position-1 {
-    left: -100%;
+    left: -78px; /* 向左移动一个半格子的宽度（78px = 52px * 1.5），覆盖0,1,2 */
   }
   
   .overlay-position-2 {
-    left: -100%;
+    left: -78px; /* 向左移动一个半格子的宽度（78px = 52px * 1.5），覆盖1,2,3 */
   }
   
   .overlay-position-3 {
-    left: -200%;
+    left: -130px; /* 向左移动两个半格子的宽度（130px = 52px * 2.5），覆盖1,2,3 */
   }
   
   .overlay-position-4 {
-    left: -200%;
+    left: -130px; /* 向左移动两个半格子的宽度（130px = 52px * 2.5），覆盖2,3,4 */
   }
   
   .expanded-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    width: 100% !important;
+    height: 80px !important; /* 明确设置高度，与色块高度一致 */
+    min-height: 80px !important;
+    max-height: 80px !important;
+    object-fit: contain !important; /* 改为contain，让图片完整显示，不被裁剪 */
+    object-position: center center !important; /* 居中显示 */
+    display: block !important; /* 确保是块级元素 */
   }
   
   /* 小屏幕展开内容文字样式 */
@@ -2279,9 +2364,14 @@ onUnmounted(() => {
   }
   
   .history-content {
-    padding-top: 0; /* 移除顶部padding，使用flex居中 */
+    padding-top: 50px; /* 增加顶部padding，让内容往下移动 */
     padding-bottom: 0;
     transform: none; /* 移除原有的transform */
+    overflow: visible !important; /* 确保展开的图片不被裁剪 */
+  }
+  
+  .history-section {
+    overflow: visible !important; /* 确保展开的图片不被裁剪 */
   }
   
   .history-content .section-subtitle {

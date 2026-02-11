@@ -27,7 +27,7 @@
                 </span>
               </div>
               <button class="hero-arrow hero-arrow-right" @click="nextImage">
-                <img src="/arrow_right.webp" :alt="currentLanguage === 'zh' ? '下一张' : 'Next'" class="arrow-icon" />
+                <img src="/arrow_right.webp" :alt="currentLanguage === 'zh' ? '下一张' : 'Next'" class="arrow-icon arrow-icon-right" />
               </button>
             </div>
           </div>
@@ -703,38 +703,92 @@ onUnmounted(() => {
 
 .hero-arrow {
   position: relative;
-  width: 32px; /* 固定宽度 */
-  height: 32px; /* 恢复原来的大小 */
+  width: 32px !important; /* 固定宽度 */
+  height: 32px !important; /* 固定高度 */
+  min-width: 32px !important; /* 最小宽度 */
+  min-height: 32px !important; /* 最小高度 */
+  max-width: 32px !important; /* 最大宽度 */
+  max-height: 32px !important; /* 最大高度 */
   border-radius: 0;
   border: none;
   background: transparent;
   cursor: pointer;
   transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  flex-shrink: 0; /* 防止缩小 */
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  flex-shrink: 0 !important; /* 防止缩小 */
+  box-sizing: border-box !important; /* 盒模型 */
+}
+
+.hero-arrow-left,
+.hero-arrow-right {
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  min-height: 32px !important;
+  max-width: 32px !important;
+  max-height: 32px !important;
+}
+
+.hero-arrow-right {
+  /* 移除translateY，使用镜像后应该自然对齐 */
 }
 
 .arrow-icon {
-  width: 32px; /* 固定宽度 */
-  height: 32px; /* 恢复原来的大小 */
-  object-fit: contain;
+  width: 32px !important; /* 固定宽度 */
+  height: 32px !important; /* 固定高度 */
+  max-width: 32px !important; /* 最大宽度 */
+  max-height: 32px !important; /* 最大高度 */
+  min-width: 32px !important; /* 最小宽度 */
+  min-height: 32px !important; /* 最小高度 */
+  object-fit: contain !important; /* 保持比例 */
   transition: all 0.3s ease;
-  display: block;
+  display: block !important;
+  margin: 0 !important; /* 移除margin */
+  padding: 0 !important; /* 移除padding */
+  vertical-align: middle !important; /* 垂直对齐 */
+  box-sizing: border-box !important; /* 盒模型 */
 }
 
 .arrow-icon-left {
-  transform: rotate(180deg); /* 左箭头旋转180度 */
+  transform: rotate(180deg) !important; /* 左箭头旋转180度 */
+  width: 32px !important; /* 确保宽度一致 */
+  height: 32px !important; /* 确保高度一致 */
+  max-width: 32px !important;
+  max-height: 32px !important;
+  min-width: 32px !important;
+  min-height: 32px !important;
 }
 
-.hero-arrow:hover .arrow-icon {
-  transform: scale(1.2); /* 悬停时放大 */
+.arrow-icon-right {
+  transform: rotate(180deg) scaleX(-1) !important; /* 右侧按钮：先旋转180度（和左侧一样），再水平镜像 */
+  width: 32px !important; /* 确保宽度一致 */
+  height: 32px !important; /* 确保高度一致 */
+  max-width: 32px !important;
+  max-height: 32px !important;
+  min-width: 32px !important;
+  min-height: 32px !important;
+}
+
+.hero-arrow:hover .arrow-icon:not(.arrow-icon-left):not(.arrow-icon-right) {
+  transform: scale(1.2); /* 悬停时放大（仅适用于没有特殊类的箭头） */
+  width: 32px !important; /* 保持宽度 */
+  height: 32px !important; /* 保持高度 */
 }
 
 .hero-arrow:hover .arrow-icon-left {
-  transform: rotate(180deg) scale(1.2); /* 左箭头悬停时保持旋转并放大 */
+  transform: rotate(180deg) scale(1.2) !important; /* 左箭头悬停时保持旋转并放大 */
+  width: 32px !important; /* 保持宽度 */
+  height: 32px !important; /* 保持高度 */
+}
+
+.hero-arrow:hover .arrow-icon-right {
+  transform: rotate(180deg) scaleX(-1) scale(1.2) !important; /* 右箭头悬停时保持镜像并放大 */
+  width: 32px !important; /* 保持宽度 */
+  height: 32px !important; /* 保持高度 */
 }
 
 /* 绿色标签移到图片下面 */
@@ -1258,15 +1312,28 @@ onUnmounted(() => {
     background-attachment: scroll; /* 移动端禁用固定背景 */
   }
   
+  .news-section {
+    min-height: 100vh; /* 确保一页内显示 */
+    height: auto; /* 允许内容撑开 */
+    padding: 0 !important; /* 移除section的padding */
+  }
+  
   .news-section .section-container {
-    padding-top: 80px; /* 适配80px导航栏高度 */
-    padding-bottom: 20px;
+    padding-top: 65px !important; /* 增加顶部padding，让整体往下移，导航栏高度50px + 15px间距 */
+    padding-bottom: 10px !important; /* 增加底部padding */
+    padding-left: 1.5rem !important; /* 确保左右留白对称 */
+    padding-right: 1.5rem !important; /* 确保左右留白对称 */
+    min-height: calc(100vh - 50px); /* 导航栏高度50px */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* 顶部对齐 */
+    align-items: stretch !important; /* 拉伸子元素 */
   }
   
   .news-hero-layout {
     flex-direction: column; /* 垂直布局 */
     align-items: center;
-    gap: 1.5rem;
+    gap: 0 !important; /* 移除容器之间的间距 */
     width: 100%;
   }
   
@@ -1276,15 +1343,20 @@ onUnmounted(() => {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start !important; /* 顶部对齐，移除居中造成的空白 */
     position: relative;
+    margin-top: 0 !important; /* 移除margin-top */
+    margin-bottom: 0 !important; /* 移除底部margin */
+    padding: 0 !important; /* 移除所有padding */
   }
   
   .hero-image {
-    width: 80vw; /* 增加宽度以容纳箭头 */
-    max-width: 450px;
+    width: 75vw !important; /* 减小图片宽度 */
+    max-width: 380px !important; /* 减小最大宽度 */
     height: auto;
     aspect-ratio: 3/2; /* 保持3:2宽高比 */
+    margin-bottom: 0 !important; /* 移除底部margin */
+    margin-top: 0 !important; /* 移除顶部margin */
   }
   
   .hero-img {
@@ -1294,31 +1366,90 @@ onUnmounted(() => {
   }
   
   .date-overlay {
-    font-size: 1.2rem; /* 放大日期字体 */
+    font-size: 1rem !important; /* 减小日期字体 */
     font-weight: 600; /* 加粗 */
-    padding: 0.5rem 1rem;
+    padding: 0.4rem 0.8rem !important; /* 减小padding */
   }
   
   .hero-controls-below {
-    width: 80vw;
-    max-width: 450px;
-    margin-top: 25px;
-    padding: 0 30px;
+    width: 75vw !important; /* 与图片宽度一致 */
+    max-width: 380px !important; /* 与图片最大宽度一致 */
+    margin-top: 10px !important; /* 增加间距 */
+    margin-bottom: 0 !important; /* 移除底部margin */
+    padding: 0 20px !important; /* 保持左右padding对称 */
     justify-content: space-between;
-  }
-  
-  .hero-right {
-    bottom: 25px; /* 控制按钮的margin-top，使文字底部与图片底部对齐 */
+    align-items: center !important; /* 确保垂直居中对齐 */
+    display: flex !important; /* 确保flex布局 */
   }
   
   .hero-arrow {
-    width: 32px;
-    height: 32px;
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+    min-height: 32px !important;
+    max-width: 32px !important;
+    max-height: 32px !important;
+    display: flex !important; /* 确保flex布局 */
+    align-items: center !important; /* 垂直居中 */
+    justify-content: center !important; /* 水平居中 */
+    padding: 0 !important; /* 移除padding */
+    margin: 0 !important; /* 移除margin */
+    box-sizing: border-box !important; /* 盒模型 */
+  }
+  
+  .hero-arrow-left {
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+    min-height: 32px !important;
+    max-width: 32px !important;
+    max-height: 32px !important;
+    align-items: center !important; /* 确保左箭头垂直居中 */
+  }
+  
+  .hero-arrow-right {
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+    min-height: 32px !important;
+    max-width: 32px !important;
+    max-height: 32px !important;
+    align-items: center !important; /* 确保右箭头垂直居中 */
   }
   
   .arrow-icon {
-    width: 32px;
-    height: 32px;
+    width: 32px !important;
+    height: 32px !important;
+    max-width: 32px !important; /* 最大宽度 */
+    max-height: 32px !important; /* 最大高度 */
+    min-width: 32px !important; /* 最小宽度 */
+    min-height: 32px !important; /* 最小高度 */
+    display: block !important; /* 确保是块级元素 */
+    margin: 0 !important; /* 移除margin */
+    padding: 0 !important; /* 移除padding */
+    vertical-align: middle !important; /* 垂直对齐 */
+    object-fit: contain !important; /* 保持比例 */
+    box-sizing: border-box !important; /* 盒模型 */
+  }
+  
+  .arrow-icon-left {
+    transform: rotate(180deg) !important; /* 左箭头旋转180度 */
+    width: 32px !important; /* 确保宽度一致 */
+    height: 32px !important; /* 确保高度一致 */
+    max-width: 32px !important;
+    max-height: 32px !important;
+    min-width: 32px !important;
+    min-height: 32px !important;
+  }
+  
+  .arrow-icon-right {
+    transform: rotate(180deg) scaleX(-1) !important; /* 右侧按钮：先旋转180度（和左侧一样），再水平镜像 */
+    width: 32px !important; /* 确保宽度一致 */
+    height: 32px !important; /* 确保高度一致 */
+    max-width: 32px !important;
+    max-height: 32px !important;
+    min-width: 32px !important;
+    min-height: 32px !important;
   }
   
   .hero-dots-below {
@@ -1342,38 +1473,62 @@ onUnmounted(() => {
     width: 100%;
     left: auto !important; /* 重置left属性 */
     bottom: auto !important; /* 重置bottom属性 */
+    top: auto !important; /* 重置top属性 */
+    transform: none !important; /* 移除transform */
+    margin-top: 0.8rem !important; /* 增加间距 */
+    margin-bottom: 0 !important; /* 移除底部margin */
+    padding: 0 !important; /* 移除所有padding */
+    align-self: stretch !important; /* 拉伸填充 */
   }
   
   .right-text {
-    max-height: none;
-    padding: 1rem;
+    max-height: none !important; /* 移除高度限制 */
+    height: auto !important; /* 自动高度 */
+    padding: 0.5rem 0.8rem 0.4rem 0.8rem !important; /* 增加上下padding */
     text-align: center; /* 文字居中 */
-    margin-bottom: 0;
+    margin-bottom: 0 !important;
+    margin-top: 0 !important; /* 移除顶部margin */
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
+    line-height: 1.5 !important; /* 适当增加行高 */
   }
   
   .right-text p {
-    font-size: 0.85rem;
-    line-height: 1.6;
+    font-size: 0.8rem !important; /* 稍微减小字体 */
+    line-height: 1.5 !important; /* 适当增加行高 */
     text-align: center !important; /* 文字居中，使用!important确保生效 */
+    margin-bottom: 0.7rem !important; /* 增加段落间距 */
+    margin-top: 0 !important; /* 移除顶部margin */
+    padding: 0 !important; /* 移除所有padding */
+  }
+  
+  .right-text p:first-child {
+    margin-top: 0 !important; /* 第一个段落没有顶部margin */
+  }
+  
+  .right-text p:last-child {
+    margin-bottom: 0 !important; /* 最后一个段落没有底部margin */
   }
   
   .news-bottom {
-    margin-top: 1.5rem;
+    margin-top: 0.8rem !important; /* 增加间距 */
     width: 85vw;
+    margin-bottom: 0 !important; /* 移除底部margin */
+    padding: 0 !important; /* 移除所有padding */
   }
   
   .news-bottom-title {
-    font-size: 1.2rem;
-    margin-bottom: 1rem;
+    font-size: 1.1rem !important; /* 稍微减小字体 */
+    margin-bottom: 0.5rem !important; /* 适当增加间距 */
+    margin-top: 0 !important; /* 移除顶部margin */
+    padding: 0 !important; /* 移除所有padding */
   }
   
   .learn-more-btn {
-    padding: 0.6rem 1.5rem;
-    font-size: 0.75rem;
+    padding: 0.5rem 1.2rem !important; /* 减小按钮大小 */
+    font-size: 0.7rem !important; /* 减小字体 */
   }
   
   /* 页脚响应式 */
@@ -1447,51 +1602,129 @@ onUnmounted(() => {
 }
 
 @media (max-width: 480px) {
+  .news-section {
+    min-height: 100vh; /* 确保一页内显示 */
+    height: auto; /* 允许内容撑开 */
+    padding: 0 !important; /* 移除section的padding */
+  }
+  
   .news-section .section-container {
-    padding-top: 60px; /* 适配60px导航栏高度 */
-    padding-bottom: 15px;
+    padding-top: 55px !important; /* 增加顶部padding，让整体往下移，导航栏高度40px + 15px间距 */
+    padding-bottom: 8px !important; /* 增加底部padding */
+    padding-left: 1rem !important; /* 确保左右留白对称 */
+    padding-right: 1rem !important; /* 确保左右留白对称 */
+    min-height: calc(100vh - 40px); /* 导航栏高度40px */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* 顶部对齐 */
+    align-items: stretch !important; /* 拉伸子元素 */
   }
   
   .news-hero-layout {
-    gap: 1rem;
+    gap: 0 !important; /* 移除容器之间的间距 */
   }
   
   .hero-left {
     max-width: 95vw;
+    margin-top: 0 !important; /* 移除margin-top */
+    margin-bottom: 0 !important; /* 移除底部margin */
+    padding: 0 !important; /* 移除所有padding */
+    justify-content: flex-start !important; /* 顶部对齐 */
   }
   
   .hero-image {
-    width: 85vw; /* 增加宽度 */
-    max-width: 400px;
+    width: 70vw !important; /* 减小图片宽度 */
+    max-width: 320px !important; /* 减小最大宽度 */
     aspect-ratio: 3/2;
+    margin-bottom: 0 !important; /* 移除底部margin */
+    margin-top: 0 !important; /* 移除顶部margin */
   }
   
   .date-overlay {
-    font-size: 1rem; /* 放大日期字体 */
+    font-size: 0.9rem !important; /* 减小日期字体 */
     font-weight: 600; /* 加粗 */
-    padding: 0.4rem 0.8rem;
+    padding: 0.35rem 0.7rem !important; /* 减小padding */
   }
   
   .hero-controls-below {
-    width: 85vw;
-    max-width: 400px;
-    margin-top: 20px;
-    padding: 0 25px;
+    width: 70vw !important; /* 与图片宽度一致 */
+    max-width: 320px !important; /* 与图片最大宽度一致 */
+    margin-top: 8px !important; /* 增加间距 */
+    margin-bottom: 0 !important; /* 移除底部margin */
+    padding: 0 15px !important; /* 保持左右padding对称 */
     justify-content: space-between;
-  }
-  
-  .hero-right {
-    bottom: 20px; /* 控制按钮的margin-top，使文字底部与图片底部对齐 */
+    align-items: center !important; /* 确保垂直居中对齐 */
+    display: flex !important; /* 确保flex布局 */
   }
   
   .hero-arrow {
-    width: 28px;
-    height: 28px;
+    width: 28px !important;
+    height: 28px !important;
+    min-width: 28px !important;
+    min-height: 28px !important;
+    max-width: 28px !important;
+    max-height: 28px !important;
+    display: flex !important; /* 确保flex布局 */
+    align-items: center !important; /* 垂直居中 */
+    justify-content: center !important; /* 水平居中 */
+    padding: 0 !important; /* 移除padding */
+    margin: 0 !important; /* 移除margin */
+    box-sizing: border-box !important; /* 盒模型 */
+  }
+  
+  .hero-arrow-left {
+    width: 28px !important;
+    height: 28px !important;
+    min-width: 28px !important;
+    min-height: 28px !important;
+    max-width: 28px !important;
+    max-height: 28px !important;
+    align-items: center !important; /* 确保左箭头垂直居中 */
+  }
+  
+  .hero-arrow-right {
+    width: 28px !important;
+    height: 28px !important;
+    min-width: 28px !important;
+    min-height: 28px !important;
+    max-width: 28px !important;
+    max-height: 28px !important;
+    align-items: center !important; /* 确保右箭头垂直居中 */
   }
   
   .arrow-icon {
-    width: 28px;
-    height: 28px;
+    width: 28px !important;
+    height: 28px !important;
+    max-width: 28px !important; /* 最大宽度 */
+    max-height: 28px !important; /* 最大高度 */
+    min-width: 28px !important; /* 最小宽度 */
+    min-height: 28px !important; /* 最小高度 */
+    display: block !important; /* 确保是块级元素 */
+    margin: 0 !important; /* 移除margin */
+    padding: 0 !important; /* 移除padding */
+    vertical-align: middle !important; /* 垂直对齐 */
+    object-fit: contain !important; /* 保持比例 */
+    box-sizing: border-box !important; /* 盒模型 */
+  }
+  
+  .arrow-icon-left {
+    transform: rotate(180deg) !important; /* 左箭头旋转180度 */
+    width: 28px !important; /* 确保宽度一致 */
+    height: 28px !important; /* 确保高度一致 */
+    max-width: 28px !important;
+    max-height: 28px !important;
+    min-width: 28px !important;
+    min-height: 28px !important;
+  }
+  
+  .arrow-icon-right {
+    transform: rotate(180deg) scaleX(-1) !important; /* 右侧按钮：先旋转180度（和左侧一样），再水平镜像 */
+    width: 28px !important; /* 确保宽度一致 */
+    height: 28px !important; /* 确保高度一致 */
+    max-width: 28px !important;
+    max-height: 28px !important;
+    min-width: 28px !important;
+    min-height: 28px !important;
   }
   
   .hero-dots-below {
@@ -1513,38 +1746,63 @@ onUnmounted(() => {
     max-width: 90vw;
     left: auto !important; /* 重置left属性 */
     bottom: auto !important; /* 重置bottom属性 */
+    top: auto !important; /* 重置top属性 */
+    transform: none !important; /* 移除transform */
     margin-left: 0 !important;
+    margin-top: 0.6rem !important; /* 增加间距 */
+    margin-bottom: 0 !important; /* 移除底部margin */
+    padding: 0 !important; /* 移除所有padding */
+    align-self: stretch !important; /* 拉伸填充 */
   }
   
   .right-text {
-    padding: 0.8rem;
+    max-height: none !important; /* 移除高度限制 */
+    height: auto !important; /* 自动高度 */
+    padding: 0.4rem 0.6rem 0.35rem 0.6rem !important; /* 增加上下padding */
     text-align: center; /* 文字居中 */
-    margin-bottom: 0;
+    margin-bottom: 0 !important;
+    margin-top: 0 !important; /* 移除顶部margin */
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
+    line-height: 1.45 !important; /* 适当增加行高 */
   }
   
   .right-text p {
-    font-size: 0.75rem;
-    line-height: 1.5;
+    font-size: 0.7rem !important; /* 稍微减小字体 */
+    line-height: 1.45 !important; /* 适当增加行高 */
     text-align: center !important; /* 文字居中，使用!important确保生效 */
+    margin-bottom: 0.6rem !important; /* 增加段落间距 */
+    margin-top: 0 !important; /* 移除顶部margin */
+    padding: 0 !important; /* 移除所有padding */
+  }
+  
+  .right-text p:first-child {
+    margin-top: 0 !important; /* 第一个段落没有顶部margin */
+  }
+  
+  .right-text p:last-child {
+    margin-bottom: 0 !important; /* 最后一个段落没有底部margin */
   }
   
   .news-bottom {
-    margin-top: 1rem;
+    margin-top: 0.6rem !important; /* 增加间距 */
     width: 90vw;
+    margin-bottom: 0 !important; /* 移除底部margin */
+    padding: 0 !important; /* 移除所有padding */
   }
   
   .news-bottom-title {
-    font-size: 1rem;
-    margin-bottom: 0.8rem;
+    font-size: 0.95rem !important; /* 稍微减小字体 */
+    margin-bottom: 0.4rem !important; /* 适当增加间距 */
+    margin-top: 0 !important; /* 移除顶部margin */
+    padding: 0 !important; /* 移除所有padding */
   }
   
   .learn-more-btn {
-    padding: 0.5rem 1.2rem;
-    font-size: 0.65rem;
+    padding: 0.45rem 1rem !important; /* 减小按钮大小 */
+    font-size: 0.6rem !important; /* 减小字体 */
   }
   
   /* 页脚响应式 */
@@ -1890,11 +2148,63 @@ onUnmounted(() => {
   .hero-arrow {
     width: 77px !important; /* 进一步放大 */
     height: 77px !important; /* 进一步放大 */
+    min-width: 77px !important;
+    min-height: 77px !important;
+    max-width: 77px !important;
+    max-height: 77px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
   }
   
+  .hero-arrow-left,
+  .hero-arrow-right {
+    width: 77px !important;
+    height: 77px !important;
+    min-width: 77px !important;
+    min-height: 77px !important;
+    max-width: 77px !important;
+    max-height: 77px !important;
+  }
+  
+  .hero-arrow-right {
+    /* 移除translateY，使用镜像后应该自然对齐 */
+  }
+
   .arrow-icon {
     width: 77px !important; /* 进一步放大 */
     height: 77px !important; /* 进一步放大 */
+    max-width: 77px !important; /* 最大宽度 */
+    max-height: 77px !important; /* 最大高度 */
+    min-width: 77px !important; /* 最小宽度 */
+    min-height: 77px !important; /* 最小高度 */
+    object-fit: contain !important; /* 保持比例 */
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+  }
+  
+  .arrow-icon-left {
+    width: 77px !important; /* 确保宽度一致 */
+    height: 77px !important; /* 确保高度一致 */
+    max-width: 77px !important;
+    max-height: 77px !important;
+    min-width: 77px !important;
+    min-height: 77px !important;
+  }
+  
+  .arrow-icon-right {
+    transform: rotate(180deg) scaleX(-1) !important; /* 右侧按钮：先旋转180度（和左侧一样），再水平镜像 */
+    width: 77px !important; /* 确保宽度一致 */
+    height: 77px !important; /* 确保高度一致 */
+    max-width: 77px !important;
+    max-height: 77px !important;
+    min-width: 77px !important;
+    min-height: 77px !important;
   }
   
   .hero-dots-below {

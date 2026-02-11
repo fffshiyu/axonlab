@@ -884,9 +884,9 @@ onUnmounted(() => {
   }
   
   .logo {
-    left: 20px; /* 与右侧CN|EN按钮边距一致 */
+    left: 50%; /* 居中 */
     top: 50%; /* 垂直居中 */
-    transform: translateY(-50%); /* 垂直居中 */
+    transform: translate(-50%, -50%); /* 水平和垂直居中 */
     display: flex;
     align-items: center; /* 垂直居中 */
   }
@@ -902,7 +902,8 @@ onUnmounted(() => {
   
   .mobile-menu-btn {
     display: flex;
-    right: 90px;
+    left: 20px; /* 左侧 */
+    right: auto; /* 移除右侧定位 */
   }
   
   .nav-right {
@@ -925,9 +926,9 @@ onUnmounted(() => {
   }
   
   .logo {
-    left: 15px; /* 与右侧CN|EN按钮边距一致 */
+    left: 50%; /* 居中 */
     top: 50%; /* 垂直居中 */
-    transform: translateY(-50%); /* 垂直居中 */
+    transform: translate(-50%, -50%); /* 水平和垂直居中 */
     display: flex;
     align-items: center; /* 垂直居中 */
   }
@@ -939,7 +940,8 @@ onUnmounted(() => {
   
   .mobile-menu-btn {
     display: flex;
-    right: 70px;
+    left: 15px; /* 左侧 */
+    right: auto; /* 移除右侧定位 */
   }
   
   .mobile-menu-btn span {

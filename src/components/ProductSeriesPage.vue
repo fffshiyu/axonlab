@@ -152,22 +152,22 @@
         <div class="icon-column">
           <div class="icon-item" @click="handleIconClick2('正面')">
             <div class="icon-fill"></div>
-            <img src="/zhengmian_icon.webp" alt="正面" class="icon-img" />
+            <img src="/rob_zhengmian.png" alt="正面" class="icon-img" />
             <span class="icon-label">正面</span>
           </div>
           <div class="icon-item" @click="handleIconClick2('侧面')">
             <div class="icon-fill"></div>
-            <img src="/cemian_icon.webp" alt="侧面" class="icon-img" />
+            <img src="/rob_cemian.png" alt="侧面" class="icon-img" />
             <span class="icon-label">侧面</span>
           </div>
           <div class="icon-item" @click="handleIconClick2('右侧')">
             <div class="icon-fill"></div>
-            <img src="/cemian_icon.webp" alt="右侧" class="icon-img icon-mirror" />
+            <img src="/rob_cemian.png" alt="右侧" class="icon-img icon-mirror" />
             <span class="icon-label">右侧</span>
           </div>
           <div class="icon-item" @click="handleIconClick2('背面')">
             <div class="icon-fill"></div>
-            <img src="/beimian_icon.webp" alt="背面" class="icon-img" />
+            <img src="/rob_beimian.png" alt="背面" class="icon-img" />
             <span class="icon-label">背面</span>
           </div>
         </div>
@@ -2934,6 +2934,37 @@ onUnmounted(() => {
   .icon-label {
     font-size: 14px; /* 从16px缩小到14px */
   }
+  
+  /* 手机端音频按钮缩小40% */
+  .audio-btn img {
+    width: 30px !important; /* 50px * 0.6 = 30px，缩小40% */
+    height: 30px !important; /* 50px * 0.6 = 30px，缩小40% */
+  }
+  
+  /* 最上面的音频按钮往下移动 */
+  .audio-btn-3 {
+    top: 12% !important; /* 从5%往下移动到12% */
+  }
+  
+  /* 两侧按钮往下移动并往外侧移动 */
+  .audio-btn-2 {
+    top: 45% !important; /* 从42%再往下移动到45% */
+    right: 25% !important; /* 从35%往外侧移动到25%（更靠右） */
+  }
+  
+  .audio-btn-4 {
+    top: 45% !important; /* 从42%再往下移动到45% */
+    left: 25% !important; /* 从35%往外侧移动到25%（更靠左） */
+  }
+  
+  /* 最下面的两个按钮往外侧移动，和上面两个一样的左右位置 */
+  .audio-btn-1 {
+    right: 25% !important; /* 从35%往外侧移动到25%，和audio-btn-2对齐 */
+  }
+  
+  .audio-btn-5 {
+    left: 25% !important; /* 从35%往外侧移动到25%，和audio-btn-4对齐 */
+  }
 }
 
 @media (max-width: 480px) {
@@ -3006,6 +3037,37 @@ onUnmounted(() => {
   
   .icon-label {
     font-size: 12px; /* 从14px进一步缩小到12px */
+  }
+  
+  /* 手机端音频按钮缩小40% */
+  .audio-btn img {
+    width: 30px !important; /* 50px * 0.6 = 30px，缩小40% */
+    height: 30px !important; /* 50px * 0.6 = 30px，缩小40% */
+  }
+  
+  /* 最上面的音频按钮往下移动 */
+  .audio-btn-3 {
+    top: 32% !important; /* 从5%往下移动到12% */
+  }
+  
+  /* 两侧按钮往下移动并往外侧移动 */
+  .audio-btn-2 {
+    top: 45% !important; /* 从42%再往下移动到45% */
+    right: 25% !important; /* 从35%往外侧移动到25%（更靠右） */
+  }
+  
+  .audio-btn-4 {
+    top: 45% !important; /* 从42%再往下移动到45% */
+    left: 25% !important; /* 从35%往外侧移动到25%（更靠左） */
+  }
+  
+  /* 最下面的两个按钮往外侧移动，和上面两个一样的左右位置 */
+  .audio-btn-1 {
+    right: 25% !important; /* 从35%往外侧移动到25%，和audio-btn-2对齐 */
+  }
+  
+  .audio-btn-5 {
+    left: 25% !important; /* 从35%往外侧移动到25%，和audio-btn-4对齐 */
   }
 }
 

@@ -993,13 +993,13 @@ onUnmounted(() => {
   .contact-info {
     flex: 1;
     width: 100%;
-    text-align: center;
+    text-align: left !important; /* 手机端靠左显示 */
   }
   
   .contact-title {
     font-size: 14px;
     margin-bottom: 0.8rem;
-    text-align: center;
+    text-align: left !important; /* 手机端靠左显示 */
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -1013,17 +1013,17 @@ onUnmounted(() => {
     font-size: 13px;
     line-height: 1.6;
     margin-bottom: 0.8rem;
-    text-align: center;
+    text-align: left !important; /* 手机端靠左显示 */
   }
   
   .contact-details {
     gap: 0.5rem;
-    align-items: center;
+    align-items: flex-start !important; /* 手机端靠左对齐 */
   }
   
   .contact-item {
     font-size: 13px;
-    text-align: center;
+    text-align: left !important; /* 手机端靠左显示 */
   }
   
   .qr-code-box {
@@ -1129,9 +1129,14 @@ onUnmounted(() => {
     gap: 0.8rem;
   }
   
+  .contact-info {
+    text-align: left !important; /* 手机端靠左显示 */
+  }
+  
   .contact-title {
     font-size: 13px;
     margin-bottom: 0.6rem;
+    text-align: left !important; /* 手机端靠左显示 */
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -1145,10 +1150,16 @@ onUnmounted(() => {
     font-size: 12px;
     line-height: 1.5;
     margin-bottom: 0.6rem;
+    text-align: left !important; /* 手机端靠左显示 */
+  }
+  
+  .contact-details {
+    align-items: flex-start !important; /* 手机端靠左对齐 */
   }
   
   .contact-item {
     font-size: 12px;
+    text-align: left !important; /* 手机端靠左显示 */
   }
   
   .contact-item .label {
