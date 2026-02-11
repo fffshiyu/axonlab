@@ -21,6 +21,7 @@
                   <img src="/arrow_right.webp" :alt="currentLanguage === 'zh' ? '下一张' : 'Next'" class="arrow-icon arrow-icon-right" />
                 </button>
               </div>
+              <!-- 桌面：右侧文字；手机：在标题下、按钮上（同一份 DOM，靠 CSS 控制位置） -->
               <div class="hero-right">
                 <div
                   class="right-text-wrapper"
@@ -49,7 +50,7 @@
                 </div>
               </div>
             </div>
-            <!-- 第二行：点与按钮，与图片居中对齐 -->
+            <!-- 第二行：点 + 标题 + 正文 + 按钮（手机端顺序：标题→文字→按钮；桌面端标题+按钮在下方，文字在右侧） -->
             <div class="hero-below">
               <div class="hero-controls-below">
                 <div class="hero-dots-below">
@@ -61,10 +62,12 @@
                   </span>
                 </div>
               </div>
-              <div class="news-bottom">
-                <h3 class="news-bottom-title">{{ latestNews.title }}</h3>
-                <button class="learn-more-btn" @click="handleLearnMore">LEARN MORE</button>
+              <h3 class="news-bottom-title">{{ latestNews.title }}</h3>
+              <!-- 手机端：此处显示正文（标题下、按钮上）；桌面端隐藏，正文在 hero-right -->
+              <div class="hero-below-text">
+                <p v-for="(content, idx) in latestNews.contents" :key="idx">{{ content }}</p>
               </div>
+              <button class="learn-more-btn" @click="handleLearnMore">LEARN MORE</button>
             </div>
           </div>
         </div>
@@ -1098,12 +1101,21 @@ onUnmounted(() => {
   max-width: 100%;
 }
 
+/* 手机端：标题下、按钮上的正文块（桌面端隐藏） */
+.hero-below-text {
+  display: none;
+}
+
 .news-bottom-title {
   color: #fff;
   font-size: 20px;
   margin-bottom: 12px;
   font-family: 'MiSans', 'Noto Sans SC', sans-serif;
   font-weight: 400; /* Demibold */
+}
+
+.hero-below .news-bottom-title {
+  margin-top: 28px;
 }
 
 .learn-more-btn {
@@ -1583,6 +1595,41 @@ onUnmounted(() => {
     max-width: 380px !important;
   }
   
+  .hero-below {
+    align-items: center;
+    text-align: center;
+  }
+  
+  .hero-right {
+    display: none !important;
+  }
+  
+  .hero-below .news-bottom-title {
+    margin-top: 10px;
+    margin-bottom: 8px;
+  }
+  
+  .hero-below-text {
+    display: block !important;
+    width: 100%;
+    max-height: 28vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    color: #fff;
+    text-align: center;
+    padding: 0.3rem 0;
+  }
+  
+  .hero-below-text p {
+    font-size: 0.8rem !important;
+    line-height: 1.5 !important;
+    margin-bottom: 0.5rem !important;
+  }
+  
+  .hero-below .learn-more-btn {
+    margin-top: 12px;
+  }
+  
   .hero-image {
     width: 75vw !important;
     max-width: 380px !important;
@@ -1887,6 +1934,14 @@ onUnmounted(() => {
   .hero-below {
     width: 70vw !important;
     max-width: 320px !important;
+  }
+  
+  .hero-right {
+    display: none !important;
+  }
+  
+  .hero-below-text {
+    max-height: 26vh;
   }
   
   .hero-image {
