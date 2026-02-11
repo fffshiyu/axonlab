@@ -2514,13 +2514,11 @@ onUnmounted(() => {
     pointer-events: auto !important; /* 确保可以接收点击事件 */
     position: relative !important; /* 确保定位正确 */
     overflow: visible !important; /* 确保展开覆盖层可伸出 */
-    z-index: 1 !important; /* 确保在正确的层级 */
   }
   
   /* 确保被覆盖层隐藏的item仍然可以点击 */
   .timeline-item.hidden-by-overlay {
     pointer-events: auto !important; /* 确保可以接收点击事件 */
-    z-index: 1 !important; /* 保持可点击 */
   }
   
   .timeline-item-fixed {
@@ -2536,7 +2534,6 @@ onUnmounted(() => {
     width: 100% !important; /* 保持100%填满父容器 */
     pointer-events: auto !important; /* 确保可以接收点击事件 */
     position: relative !important; /* 确保定位正确 */
-    z-index: 1 !important; /* 确保在正确的层级 */
   }
   
   /* 确保被隐藏的bar仍然可以点击 */
@@ -2555,9 +2552,32 @@ onUnmounted(() => {
     min-height: 800px !important;
     max-height: 800px !important;
     width: 300% !important; /* 保持3个格子的宽度比例，与非4K一致 */
-    pointer-events: none !important; /* 不阻挡下面元素的点击 */
-    z-index: 2 !important; /* 降低z-index，确保不阻挡其他item的点击 */
+    pointer-events: none !important; /* 不阻挡下面元素的点击，与非4K一致 */
+    z-index: 10 !important; /* 与非4K一致，确保展开图片在正确层级 */
     overflow: hidden !important; /* 确保内容不会超出高度，与非4K一致 */
+    transform-origin: center center !important; /* 与非4K一致 */
+    animation: expandAnimation 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards !important; /* 与非4K一致，添加展开动画 */
+  }
+  
+  /* 4K下的overlay位置，与非4K逻辑一致（使用百分比） */
+  .overlay-position-0 {
+    left: 0 !important; /* 索引0：从当前位置开始向右，覆盖0,1,2 */
+  }
+  
+  .overlay-position-1 {
+    left: -100% !important; /* 索引1：从当前位置向左1个格子，覆盖0,1,2 */
+  }
+  
+  .overlay-position-2 {
+    left: -100% !important; /* 索引2：从当前位置向左1个格子，覆盖1,2,3 */
+  }
+  
+  .overlay-position-3 {
+    left: -200% !important; /* 索引3：从当前位置向左2个格子，覆盖1,2,3 */
+  }
+  
+  .overlay-position-4 {
+    left: -200% !important; /* 索引4：从当前位置向左2个格子，覆盖2,3,4 */
   }
   
   .expanded-image {
