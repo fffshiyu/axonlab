@@ -94,7 +94,9 @@
               </div>
               <!-- 固定的"CONSTANLY UPDATING"色块 -->
               <div class="timeline-item timeline-item-fixed" 
-                   :class="{ 'dimmed-card': expandedCardIndex !== -1 }">
+                   :class="{ 'dimmed-card': expandedCardIndex !== -1 }"
+                   @click="handleFixedCardClick"
+                   @mouseenter="expandedCardIndex = -1">
                 <div class="timeline-bar timeline-bar-fixed timeline-bar-img" 
                      :style="{ backgroundImage: 'url(/history5.png)' }">
                   <div class="constantly-updating-text">
@@ -236,6 +238,11 @@ const handleCardClick = (index: number) => {
     // 否则展开当前点击的卡片
     expandedCardIndex.value = index
   }
+}
+
+// 点击固定的色块五时恢复全部色块
+const handleFixedCardClick = () => {
+  expandedCardIndex.value = -1
 }
 
 // 移动端触摸结束时的处理（点击时间线外部区域收起）
@@ -2524,7 +2531,8 @@ onUnmounted(() => {
   .timeline-item-fixed {
     flex: 0 0 488px !important; /* 244px * 2，与非4K逻辑一致 */
     width: 488px !important; /* 244px * 2，与非4K逻辑一致 */
-    pointer-events: none !important; /* 固定块不可点击 */
+    pointer-events: auto !important; /* 确保可以接收点击事件 */
+    cursor: pointer !important; /* 确保显示手型光标 */
   }
   
   .timeline-bar {
