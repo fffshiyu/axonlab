@@ -131,13 +131,13 @@ const { currentLanguage, isZh } = useLanguage()
 // 时间线数据
 const timelineData = ref([
   { 
-    date: '2024.09', 
+    date: '2024.08', 
     color: '#B0D0C3',
     title: 'AXON LABS成立',
     description: '北京玄圃科技有限公司成立于2024年，为国内新锐的AI技术与智能硬件开发公司。AXON LABS羽山作为公司旗下最重要的品牌，利用AI与硬件技术的深度融合，重塑科技产品的"生命逻辑"。以用户情感需求为导向，推动智能产品从功能工具向"有温度的伙伴"进化。'
   },
   { 
-    date: '2025.06', 
+    date: '2024.09', 
     color: '#83D5B5',
     title: '"三体"机器人项目启动',
     description: '2024年9月，AXON LABS羽山品牌旗下系列AXON ROBO与"三体宇宙"旗下《三体》IP联名项目启动，以"章北海"为原型开发的第一款"具身智能机器人"进入研发阶段。'
