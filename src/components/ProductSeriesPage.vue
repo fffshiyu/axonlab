@@ -1477,30 +1477,20 @@ const rotateCameraToView1 = (view: string) => {
   // 获取当前相机到原点的距离
   const currentDistance = camera1.position.distanceTo(center)
   
-  // 计算模型尺寸
-  const box = new THREE.Box3().setFromObject(content1)
-  const size = box.getSize(new THREE.Vector3()).length()
-  
-  // 用初始相机方向 (size/1.5, size/2.5, size/1.5) 算出俯仰角，保持各视角与此一致，避免俯视感
-  const initialDir = new THREE.Vector3(size / 1.5, size / 2.5, size / 1.5)
-  const initialLen = initialDir.length()
-  const sinElev = initialDir.y / initialLen
-  const cosElev = Math.sqrt(1 - sinElev * sinElev)
-  
+  // 相机到达位置的正前方，与模型中心同高，无仰角俯角（Y=0）
   let targetPosition = new THREE.Vector3()
   switch (view) {
     case '正面':
-      targetPosition.set(0, currentDistance * sinElev, currentDistance * cosElev)
+      targetPosition.set(0, 0, currentDistance)
       break
     case '侧面':
-      targetPosition.set(currentDistance * cosElev, currentDistance * sinElev, 0)
+      targetPosition.set(currentDistance, 0, 0)
       break
     case '右侧':
-      // 右侧：略仰视（相机略低于中心，Y 为负）
-      targetPosition.set(-currentDistance * 0.98, -currentDistance * 0.08, 0)
+      targetPosition.set(-currentDistance, 0, 0)
       break
     case '背面':
-      targetPosition.set(0, currentDistance * sinElev, -currentDistance * cosElev)
+      targetPosition.set(0, 0, -currentDistance)
       break
     default:
       console.warn('rotateCameraToView1: 未知视角', view)
@@ -1729,29 +1719,20 @@ const rotateCameraToView = (view: string) => {
   // 获取当前相机到原点的距离
   const currentDistance = camera.position.distanceTo(center)
   
-  // 计算模型尺寸
-  const box = new THREE.Box3().setFromObject(content)
-  const size = box.getSize(new THREE.Vector3()).length()
-  
-  // 用初始相机方向 (size/1.5, size/2.5, size/1.5) 算出俯仰角，保持各视角与此一致，避免俯视感
-  const initialDir = new THREE.Vector3(size / 1.5, size / 2.5, size / 1.5)
-  const initialLen = initialDir.length()
-  const sinElev = initialDir.y / initialLen
-  const cosElev = Math.sqrt(1 - sinElev * sinElev)
-  
+  // 相机到达位置的正前方，与模型中心同高，无仰角俯角（Y=0）
   let targetPosition = new THREE.Vector3()
   switch (view) {
     case '正面':
-      targetPosition.set(0, currentDistance * sinElev, currentDistance * cosElev)
+      targetPosition.set(0, 0, currentDistance)
       break
     case '侧面':
-      targetPosition.set(currentDistance * cosElev, currentDistance * sinElev, 0)
+      targetPosition.set(currentDistance, 0, 0)
       break
     case '右侧':
-      targetPosition.set(-currentDistance * 0.98, -currentDistance * 0.08, 0)
+      targetPosition.set(-currentDistance, 0, 0)
       break
     case '背面':
-      targetPosition.set(0, currentDistance * sinElev, -currentDistance * cosElev)
+      targetPosition.set(0, 0, -currentDistance)
       break
     default:
       console.warn('rotateCameraToView: 未知视角', view)
