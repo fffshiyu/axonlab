@@ -1099,5 +1099,67 @@ onUnmounted(() => {
     font-size: 22px; /* 11px * 2 */
   }
 }
+
+/* 真 4K 视口 (3840px)：在 2560px 基础上再放大约 1.5 倍，避免大屏上显得小 */
+@media (min-width: 3840px) {
+  .navbar {
+    height: 320px;
+  }
+  .logo-img {
+    width: 680px;
+  }
+  .logo {
+    left: 380px;
+  }
+  .nav-links {
+    left: 1800px;
+    gap: 10rem !important;
+  }
+  .nav-link {
+    font-size: 2.4rem;
+  }
+  .nav-right {
+    right: 380px;
+  }
+  .nav-language,
+  .lang-sep {
+    font-size: 42px;
+  }
+  .dropdown-menu {
+    width: 440px;
+    min-width: 440px;
+    padding: 1.4rem 0;
+    margin-top: 28px;
+  }
+  .dropdown-item {
+    padding: 2rem 2.4rem;
+    font-size: 2.4rem;
+  }
+  .qr-code-container {
+    width: 440px;
+  }
+  .qr-code-image,
+  .qr-code-placeholder {
+    width: 280px;
+    height: 280px;
+  }
+  .qr-code-title {
+    font-size: 28px;
+  }
+  .qr-code-link {
+    font-size: 26px;
+  }
+  .mobile-qr-image,
+  .mobile-qr-placeholder {
+    width: 320px;
+    height: 320px;
+  }
+  .mobile-qr-title {
+    font-size: 30px;
+  }
+  .mobile-qr-link {
+    font-size: 28px;
+  }
+}
 </style>
 

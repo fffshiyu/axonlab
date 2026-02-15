@@ -2652,4 +2652,103 @@ onUnmounted(() => {
     font-size: 22px; /* 11px * 2 */
   }
 }
+
+/* 真 4K 视口 (3840px)：在 2560px 基础上再放大约 1.5 倍 */
+@media (min-width: 3840px) {
+  .navbar {
+    height: 320px;
+  }
+  .main-content {
+    padding-top: 320px;
+  }
+  .introduction-section {
+    margin-top: -320px;
+    padding-top: 320px;
+  }
+  .logo {
+    left: 520px;
+  }
+  .logo-img {
+    width: 680px;
+  }
+  .nav-links {
+    left: 1800px;
+    gap: 10rem;
+  }
+  .nav-link {
+    font-size: 2.4rem;
+  }
+  .nav-right {
+    right: 380px;
+  }
+  .nav-language {
+    font-size: 42px;
+  }
+  .section-content {
+    left: 520px;
+    bottom: 720px;
+    max-width: 2600px;
+  }
+  .section-content.lang-en {
+    bottom: 620px;
+  }
+  .intro-title-en {
+    font-size: 128px !important;
+  }
+  .intro-title-cn {
+    font-size: 80px !important;
+  }
+  .intro-paragraph {
+    font-size: 36px !important;
+    max-width: 1800px !important;
+  }
+  .section-title {
+    font-size: 168px !important;
+  }
+  .section-subtitle {
+    font-size: 84px !important;
+    margin-bottom: 56px !important;
+  }
+  .history-content {
+    padding-top: 320px !important;
+  }
+  .timeline {
+    max-width: 3200px !important;
+  }
+  .timeline-item,
+  .timeline-item-fixed {
+    flex: 0 0 640px !important;
+    width: 640px !important;
+  }
+  .timeline-bar,
+  .timeline-bar-fixed,
+  .timeline-expanded-overlay {
+    height: 1000px !important;
+    min-height: 1000px !important;
+    max-height: 1000px !important;
+  }
+  .expanded-image {
+    height: 1000px !important;
+    min-height: 1000px !important;
+    max-height: 1000px !important;
+  }
+  .learn-more-btn {
+    padding: 2.4rem 5.6rem !important;
+    font-size: 2.6rem !important;
+  }
+  .constantly-updating-text {
+    font-size: 30px;
+    gap: 10px;
+  }
+  .timeline-date {
+    font-size: 2.4rem;
+  }
+  .scroll-indicator {
+    bottom: 120px;
+  }
+  .scroll-arrow-img {
+    width: 80px;
+    height: 72px;
+  }
+}
 </style>

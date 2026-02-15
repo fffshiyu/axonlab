@@ -1009,5 +1009,15 @@ onUnmounted(() => {
     font-size: 32px; /* 16px * 2 */
   }
 }
+
+/* 真 4K 视口 (3840px) */
+@media (min-width: 3840px) {
+  .navbar {
+    height: 320px !important;
+  }
+  .section-container {
+    padding-top: 320px !important;
+  }
+}
 </style>
 

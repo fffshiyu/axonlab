@@ -1316,5 +1316,20 @@ onUnmounted(() => {
     padding: 0 clamp(32px, 8vw, 8rem) !important; /* 16px-4rem * 2 */
   }
 }
+
+/* 真 4K 视口 (3840px) */
+@media (min-width: 3840px) {
+  .navbar {
+    height: 320px !important;
+  }
+  .section-container {
+    padding-top: 320px !important;
+    max-width: 3600px !important;
+  }
+  .scroll-arrow-img {
+    width: 76px !important;
+    height: 72px !important;
+  }
+}
 </style>
 

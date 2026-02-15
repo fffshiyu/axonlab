@@ -1854,4 +1854,21 @@ onUnmounted(() => {
     font-size: 32px; /* 16px * 2 */
   }
 }
+
+/* 真 4K 视口 (3840px) */
+@media (min-width: 3840px) {
+  .navbar {
+    height: 320px !important;
+  }
+  .main-content {
+    padding-top: 320px !important;
+  }
+  .product-section-title {
+    font-size: 160px;
+    margin-bottom: 100px;
+  }
+  .product-section-subtitle {
+    font-size: 78px;
+  }
+}
 </style>

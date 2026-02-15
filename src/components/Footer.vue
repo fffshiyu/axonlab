@@ -31,7 +31,7 @@
         <div class="footer-text-area">
           <!-- 页脚链接 -->
           <div class="footer-links">
-            <a href="#" class="footer-link">{{ currentLanguage === 'zh' ? '知识产权保护' : 'Intellectual Property Protection' }}</a>
+            <a href="/ip-statement.pdf" target="_blank" rel="noopener noreferrer" class="footer-link" @click.prevent="openIPStatement">{{ currentLanguage === 'zh' ? '知识产权保护' : 'Intellectual Property Protection' }}</a>
             <span class="separator">|</span>
             <a href="#" class="footer-link">{{ currentLanguage === 'zh' ? '隐私声明' : 'Privacy Statement' }}</a>
           </div>
@@ -98,10 +98,10 @@ function updateQRPosition() {
   if (!currentQR.value || !icon) return
   nextTick(() => {
     const rect = icon.getBoundingClientRect()
-    // 检测是否为4K屏幕，如果是则使用更大的二维码尺寸
-    const is4K = window.innerWidth >= 2560
-    const qrWidth = is4K ? 260 : 130 // 4K下使用2倍尺寸，非4K从140缩小到130
-    const bottomOffset = is4K ? 20 : 10 // 4K下使用2倍间距
+    // 检测视口：真 4K (3840) 用更大二维码，2560 用 2 倍，否则默认
+    const w = window.innerWidth
+    const qrWidth = w >= 3840 ? 360 : w >= 2560 ? 260 : 130
+    const bottomOffset = w >= 2560 ? (w >= 3840 ? 28 : 20) : 10
     qrPortalStyle.value = {
       left: `${rect.left + rect.width / 2 - qrWidth / 2}px`,
       bottom: `${window.innerHeight - rect.top + bottomOffset}px`
@@ -116,6 +116,11 @@ function showQR(type: QRType) {
   }
   currentQR.value = type
   updateQRPosition()
+}
+
+// 点击打开知识产权保护声明 PDF（新标签页）
+function openIPStatement(e: MouseEvent) {
+  window.open('/ip-statement.pdf', '_blank', 'noopener,noreferrer')
 }
 
 watch(currentQR, (val) => {
@@ -756,6 +761,66 @@ onUnmounted(() => {
     width: 260px !important; /* 130px * 2，使用固定宽度，确保所有二维码大小一致 */
     height: 260px !important; /* 130px * 2，使用固定高度，确保所有二维码大小一致 */
     object-fit: contain !important; /* 保持图片比例，完整显示 */
+  }
+}
+
+/* 真 4K 视口 (3840px)：在 2560px 基础上再放大约 1.5 倍 */
+@media (min-width: 3840px) {
+  .footer {
+    height: 400px;
+    padding: 80px 0;
+  }
+  .footer-logo {
+    left: 380px;
+    top: 80px;
+  }
+  .footer-logo-img {
+    width: 560px;
+  }
+  .footer-content {
+    max-width: 2200px;
+    margin-left: 1200px;
+    padding-left: 5rem;
+  }
+  .social-icons {
+    gap: 2.2rem;
+    margin-bottom: 32px;
+  }
+  .social-icon {
+    width: 56px;
+    height: 56px;
+  }
+  .social-icon.bilibili-icon {
+    width: 96px;
+    height: 44px;
+  }
+  .social-icon.bilibili-icon img {
+    width: 96px;
+    height: 44px;
+  }
+  .footer-text-area {
+    height: 180px;
+  }
+  .footer-links {
+    font-size: 36px;
+    height: 48px;
+    gap: 1.2rem;
+  }
+  .footer-contact p,
+  .footer-copyright p {
+    font-size: 36px;
+  }
+  .footer-contact,
+  .footer-copyright {
+    height: 48px;
+  }
+  .bilibili-qr-portal {
+    padding: 28px;
+    border-radius: 20px;
+  }
+  .bilibili-qr-portal img {
+    width: 360px !important;
+    height: 360px !important;
   }
 }
 </style>

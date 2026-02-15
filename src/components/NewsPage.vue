@@ -2680,4 +2680,82 @@ onUnmounted(() => {
     font-size: 32px; /* 16px * 2 */
   }
 }
+
+/* 真 4K 视口 (3840px)：在 2560px 基础上再放大约 1.5 倍 */
+@media (min-width: 3840px) {
+  .navbar {
+    height: 320px !important;
+  }
+  .section-container {
+    padding-top: 320px !important;
+  }
+  .hero-image {
+    width: 2880px !important;
+    height: 1920px !important;
+  }
+  .hero-below,
+  .hero-controls-below {
+    width: 2880px !important;
+  }
+  .hero-controls-below {
+    margin-top: 32px !important;
+  }
+  .hero-image-row {
+    gap: 64px;
+  }
+  .hero-arrow,
+  .hero-arrow-left,
+  .hero-arrow-right,
+  .arrow-icon,
+  .arrow-icon-left,
+  .arrow-icon-right {
+    width: 100px !important;
+    height: 100px !important;
+    min-width: 100px !important;
+    min-height: 100px !important;
+    max-width: 100px !important;
+    max-height: 100px !important;
+  }
+  .hero-arrow-inside.hero-arrow-left {
+    left: 56px !important;
+  }
+  .hero-arrow-inside.hero-arrow-right {
+    right: 56px !important;
+  }
+  .hero-dots-below {
+    gap: 32px !important;
+  }
+  .hero-dots-below .dot-below {
+    width: 32px !important;
+    height: 32px !important;
+  }
+  .hero-dots-below .dot-below.wide {
+    width: 76px !important;
+    height: 32px !important;
+  }
+  .hero-right {
+    max-width: 720px !important;
+    width: 720px !important;
+  }
+  .right-text {
+    max-height: 1920px !important;
+    font-size: 42px !important;
+    padding-right: 24px !important;
+  }
+  .date-overlay {
+    font-size: 200px !important;
+  }
+  .news-bottom-title {
+    font-size: 50px;
+    margin-bottom: 28px;
+  }
+  .learn-more-btn {
+    padding: 2rem 5rem;
+    font-size: 2.2rem;
+  }
+  .scroll-arrow-img {
+    width: 76px;
+    height: 72px;
+  }
+}
 </style>

@@ -364,4 +364,17 @@ const startCharging = () => {
     font-size: 32px; /* 16px * 2 */
   }
 }
+
+/* 真 4K 视口 (3840px) */
+@media (min-width: 3840px) {
+  .logo-layers,
+  .logo-white,
+  .logo-green {
+    width: 1600px;
+    height: 150px;
+  }
+  .brand-slogan {
+    font-size: 42px;
+  }
+}
 </style>

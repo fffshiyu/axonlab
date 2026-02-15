@@ -11,7 +11,9 @@
     "dev": "vite",
     "build": "vite build",
     "build-tsc": "vue-tsc --noEmit && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test:4k": "npx playwright test --project=4k",
+    "test:4k:headed": "npx playwright test --project=4k --headed"
   },
   "dependencies": {
     "@babylonjs/core": "^8.34.0",
@@ -22,6 +24,7 @@
     "vue-router": "^4.2.5"
   },
   "devDependencies": {
+    "@playwright/test": "^1.49.0",
     "@types/node": "^20.5.1",
     "@vitejs/plugin-vue": "^4.4.0",
     "typescript": "^5.0.2",
