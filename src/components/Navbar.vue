@@ -185,13 +185,21 @@ const currentQRImage = ref('')
 const currentQRLink = ref('')
 
 const showDropdown = () => {
+  if (hideDropdownTimer) {
+    clearTimeout(hideDropdownTimer)
+    hideDropdownTimer = null
+  }
   isDropdownVisible.value = true
 }
 
+let hideDropdownTimer: ReturnType<typeof setTimeout> | null = null
 const hideDropdown = () => {
-  setTimeout(() => {
-    // 延迟隐藏以防止意外关闭
-  }, 200)
+  if (hideDropdownTimer) clearTimeout(hideDropdownTimer)
+  hideDropdownTimer = setTimeout(() => {
+    isDropdownVisible.value = false
+    isQRCodeVisible.value = false
+    hideDropdownTimer = null
+  }, 120)
 }
 
 const showQRCode = (platform: string) => {
@@ -456,10 +464,21 @@ onUnmounted(() => {
   color: #666666;
 }
 
-/* 下拉菜单样式 */
+/* 下拉菜单样式：限定区域 = 链接 + 桥接缝隙 + 下拉面板，移出即关闭 */
 .nav-dropdown {
   position: relative;
   display: inline-block;
+}
+
+/* 桥接链接与下拉之间的缝隙，避免从链接移到菜单时误触 mouseleave */
+.nav-dropdown::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  height: 14px;
+  z-index: 1001;
 }
 
 .dropdown-menu {

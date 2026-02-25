@@ -33,7 +33,7 @@
           <div class="footer-links">
             <a href="/ip-statement.pdf" target="_blank" rel="noopener noreferrer" class="footer-link" @click.prevent="openIPStatement">{{ currentLanguage === 'zh' ? '知识产权保护' : 'Intellectual Property Protection' }}</a>
             <span class="separator">|</span>
-            <a href="#" class="footer-link">{{ currentLanguage === 'zh' ? '隐私声明' : 'Privacy Statement' }}</a>
+            <a href="/privacy-statement.pdf" target="_blank" rel="noopener noreferrer" class="footer-link" @click.prevent="openPrivacyStatement">{{ currentLanguage === 'zh' ? '隐私声明' : 'Privacy Statement' }}</a>
           </div>
           
           <!-- 联系信息 -->
@@ -119,8 +119,13 @@ function showQR(type: QRType) {
 }
 
 // 点击打开知识产权保护声明 PDF（新标签页）
-function openIPStatement(e: MouseEvent) {
+function openIPStatement() {
   window.open('/ip-statement.pdf', '_blank', 'noopener,noreferrer')
+}
+
+// 点击打开隐私声明 PDF（新标签页）
+function openPrivacyStatement() {
+  window.open('/privacy-statement.pdf', '_blank', 'noopener,noreferrer')
 }
 
 watch(currentQR, (val) => {
