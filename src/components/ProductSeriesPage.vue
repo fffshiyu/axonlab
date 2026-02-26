@@ -99,7 +99,7 @@
       <div class="product-series-content">
         <!-- 小标题 -->
         <div class="product-title-container">
-          <img src="/axonrob_text.webp" alt="AXONROB" class="product-title-img" />
+          <img src="/axonrob_text.webp" alt="AXONROB" class="product-title-img axonrob-title" />
           <p class="product-hint-text">{{ currentLanguage === 'zh' ? '点击产品拖拽，可360度观看' : 'Click and drag to rotate 360°' }}</p>
         </div>
         
@@ -1173,6 +1173,9 @@ const setContent = (object: THREE.Object3D) => {
   // 将模型稍微往下移动（减少偏移量，让模型显示更高）
   object.position.y -= size * 0.05  // 向下移动模型高度的5%（从15%减少到5%）
 
+  // 机器人模型往左移一丢丢（当前偏右）
+  object.position.x -= size * 0.06
+
   // 下面的机器人稍微放大
   object.scale.set(1.1, 1.1, 1.1)
 
@@ -2242,7 +2245,8 @@ onUnmounted(() => {
 }
 
 /* loomi标题缩小以匹配axonrob - 原图860*127 */
-.loomi-title {
+.loomi-title,
+.axonrob-title {
   max-width: 250px !important;
   width: 250px !important;
 }
@@ -2832,11 +2836,12 @@ onUnmounted(() => {
     width: 400px;
   }
   
-  .loomi-title {
+  .loomi-title,
+  .axonrob-title {
     max-width: 250px !important;
     width: 250px !important;
   }
-  
+
   .product-title-container {
     margin-bottom: 50px;
   }
@@ -2857,11 +2862,12 @@ onUnmounted(() => {
     width: 400px !important;
   }
   
-  .loomi-title {
+  .loomi-title,
+  .axonrob-title {
     max-width: 250px !important;
     width: 250px !important;
   }
-  
+
   .product-image-container {
     max-width: 65vw;
     max-height: 50vh;
@@ -2892,11 +2898,12 @@ onUnmounted(() => {
     width: 250px !important;
   }
   
-  .loomi-title {
+  .loomi-title,
+  .axonrob-title {
     max-width: 200px !important;
     width: 200px !important;
   }
-  
+
   .product-hint-text {
     font-size: 12px;
     margin-top: 6px;
@@ -2996,11 +3003,12 @@ onUnmounted(() => {
     width: 200px !important;
   }
   
-  .loomi-title {
+  .loomi-title,
+  .axonrob-title {
     max-width: 160px !important;
     width: 160px !important;
   }
-  
+
   .product-hint-text {
     font-size: 11px;
     margin-top: 5px;
@@ -3163,11 +3171,12 @@ onUnmounted(() => {
     width: 800px !important;
   }
   
-  .loomi-title {
+  .loomi-title,
+  .axonrob-title {
     max-width: 500px !important; /* 250px * 2 */
     width: 500px !important;
   }
-  
+
   .product-hint-text {
     font-size: 28px; /* 14px * 2 */
     margin-top: 20px; /* 10px * 2 */

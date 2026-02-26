@@ -118,14 +118,49 @@ function showQR(type: QRType) {
   updateQRPosition()
 }
 
+// 每设备最多打开/下载 3 次声明类 PDF（知识产权 + 隐私声明合计）
+const PDF_DOWNLOAD_LIMIT = 3
+const STORAGE_KEY = 'axonlab_pdf_open_count'
+
+function getPdfOpenCount(): number {
+  try {
+    const n = parseInt(localStorage.getItem(STORAGE_KEY) ?? '0', 10)
+    return Number.isNaN(n) ? 0 : Math.max(0, n)
+  } catch {
+    return 0
+  }
+}
+
+function incrementPdfOpenCount(): boolean {
+  const count = getPdfOpenCount()
+  if (count >= PDF_DOWNLOAD_LIMIT) return false
+  try {
+    localStorage.setItem(STORAGE_KEY, String(count + 1))
+    return true
+  } catch {
+    return false
+  }
+}
+
+function openPdfWithLimit(url: string): void {
+  if (!incrementPdfOpenCount()) {
+    const msg = currentLanguage.value === 'zh'
+      ? `本设备声明文件打开次数已达上限（${PDF_DOWNLOAD_LIMIT} 次），如需继续查看请使用其他设备。`
+      : `This device has reached the limit of ${PDF_DOWNLOAD_LIMIT} opens. Please use another device if you need to view again.`
+    alert(msg)
+    return
+  }
+  window.open(url, '_blank', 'noopener,noreferrer')
+}
+
 // 点击打开知识产权保护声明 PDF（新标签页）
 function openIPStatement() {
-  window.open('/ip-statement.pdf', '_blank', 'noopener,noreferrer')
+  openPdfWithLimit('/ip-statement.pdf')
 }
 
 // 点击打开隐私声明 PDF（新标签页）
 function openPrivacyStatement() {
-  window.open('/privacy-statement.pdf', '_blank', 'noopener,noreferrer')
+  openPdfWithLimit('/privacy-statement.pdf')
 }
 
 watch(currentQR, (val) => {
